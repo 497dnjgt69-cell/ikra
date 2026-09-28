@@ -1,4 +1,4 @@
-const CACHE = 'ikra-v1.0.1';
+const CACHE = 'ikra-v1.1.0';
 
 const CORE = [
   './',
@@ -11,9 +11,8 @@ const CORE = [
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE).then(cache => cache.addAll(CORE))
+    caches.open(CACHE).then(cache => cache.addAll(CORE.map(url => new Request(url, { cache: 'reload' })))).then(() => self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
@@ -21,12 +20,11 @@ self.addEventListener('activate', event => {
     caches.keys().then(keys =>
       Promise.all(
         keys
-          .filter(key => key !== CACHE)
+          .filter(key => key.startsWith('ikra-') && key !== CACHE)
           .map(key => caches.delete(key))
       )
-    )
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
@@ -59,3 +57,4 @@ self.addEventListener('fetch', event => {
       })
   );
 });
+
