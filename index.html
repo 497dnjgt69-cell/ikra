@@ -159,8 +159,41 @@ body[data-theme="nature"] :is(button,input,select):focus-visible{outline-color:#
 }
 @media(hover:none){.digit:hover,.button:hover,.seg button:hover,.prayer-active .bigclock:hover{transform:none!important}.dock .button:hover svg{transform:none}}
 
-.release-notice ul{margin:0;padding-left:15px;color:var(--muted);font-size:.78rem;line-height:1.5}
-.release-notice li+li{margin-top:5px}
+/* Release announcements have their own centered, accessible surface. */
+body.release-open{overflow:hidden}
+#release-dialog{--release-accent:#355e51;--release-soft:#dcebe2;color:var(--fg);width:min(480px,calc(100vw - 32px));max-width:480px;max-height:calc(100dvh - 32px);inset:0;margin:auto;padding:0;border:1px solid #ffffffa3;border-radius:30px;background:linear-gradient(145deg,#ffffffc9,#eef4f3de);box-shadow:0 32px 100px #172c4a40,inset 0 1px 0 #fff;backdrop-filter:blur(36px);-webkit-backdrop-filter:blur(36px);overflow:auto;overscroll-behavior:contain}
+#release-dialog::backdrop{background:#14202f60;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+#release-dialog[open]{animation:release-enter .32s cubic-bezier(.22,1,.36,1)}
+#release-dialog .release-shell{position:relative;padding:32px;background:radial-gradient(ellipse at 15% 0%,#a4d5b945,transparent 55%),radial-gradient(ellipse at 100% 10%,#b8b6e431,transparent 48%)}
+#release-dialog .release-close{position:absolute;right:14px;top:14px;display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:50%;color:var(--muted);background:transparent;font-size:1.35rem}
+#release-dialog .release-close:hover{background:var(--tint);color:var(--fg)}
+#release-dialog .release-mark{display:grid;place-items:center;width:60px;height:60px;margin:4px 0 22px;border:1px solid #ffffffbb;border-radius:20px;color:var(--release-accent);background:linear-gradient(145deg,#ffffffe0,var(--release-soft));box-shadow:0 7px 20px #315c4312,inset 0 1px 0 #fff}
+#release-dialog svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+#release-dialog .release-mark svg{width:30px;height:30px}
+#release-dialog .release-meta{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:.65rem;font-weight:700;letter-spacing:.14em;color:var(--release-accent)}
+#release-dialog .release-version{padding:4px 8px;border:1px solid var(--line);border-radius:7px;background:#ffffff70;font-size:.65rem;letter-spacing:.02em;color:var(--muted);font-variant-numeric:tabular-nums}
+#release-dialog h2{font-size:1.8rem;font-weight:650;line-height:1.16;letter-spacing:-.045em;margin:0 0 10px;max-width:340px}
+#release-dialog .release-intro{font-size:.86rem;line-height:1.6;color:var(--muted);margin:0 0 24px}
+#release-dialog .release-features{list-style:none;padding:0;margin:0 0 26px;display:grid;gap:10px}
+#release-dialog .release-feature{display:flex;align-items:flex-start;gap:13px;padding:13px;border:1px solid #ffffffaa;border-radius:16px;background:#ffffff59}
+#release-dialog .release-feature-icon{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:11px;background:var(--release-soft);color:var(--release-accent)}
+#release-dialog .release-feature-icon svg{width:19px;height:19px}
+#release-dialog .release-feature strong{display:block;font-size:.83rem;line-height:1.4;font-weight:650;margin:0 0 3px}
+#release-dialog .release-feature p{font-size:.76rem;line-height:1.5;color:var(--muted);margin:0}
+#release-dialog .release-continue{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:49px;padding:12px 16px;border:1px solid #ffffff18;border-radius:14px;background:var(--release-accent);color:#fff;font-size:.85rem;font-weight:600;box-shadow:0 5px 16px #254c3920;transition:filter .15s,transform .15s}
+#release-dialog .release-continue svg{width:17px;height:17px}
+#release-dialog .release-continue:hover{filter:brightness(1.1);transform:translateY(-1px)}
+#release-dialog .release-footnote{margin:13px 0 0;text-align:center;font-size:.65rem;line-height:1.5;color:var(--muted)}
+body[data-theme=nature] #release-dialog{background:linear-gradient(145deg,#f2f8e9eb,#dcebd9ed);--release-soft:#d9e8d3;--release-accent:#315e44}
+body[data-theme=dark] #release-dialog{background:linear-gradient(145deg,#262f36ed,#191f29f2);border-color:#ffffff26;--release-soft:#354c46;--release-accent:#b3dbc8;box-shadow:0 32px 100px #0008,inset 0 1px 0 #ffffff16}
+body[data-theme=dark] #release-dialog .release-mark{background:linear-gradient(145deg,#405b50,#293f39);border-color:#ffffff24;box-shadow:0 7px 20px #0002,inset 0 1px 0 #ffffff16}
+body[data-theme=dark] #release-dialog .release-feature{background:#ffffff06;border-color:#ffffff12}
+body[data-theme=dark] #release-dialog .release-version{background:#ffffff09}
+body[data-theme=dark] #release-dialog .release-continue{color:#18392a}
+@keyframes release-enter{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+@media(max-width:520px){#release-dialog{border-radius:25px}#release-dialog .release-shell{padding:26px 23px}#release-dialog h2{font-size:1.65rem}#release-dialog .release-mark{margin-bottom:18px}#release-dialog .release-feature{padding:11px}}
+@media(max-height:680px){#release-dialog .release-shell{padding:22px}#release-dialog .release-mark{width:44px;height:44px;border-radius:14px;margin:0 0 12px}#release-dialog .release-intro{margin-bottom:16px}#release-dialog .release-features{margin-bottom:18px;gap:7px}}
+@media(prefers-reduced-motion:reduce){#release-dialog[open]{animation:none}#release-dialog .release-continue{transition:none}}
 </style><link rel="manifest" href="./manifest.webmanifest">
 <meta name="theme-color" content="#e9eef5">
 <meta name="application-name" content="IKRA">
@@ -175,6 +208,7 @@ body[data-theme="nature"] :is(button,input,select):focus-visible{outline-color:#
 <section class="card wide"><div class="row between"><h2>Son kayıtlar</h2><span id="total" class="small"></span></div><section id="stats-panel"><div class="seg stat-tabs" aria-label="İstatistik dönemi"><button data-stats="week">Hafta</button><button data-stats="month">Ay</button><button data-stats="year">Yıl</button><button data-stats="all">Tüm zamanlar</button></div><div class="stat-period"><button id="stats-prev" class="button" aria-label="Önceki dönem">‹</button><strong id="stats-period"></strong><button id="stats-next" class="button" aria-label="Sonraki dönem">›</button></div><div class="stat-summary"><div><strong id="stats-duration"></strong><span>Çalışma süresi</span></div><div><strong id="stats-count"></strong><span>Tamamlanan tur</span></div><div><strong id="stats-days"></strong><span>Aktif gün</span></div></div><div id="stats-bars" class="stats-bars" aria-label="Döneme göre çalışma süreleri"></div><div id="stats-subjects" class="subjects"></div><p class="quiet">Tüm kayıtlı çalışmalar burada birikir. Namaz süreleri çalışma toplamına eklenmez.</p></section><ul id="history" class="history"></ul><section class="manual-session"><button type="button" id="manual-open" class="button" aria-expanded="false" aria-controls="manual-body">+ Oturum ekle</button><div id="manual-body" class="hidden"><form id="manual-session-form" novalidate><label>Ders<input id="manual-subject" class="field" list="subject-options" placeholder="Ders seç veya yeni ders yaz" maxlength="60" required><datalist id="subject-options"></datalist></label><label>Süre (dakika)<input id="manual-minutes" class="field" type="number" min="1" max="1440" step="1" value="50" placeholder="Örn. 50" required><small id="manual-preview" aria-live="polite"></small></label><label>Tarih<input id="manual-date" class="field" type="date" required></label><button class="button primary" type="submit">Kaydet</button><p id="manual-status" role="status" class="manual-status"></p></form></div></section></section><section class="card wide settings"><label>Odak <input id="focusmin" class="field" type="number" min="1" max="240"> dk</label><label>Mola <input id="breakmin" class="field" type="number" min="1" max="90"> dk</label><label>Uzun mola <input id="longmin" class="field" type="number" min="1" max="120"> dk</label><label>Namaz <input id="prayermin" class="field" type="number" min="1" max="99"> dk</label><label><input id="autonext" type="checkbox"> Otomatik geç</label><label>Uzun mola aralığı <input id="longevery" class="field" type="number" min="0" max="24"> tur</label><span class="quiet">0 = serbest; uzun molayı kendin seç.</span><label><input id="soundenabled" type="checkbox"> Ses efektleri</label><label>Ses <input id="soundvolume" type="range" min="0" max="100" aria-label="Ses seviyesi"></label><button id="reset-widgets" class="button" type="button">Kart konumlarını sıfırla</button><button id="soundtest" class="button">Sesi dene</button><button id="export" class="button">Yedek indir</button><button id="import" class="button">Yedek yükle</button><input id="importfile" type="file" accept=".json,application/json" hidden></section></div><button id="peek-toggle" class="button" aria-controls="prayer-peek" aria-expanded="false">Vakitler</button><section id="prayer-peek" class="prayer-peek hidden" aria-label="Namaz vakitleri özeti"><div id="peek-location" class="quiet"></div><div id="next-prayer" class="next-prayer" role="status"></div><div id="peek-times" class="prayergrid"></div><button id="peek-config" class="button">Konum ve vakit ayarları</button></section><p class="footer">Kayıtlar bu tarayıcıda saklanır. Başka tarayıcıya taşımak için yedeği indir. Sayfa açıkken sayaç ve namaz süresi kaldığı yerden hesaplanır; bildirimler tarayıcı kapalıyken çalışmaz.</p></main></div><div id="toast" class="notification-region notification-top" popover="manual" role="region" aria-label="Bildirimler" aria-live="polite"></div><div id="completion-notices" class="notification-region notification-bottom" popover="manual" role="region" aria-label="Tamamlanan oturumlar" aria-live="polite"></div>
 <script>(()=>{
 const dictionary={"Odak": "Focus", "ODAK": "FOCUS", "Saat": "Clock", "SAAT": "CLOCK", "Namaz": "Prayer", "NAMAZ": "PRAYER", "Mola": "Break", "Uzun mola": "Long break", "Kısa mola": "Short break", "Fokus": "Focus view", "Başlat": "Start", "Duraklat": "Pause", "Sıfırla": "Reset", "Geç": "Skip", "Bitir ve kaydet": "Finish & save", "Sonraki aşamaya geç": "Skip to the next stage", "Çalışma zamanı": "Study time", "Odağını topla.": "Find your focus.", "Şimdiki an.": "Be in the present.", "Biraz nefes al.": "Take a breath.", "Şu an": "Right now", "Dinlenme": "Rest", "Namaz vakti": "Prayer time", "Rabbine yönel.": "Turn to your Lord.", "Ders seç": "Choose a subject", "İlk dersini ekle": "Add your first subject", "Planım": "My plan", "Bir sonraki küçük adımını belirle.": "Choose your next small step.", "+ Ders": "+ Subject", "Yeni ders adı": "New subject name", "Yeni dersin rengi": "New subject colour", "Kaydet": "Save", "Ne üzerinde çalışacaksın?": "What will you work on?", "Yeni görev": "New task", "Ekle": "Add", "Hedef tarih": "Due date", "Görev hedef tarihi": "Task due date", "İsteğe bağlı": "Optional", "Yapılacak": "To do", "Tamamlanan": "Completed", "Tümü": "All", "Dersler ve renkler": "Subjects & colours", "Dersi silmek çalışma geçmişini veya görevlerini silmez.": "Deleting a subject keeps your study history and tasks.", "Dersi sil": "Delete subject", "Sil": "Delete", "Geri al": "Undo", "Ders silindi": "Subject deleted", "Çalışma geçmişin ve görevlerin korundu.": "Your study history and tasks have been kept.", "Ders geri eklendi.": "Subject restored.", "Ders silinemedi. Lütfen tekrar dene.": "Could not delete the subject. Please try again.", "Henüz ders eklenmedi.": "No subjects yet.", "İlk görevini ekle": "Add your first task", "Görev ekleyerek planını oluşturmaya başla.": "Add a task to start your plan.", "Tamamladığın görevler burada görünecek.": "Your completed tasks will appear here.", "Planındaki görevler tamamlandı.": "All tasks in your plan are complete.", "Görev metni": "Task text", "Görevi düzenle": "Edit task", "Görevi sil": "Delete task", "Düzenle": "Edit", "Genel": "General", "İlerleme": "Progress", "Bugün": "Today", "Son 7 gün": "Last 7 days", "Odak turu": "Focus sessions", "Bu hafta": "This week", "Hafta": "Week", "Ay": "Month", "Yıl": "Year", "Tüm zamanlar": "All time", "Az": "Less", "Çok": "More", "İstatistikler": "Statistics", "Son kayıtlar": "Recent sessions", "Çalışma süresi": "Study time", "Tamamlanan tur": "Completed sessions", "Aktif gün": "Active days", "Döneme göre çalışma süreleri": "Study time by period", "İstatistik dönemi": "Statistics period", "Önceki dönem": "Previous period", "Sonraki dönem": "Next period", "Tüm kayıtlı çalışmalar burada birikir. Namaz süreleri çalışma toplamına eklenmez.": "All recorded study sessions are included here. Prayer time is not included in study totals.", "İlk çalışma kaydınla istatistikler oluşacak.": "Your statistics will appear after your first study session.", "Henüz kayıt yok.": "No sessions yet.", "+ Oturum ekle": "+ Add session", "Ders": "Subject", "Ders seç veya yeni ders yaz": "Choose or enter a subject", "Süre (dakika)": "Duration (minutes)", "Örn. 50": "e.g. 50", "Tarih": "Date", "Bir ders seç veya dersin adını yaz.": "Choose a subject or enter its name.", "1–1440 arasında tam sayı olarak dakika gir.": "Enter a whole number of minutes from 1 to 1440.", "Bugün veya geçmişte geçerli bir tarih seç.": "Choose a valid date today or in the past.", "Dakika olarak gir: 1 saat = 60 dakika": "Enter minutes: 1 hour = 60 minutes", "Oturum kaydedildi": "Session saved", "Oturum silindi": "Session deleted", "Oturum geri yüklendi.": "Session restored.", "Oturum tamamlandı": "Session complete", "Bildirim": "Notification", "Bildirimler": "Notifications", "Tamamlanan oturumlar": "Completed sessions", "Bildirimi kapat": "Dismiss notification", "Geri yüklenemedi.": "Could not restore the session.", "Kayıt saklanamadı. Tarayıcı depolaması dolu olabilir.": "Could not save. Your browser storage may be full.", "Kayıt silinemedi. Tarayıcı depolamasını kontrol et.": "Could not delete. Check your browser storage.", "Ayarlar": "Settings", "Süreler": "Durations", "dakika": "minutes", "dk": "min", "tur": "sessions", "Otomatik devam": "Auto-continue", "Otomatik geç": "Auto-continue", "Süre bitince sonraki sayacı başlat.": "Start the next timer when this one ends.", "Ses efektleri": "Sound effects", "Geçişler ve oturum bitişi.": "Transitions and session completion.", "Ses": "Sound", "Ses seviyesi": "Volume", "Sesi dene": "Preview sound", "Uzun mola düzeni": "Long break schedule", "Uzun mola aralığı": "Long break interval", "0 = serbest; uzun molayı kendin seç.": "0 = manual; start long breaks yourself.", "0 seçersen uzun molayı kendin başlatırsın. Örneğin 4, her dört odak turundan sonra uzun mola verir.": "Choose 0 to start long breaks manually. Choose 4 for a long break after every four focus sessions.", "Elle": "Manual", "Serbest": "Manual", "Veriler ve düzen": "Data & layout", "Yedeği indir": "Download backup", "Yedek indir": "Download backup", "Yedekten yükle": "Restore backup", "Yedek yükle": "Restore backup", "Kartları başlangıç konumuna getir": "Reset card positions", "Kart konumlarını sıfırla": "Reset card positions", "Çalışmaların bu tarayıcıda saklanır. Başka tarayıcıya geçmeden önce yedek indir.": "Your study data is stored in this browser. Download a backup before switching browsers.", "Değişiklikler otomatik kaydedilir.": "Changes are saved automatically.", "Tam ekran": "Full screen", "Görünüm": "Appearance", "Açık": "Light", "Koyu": "Dark", "Açık temaya geç": "Switch to light theme", "Koyu temaya geç": "Switch to dark theme", "Kapat": "Close", "Fokus görünümüne geç": "Enter focus view", "Fokus görünümü": "Focus view", "Fokus modundan çık": "Exit focus view", "Esc veya saate dokunarak geri dön": "Press Esc or click the clock to return", "Sayaç": "Timer", "Çalışma araçları": "Study tools", "Bilgi kartları": "Information cards", "Namaz vakitleri": "Prayer times", "Vakitler": "Prayer times", "Namaz vakitleri özeti": "Prayer times overview", "Namaz vakitleri ve konum": "Prayer times & location", "Konum ve vakit ayarları": "Location & prayer settings", "Konum ekle": "Add a location", "Şehir, ülke — ör. Montréal, Canada": "City, country — e.g. Montréal, Canada", "Şehir ve ülke": "City and country", "Vakitleri getir": "Get prayer times", "Konumum": "My location", "Hesaplama": "Calculation", "ISNA (Kuzey Amerika)": "ISNA (North America)", "Diyanet": "Diyanet", "Elle gir": "Enter manually", "Elle girildi": "Entered manually", "Alanları kapat": "Hide fields", "Sabah": "Fajr", "Öğle": "Dhuhr", "İkindi": "Asr", "Akşam": "Maghrib", "Yatsı": "Isha", "Namaz seçimi": "Prayer selection", "Kılınacak namaz": "Choose a prayer", "Namaza başla": "Start prayer", "Namaz sayacını başlat": "Start prayer timer", "Namazı bitir ve kaydet": "Finish & save prayer", "Çalışma ekranına dön": "Return to study", "Ayet ve hadisler": "Verses & hadith", "Güncel vakitleri getirerek kalan süreyi gör.": "Get today's prayer times to see the countdown.", "Bugünün vakitleri tamamlandı. Yarın için vakit bekleniyor.": "Today's prayers have passed. Waiting for tomorrow's times.", "Otomatik vakitler internet ister ve hesaplama yöntemine göre değişebilir. Konum izni dosya olarak açıldığında çalışmazsa şehirle arayabilir veya elle girebilirsin. Yerel cami takvimini esas al.": "Automatic times require internet and depend on the calculation method. If location access is unavailable, search by city or enter times manually. Follow your local mosque's timetable.", "Şehir ve ülke yaz.": "Enter a city and country.", "Konum desteklenmiyor. Şehir yazabilirsin.": "Location is unavailable. You can enter a city instead.", "Konum izni alınamadı. Şehirle arayabilirsin.": "Location permission was unavailable. Try searching by city.", "İnternet bağlantısını kontrol et.": "Check your internet connection.", "Vakitler alınıyor…": "Loading prayer times…", "Vakitler getiriliyor…": "Loading prayer times…", "Vakitler alınamadı.": "Could not load prayer times.", "Çalışma": "Study", "Önce Planım bölümünden bir ders ekle.": "Add a subject in My plan first.", "Mola başladı.": "Your break has started.", "Molan hazır.": "Time for a break.", "Mola tamamlandı": "Break complete", "Odak sayacı başladı.": "Your focus timer has started.", "Hazır olduğunda yeni bir çalışma başlatabilirsin.": "Start your next study session when you're ready.", "Namaz oturumu tamamlandı": "Prayer session complete", "Namaz oturumu kaydedildi": "Prayer session saved", "Kaydetme başarısız. Tarayıcı depolamasını kontrol et.": "Could not save. Check your browser storage.", "Yedek indirme başlatıldı. Dosyayı İndirilenler klasöründe bulabilirsin.": "Backup download started. You can find the file in Downloads.", "Yedek hazırlanamadı. Lütfen tekrar dene.": "Could not prepare the backup. Please try again.", "Geçerli bir yedek seç.": "Choose a valid backup.", "Bu yedek biçimi desteklenmiyor.": "This backup format is not supported.", "Yedekte çalışma, görev veya ders listesi eksik.": "The backup is missing sessions, tasks or subjects.", "Ders listesi geçersiz.": "Invalid subject list.", "Namaz kayıtları geçersiz.": "Invalid prayer records.", "Namaz kayıtlarından biri geçersiz.": "One prayer record is invalid.", "Sayaç süresi geçersiz.": "Invalid timer duration.", "Namaz sayacı geçersiz.": "Invalid prayer timer.", "Yedek 20 MB sınırını aşıyor.": "The backup exceeds the 20 MB limit.", "Yeterli depolama yok. Mevcut kayıtların değiştirilmedi.": "Not enough storage. Your existing data was not changed.", "Dosya okunamadı: geçerli bir JSON yedeği seç.": "Could not read the file. Choose a valid JSON backup.", "Yedek yüklenemedi.": "Could not restore the backup.", "IKRA hakkında": "About IKRA", "IKRA · Yapımcı hakkında": "IKRA · About the creator", "Merhaba, ben Mahir. Bir öğrenciyim. IKRA’yı ders çalışırken daha iyi odaklanmak, ilerlememi takip etmek ve namaza zaman ayırmak için hazırladım. Kendi ihtiyacımdan doğan bu sade alanın sana da eşlik etmesini umuyorum.": "Hi, I'm Mahir, a student. I built IKRA to focus better while studying, keep track of my progress and make time for prayer. I hope this simple space, created from my own needs, can support you too.", "© 2026 Mahir · IKRA. Tüm hakları saklıdır.": "© 2026 Mahir · IKRA. All rights reserved.", "Biliniz ki, kalpler ancak Allah’ı anmakla huzur bulur.": "Surely, hearts find comfort in the remembrance of Allah.", "Namaz bir nurdur.": "Prayer is a light.", "Beni anmak için namaz kıl.": "Establish prayer for My remembrance.", "Kulun Rabbine en yakın olduğu hâl secdedir. Bu hâlde çokça dua edin.": "A servant is closest to their Lord while prostrating, so make abundant supplication.", "Sabır ve namazla yardım dileyin.": "Seek help through patience and prayer.", "Allah katında en sevimli amel, az da olsa devamlı olanıdır.": "The deeds most beloved to Allah are those done consistently, even if they are small.", "Şüphesiz güçlükle beraber bir kolaylık vardır.": "Surely, with hardship comes ease.", "Allah’ın en sevdiği ameller sorulduğunda verilen ilk cevap, namazı vaktinde kılmaktır.": "When asked about the deeds most beloved to Allah, the first answer was prayer at its proper time.", "Namaz, hayasızlıktan ve kötülükten alıkoyar.": "Prayer restrains a person from indecency and wrongdoing.", "Allah’ı anın, O’na şükredin ve nankörlük etmeyin.": "Remember Allah, be grateful to Him, and do not be ungrateful.", "Kayıtlar bu tarayıcıda saklanır. Başka tarayıcıya taşımak için yedeği indir. Sayfa açıkken sayaç ve namaz süresi kaldığı yerden hesaplanır; bildirimler tarayıcı kapalıyken çalışmaz.": "Records are stored in this browser. Download a backup to move them elsewhere. Timers recover elapsed time while the page is open; notifications do not work when the browser is closed.", "Namaz sayacı": "Prayer timer", "Namazını seç ve sayacı başlat. Çalışma sayacı duraklatılır.": "Choose your prayer and start the timer. Your study timer will be paused.", "Kayıtların bu tarayıcıda saklanır. Başka bir dosyaya veya tarayıcıya geçmeden önce yedek indir. Otomatik namaz vakitleri için internet bağlantısı gerekir.": "Your records are stored in this browser. Download a backup before switching files or browsers. Automatic prayer times require internet access.", "Tamamlandı": "Completed", "Vakitler yenileniyor…": "Updating prayer times…", "Yenilenemedi. İnternet bağlantısını kontrol et.": "Could not update. Check your internet connection."};
+Object.assign(dictionary,{"IKRA · YENİLİKLER": "IKRA · WHAT’S NEW", "Odak alanın yenilendi.": "A fresh space to focus.", "Daha sakin bir görünüm, daha rahat bir deneyim. İşte IKRA’daki yenilikler.": "A calmer look. A smoother experience. Discover what’s new in IKRA.", "Doğadan ilham alan bir tema": "A little closer to nature", "Yeşil tonları ve cam efektiyle yeni Doğa teması.": "Meet Nature: soft greens with a glass finish.", "Telefonunda daha akıcı": "Made for your phone", "Dokunmaya uygun kontroller, alt menü ve yenilenen paneller.": "Touch-friendly controls, bottom navigation and refreshed panels.", "Yenilikleri kaçırma": "Stay in the loop", "Her yeni sürümde seni karşılayan, sade bir güncelleme özeti.": "A simple welcome to the latest features in each new release.", "Harika, başlayalım": "Let’s get started", "Her güncellemede, yalnızca bir kez.": "Once per update. Then back to your focus."});
 Object.assign(dictionary,{"IKRA güncellendi · v1.1.0": "IKRA updated · v1.1.0", "Yeşil tonlarında yeni Doğa teması.": "New Nature theme in soft green tones.", "Telefonlarda daha rahat kullanım ve alt menü.": "Improved phone layout and bottom navigation.", "Mobilde yenilenen ilerleme ve namaz vakitleri panelleri.": "Refreshed progress and prayer-time panels on mobile."});
 Object.assign(dictionary,{"Doğa":"Nature","Tema":"Theme","Aydınlık":"Light","Karanlık":"Dark"});
 const reverse=Object.fromEntries(Object.entries(dictionary).map(([tr,en])=>[en,tr]));
@@ -614,50 +648,111 @@ document.addEventListener('ikra-language',update);update();
 </script>
 <script>
 (() => {
-  // Bump this version and the release copy together for the next announcement.
-  const RELEASE_VERSION = '1.1.0';
-  const seenKey = 'ikra-release-seen:' + RELEASE_VERSION;
+  // Edit this release record and its dictionary entries for future announcements.
+  const release = {
+    version: '1.1.1',
+    title: 'Odak alanın yenilendi.',
+    intro: 'Daha sakin bir görünüm, daha rahat bir deneyim. İşte IKRA’daki yenilikler.',
+    features: [
+      { icon: 'leaf', title: 'Doğadan ilham alan bir tema', text: 'Yeşil tonları ve cam efektiyle yeni Doğa teması.' },
+      { icon: 'phone', title: 'Telefonunda daha akıcı', text: 'Dokunmaya uygun kontroller, alt menü ve yenilenen paneller.' },
+      { icon: 'sparkle', title: 'Yenilikleri kaçırma', text: 'Her yeni sürümde seni karşılayan, sade bir güncelleme özeti.' }
+    ]
+  };
+  const seenKey = 'ikra-release-seen:' + release.version;
+  const paths = {
+    leaf: 'M20 4C12 3 5 6 5 12a6 6 0 0 0 6 6c6 0 9-7 9-14ZM4 21l11-11m-7 7v-5m3 2h5',
+    phone: 'M8 3h8a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm2 3h4m-3 12h2',
+    sparkle: 'm12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Zm7-1v4m-2-2h4',
+    arrow: 'M5 12h14m-5-5 5 5-5 5'
+  };
+  function icon(name) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+    const path = document.createElementNS(svg.namespaceURI, 'path');
+    path.setAttribute('d', paths[name]);
+    svg.append(path);
+    return svg;
+  }
+  function element(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text) node.textContent = window.ikraT(text);
+    return node;
+  }
   let attempted = false;
   function wasSeen() {
     try { if (localStorage.getItem(seenKey) === '1') return true; } catch {}
     try { return sessionStorage.getItem(seenKey) === '1'; } catch { return false; }
   }
   function showRelease() {
-    if (document.hidden) { attempted = false; return; }
+    // Wait for visibility and don't interrupt a panel the user has just opened.
+    if (document.hidden || document.querySelector('dialog[open]')) { attempted = false; return; }
     if (wasSeen()) return;
-    const card = window.ikraNotify('', {
-      title: 'IKRA güncellendi · v1.1.0',
-      completion: true,
-      duration: 16000
-    });
-    card.classList.add('release-notice');
-    const list = document.createElement('ul');
-    for (const line of [
-      'Yeşil tonlarında yeni Doğa teması.',
-      'Telefonlarda daha rahat kullanım ve alt menü.',
-      'Mobilde yenilenen ilerleme ve namaz vakitleri panelleri.'
-    ]) {
-      const item = document.createElement('li');
-      item.textContent = line;
-      list.append(item);
+    const previousFocus = document.activeElement;
+    const dialog = element('dialog');
+    dialog.id = 'release-dialog';
+    dialog.dataset.version = release.version;
+    dialog.setAttribute('aria-labelledby', 'release-title');
+    dialog.setAttribute('aria-describedby', 'release-intro');
+    const shell = element('div', 'release-shell');
+    const close = element('button', 'release-close', '×');
+    close.type = 'button';
+    close.setAttribute('aria-label', window.ikraT('Kapat'));
+    const mark = element('div', 'release-mark');mark.append(icon('sparkle'));
+    const meta = element('div', 'release-meta');
+    meta.append(element('span', '', 'IKRA · YENİLİKLER'), element('span', 'release-version', 'v' + release.version));
+    const title = element('h2', '', release.title);title.id = 'release-title';
+    const intro = element('p', 'release-intro', release.intro);intro.id = 'release-intro';
+    const features = element('ul', 'release-features');
+    for (const feature of release.features) {
+      const row = element('li', 'release-feature');
+      const badge = element('span', 'release-feature-icon');badge.append(icon(feature.icon));
+      const copy = element('div');copy.append(element('strong', '', feature.title), element('p', '', feature.text));
+      row.append(badge, copy);features.append(row);
     }
-    card.querySelector('p').replaceWith(list);
-    // Keep this separate from study data and backups; showing it counts as seen.
+    const next = element('button', 'release-continue');
+    next.type = 'button';next.autofocus = true;
+    next.append(element('span', '', 'Harika, başlayalım'), icon('arrow'));
+    const footnote = element('p', 'release-footnote', 'Her güncellemede, yalnızca bir kez.');
+    const dismiss = () => dialog.close();
+    close.onclick = next.onclick = dismiss;
+    dialog.addEventListener('keydown', event => {
+      if (event.key !== 'Tab') return;
+      if (event.shiftKey && document.activeElement === close) {
+        event.preventDefault();next.focus();
+      } else if (!event.shiftKey && document.activeElement === next) {
+        event.preventDefault();close.focus();
+      }
+    });
+    dialog.addEventListener('click', event => {
+      if (event.target !== dialog) return;
+      const rect = dialog.getBoundingClientRect();
+      if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dismiss();
+    });
+    dialog.addEventListener('close', () => {
+      document.body.classList.remove('release-open');
+      dialog.remove();
+      if (previousFocus?.isConnected && previousFocus !== document.body) previousFocus.focus({ preventScroll: true });
+    });
+    shell.append(close, mark, meta, title, intro, features, next, footnote);
+    dialog.append(shell);document.body.append(dialog);
+    dialog.showModal();document.body.classList.add('release-open');
+    // The announcement never changes study data or timer state.
     try { localStorage.setItem(seenKey, '1'); } catch {}
     try { sessionStorage.setItem(seenKey, '1'); } catch {}
   }
   function scheduleRelease() {
-    if (attempted || document.hidden) return;
+    if (attempted || document.hidden || wasSeen()) return;
     attempted = true;
     setTimeout(() => {
-      if (document.hidden) { attempted = false; return; }
-      // Avoid duplicate announcements when multiple tabs open together.
-      if (navigator.locks?.request) {
-        navigator.locks.request(seenKey, showRelease).catch(showRelease);
-      } else showRelease();
+      if (navigator.locks?.request) navigator.locks.request(seenKey, showRelease).catch(() => { attempted = false; });
+      else showRelease();
     }, 700);
   }
   document.addEventListener('visibilitychange', scheduleRelease);
+  document.addEventListener('close', scheduleRelease, true);
   scheduleRelease();
 })();
 if ('serviceWorker' in navigator) {
