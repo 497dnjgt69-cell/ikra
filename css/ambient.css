@@ -1,25 +1,46 @@
-#panel-sounds { width: min(560px, calc(100% - 28px)); }
-.ambient-intro { margin: 0 0 22px; color: var(--muted); font-size: .88rem; line-height: 1.6; }
-.ambient-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.ambient-card { min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: 19px; background: var(--tint); transition: border-color .2s, background .2s; }
-.ambient-card.is-playing { border-color: var(--heat); background: var(--card); }
-.ambient-toggle { display: grid; justify-items: start; gap: 8px; width: 100%; min-height: 110px; padding: 0 0 12px; background: transparent; border: 0; text-align: left; font: inherit; color: var(--fg); cursor: pointer; }
-.ambient-toggle svg { width: 27px; height: 27px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 6px; }
-.ambient-name { font-size: .86rem; font-weight: 550; }
-.ambient-state { color: var(--muted); font-size: .72rem; }
-.is-playing .ambient-state { color: var(--heat); }
-.ambient-volume { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.ambient-volume input { width: 100%; min-width: 0; height: 30px; margin: 0; padding: 0; accent-color: var(--heat); cursor: pointer; }
-.ambient-volume output { flex: 0 0 34px; text-align: right; font-size: .7rem; color: var(--muted); font-variant-numeric: tabular-nums; }
-.ambient-footer { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; border-top: 1px solid var(--line); margin-top: 22px; padding-top: 18px; font-size: .8rem; }
-.ambient-footer .button { font-size: .76rem; }
-.ambient-footer .button:disabled { opacity: .4; cursor: default; }
-.ambient-status { font-size: .75rem; margin: 18px 0 0; color: var(--muted); }
-.ambient-hint { font-size: .72rem; color: var(--muted); line-height: 1.5; margin: 8px 0 0; }
-.ambient-error:empty { display: none; }
-.ambient-error { font-size: .8rem; color: var(--fg); }
-.dock .sounds-playing { color: var(--heat); border-color: var(--heat); }
-.ambient-toggle:focus-visible, .ambient-volume input:focus-visible { outline: 2px solid var(--heat); outline-offset: 4px; border-radius: 6px; }
+/* Themed places share the existing dock and glass panel system. */
+#panel-sounds { width: min(760px, calc(100% - 28px)); }
+.places-intro { color: var(--muted); font-size: .9rem; margin: 0 0 22px; line-height: 1.5; }
+.places-layout { display: grid; grid-template-columns: 1fr 1.05fr; gap: 22px; align-items: stretch; }
+.places-list { display: flex; flex-direction: column; gap: 8px; }
+.place-choice { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 70px; padding: 12px; color: var(--fg); background: transparent; border: 1px solid transparent; border-radius: 14px; font: inherit; text-align: left; cursor: pointer; transition: background .18s, border-color .18s; }
+.place-choice:hover { background: var(--tint); }
+.place-choice[aria-pressed="true"] { background: var(--card); border-color: var(--heat); }
+.place-symbol { display: grid; place-items: center; width: 38px; height: 38px; flex: 0 0 38px; border-radius: 11px; background: var(--tint); }
+.place-symbol svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.place-choice-copy { flex: 1; min-width: 0; display: grid; gap: 5px; }
+.place-choice-name { font-weight: 550; font-size: .82rem; line-height: 1.4; }
+.place-choice-location { color: var(--muted); font-size: .69rem; line-height: 1.4; }
+.place-check { visibility: hidden; color: var(--heat); font-size: .82rem; }
+[aria-pressed="true"] > .place-check { visibility: visible; }
+.place-preview { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 19px; background: var(--card); }
+.place-art { display: grid; place-items: center; height: 174px; background: linear-gradient(145deg, #bedbd9, #e3e8dc); color: #365b62; }
+[data-place="oxford"] .place-art { background: linear-gradient(145deg, #d9c9b1, #ebe3d5); color: #725a40; }
+[data-place="camp"] .place-art { background: linear-gradient(145deg, #283f42, #657e72); color: #e5ddbe; }
+[data-place="space"] .place-art { background: linear-gradient(145deg, #282e4a, #646780); color: #dadcec; }
+[data-place="japan"] .place-art { background: linear-gradient(145deg, #344453, #777186); color: #edd6d2; }
+.place-art svg { width: 228px; height: 168px; max-width: 100%; }
+.place-details { padding: 19px; }
+.place-location { margin: 0 0 8px; color: var(--muted); font-size: .68rem; letter-spacing: .04em; }
+.place-details h3 { margin: 0; font-size: 1.12rem; font-weight: 550; line-height: 1.4; }
+.place-mood { color: var(--muted); font-size: .8rem; line-height: 1.6; margin: 10px 0 16px; }
+.place-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.place-tags span { border: 1px solid var(--line); border-radius: 6px; padding: 4px 7px; color: var(--muted); font-size: .65rem; }
+.place-waiting { padding-top: 16px; margin-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: .75rem; }
+.places-note { margin: 18px 0 0; color: var(--muted); font-size: .73rem; line-height: 1.5; }
+.place-choice:focus-visible { outline: 2px solid var(--heat); outline-offset: 2px; }
+.places-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.dock .button[aria-expanded="true"] { background: var(--card); border-color: var(--heat); color: var(--fg); }
 @media (max-width: 690px) { .dock { flex-wrap: nowrap; } }
-@media (max-width: 450px) { .ambient-card { padding: 12px; } .ambient-footer { grid-template-columns: 1fr auto; gap: 8px; } .ambient-footer > span { grid-column: 1 / -1; } .ambient-name { font-size: .8rem; } }
-@media (prefers-reduced-motion: reduce) { .ambient-card { transition: none; } }
+@media (max-width: 560px) {
+  .places-layout { grid-template-columns: 1fr; gap: 16px; }
+  .place-preview { grid-row: 1; }
+  .place-art { height: 116px; }
+  .place-art svg { height: 114px; }
+  .place-details { padding: 14px; }
+  .place-mood { margin: 7px 0 10px; }
+  .place-waiting { margin-top: 12px; padding-top: 10px; }
+  .places-list { gap: 3px; }
+  .place-choice { min-height: 62px; padding: 9px; }
+}
+@media (prefers-reduced-motion: reduce) { .place-choice { transition: none; } }

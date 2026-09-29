@@ -27,7 +27,7 @@ export default function initialize() {
       ["tasks", "Planım", cards[1]],
       ["prayer", "Namaz", cards[2]],
       ["history", "İstatistikler", cards[3]],
-      ["sounds", "Ortam Sesleri", sounds],
+      ["sounds", "Temalı Mekânlar", sounds],
       ["settings", "Ayarlar", cards[4]],
     ];
     for (const [id, label, card] of panels) {
@@ -72,8 +72,10 @@ export default function initialize() {
         '<svg viewBox="0 0 24 24" aria-hidden="true">' +
         icons[id] +
         "</svg><span></span>";
-      button.querySelector("span").textContent = label;
-      button.onclick = () => dialog.showModal();
+      button.querySelector("span").textContent = id === "sounds" ? "Mekânlar" : label;
+      button.setAttribute("aria-expanded", "false");
+      button.onclick = () => { dialog.showModal(); button.setAttribute("aria-expanded", "true"); };
+      dialog.addEventListener("close", () => button.setAttribute("aria-expanded", "false"));
       dock.append(button);
       if (id === "prayer") {
         const elapsed = $("#prayerelapsed");
