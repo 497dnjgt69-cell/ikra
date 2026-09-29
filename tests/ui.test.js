@@ -136,6 +136,12 @@ for (const width of [1440, 390])
     const $ = (s) => w.document.querySelector(s);
     const flush = () => new Promise((r) => setTimeout(r, 20));
     await flush();
+    assert.equal(w.document.querySelectorAll(".place-choice").length, 5);
+    $('.place-choice[data-place="japan"]').click();
+    assert.equal($(".place-preview").dataset.place, "japan");
+    assert.equal(w.localStorage.getItem("ikra-selected-place-v1"), "japan");
+    assert.equal($('.place-choice[data-place="japan"]').getAttribute("aria-pressed"), "true");
+    assert.equal($("#panel-sounds audio"), null);
     $("#addsubject").click();
     $("#new-subject-name").value = "Anatomy";
     $("#save-subject").click();
@@ -245,9 +251,9 @@ for (const width of [1440, 390])
     for (const lang of ["tr", "en", "tr", "en"]) {
       w.ikraSetLanguage(lang);
       await flush();
-      assert.equal($("#panel-sounds h2").textContent, lang === "en" ? "Ambient Sounds" : "Ortam Sesleri");
-      assert.equal($('[data-sound="rain"] .ambient-name').textContent, lang === "en" ? "Rain" : "Yağmur");
-      assert.equal($("#ambient-master").getAttribute("aria-label"), lang === "en" ? "Master volume" : "Genel ses seviyesi");
+      assert.equal($("#panel-sounds h2").textContent, lang === "en" ? "Themed Places" : "Temalı Mekânlar");
+      assert.equal($('.place-choice[data-place="bosphorus"] .place-choice-name').textContent, lang === "en" ? "Bosphorus café" : "Boğaz’da bir kafe");
+      assert.equal($(".place-waiting").textContent, lang === "en" ? "Audio coming soon" : "Ses yakında");
       assert.equal($("#title").textContent, lang === "en" ? "Find your focus." : "Odağını topla.");
       assert.ok($("#about-ikra").textContent.includes(lang === "en" ? "Hi, I'm Mahir" : "Merhaba, ben Mahir"));
       assert.ok($("#panel-history").textContent.includes(lang === "en" ? "Prayer time is not included" : "Namaz süreleri"));
