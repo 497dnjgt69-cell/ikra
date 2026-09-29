@@ -1,29 +1,40 @@
 # IKRA
 
-Odak sayacı, çalışma takibi ve namaz desteği sunan statik PWA.
+Odak sayacı, çalışma planı, istatistik ve namaz desteği sunan statik PWA.
 
-## Dosya düzeni
+## Geliştirme
 
-- `index.html`: Sayfa yapısı ve erişilebilir HTML kontrolleri.
-- `css/`: Temel stiller, cam görünümü, çalışma alanı, doğa teması, mobil düzen ve sürüm duyuruları. HTML içindeki yükleme sırası CSS önceliğini korur.
-- `js/app.js`: Uygulamanın tek giriş noktası; özellikleri bağımlılık sırasıyla başlatır.
-- `js/core/`: Uygulama durumu ve sayaç koordinasyonu, varsayılan veriler, yedekleme/doğrulama ve istatistik hesapları.
-- `js/features/`: Ses, odak görünümü, ayarlar, namaz ayarları/alıntıları, hakkında ve sürüm duyuruları.
-- `js/ui/`: Paneller, bildirimler, zaman seçiciler, mobil kartlar ve ekran yerleşimi.
-- `js/i18n/`: Türkçe/İngilizce sözlüğü ve DOM çevirisi.
-- `service-worker.js`: Çevrimdışı dosyalar ve önbellek sürümü.
-- `tests/`: Süre, istatistik ve yedek uyumluluğu regresyon kontrolleri.
+- `python3 -m http.server 8000` → http://localhost:8000
+- Testler: `npm ci` ardından `npm test` (uyumlu Node.js sürümleri `package.json` içinde belirtilir).
+- Yeni JS/CSS dosyası eklenince `npm run cache` çalıştır ve `service-worker.js` önbellek sürümünü artır.
+- Yayın için derleme gerekmez. GitHub Pages depo kökünden çalışır. ES modülleri nedeniyle `file://` yerine HTTP kullan.
 
-## Yerel kullanım
+## Yapı
 
-`python3 -m http.server 8000` çalıştır ve http://localhost:8000 adresini aç.
-ES modülleri nedeniyle HTML dosyasını çift tıklayarak `file://` üzerinden açma.
-Derleme veya npm paketi kurulumu gerekmiyor. Testler için Node.js ile `npm test` çalıştır.
+| Konum | Sorumluluk |
+| --- | --- |
+| `index.html`, `css/` | Sayfa yapısı, temalar, mobil görünüm |
+| `js/app.js`, `js/bootstrap.js` | Giriş ve arayüzün başlatılma sırası |
+| `js/core/application.js` | Servisleri birbirine bağlar; yaşam döngüsü ve render koordinasyonu |
+| `js/domain/` | Ekrandan bağımsız sayaç, namaz ve ders kuralları |
+| `js/services/` | Veri saklama, sayaç komutları, ders/görev, oturum, yedek, ayar ve erişim servisleri |
+| `js/controllers/` | Kullanıcı olaylarını servis komutlarına çevirir |
+| `js/ui/`, `js/features/` | Ekranı çizer; paneller, odak görünümü ve diğer arayüz davranışları |
+| `js/config/features.js` | Ücretsiz/Pro özellik politikası |
+| `js/platform/` | Namaz API'si, ticaret sağlayıcısı ve service worker kaydı |
+| `js/i18n/` | TR/EN sözlüğü ve çeviri |
+| `tests/` | Sayaç, veri, erişim, DOM ve çevrimdışı dosya testleri |
 
-## Güncelleme
+## Veri uyumluluğu
 
-GitHub Pages mevcut depo kökünden yayınlamaya devam eder. HTML ile beraber `css/` ve `js/` klasörlerini de yükle. Yeni çalışma zamanı dosyalarını `service-worker.js` içindeki `CORE` listesine ekle ve önbellek sürümünü artır.
+`mahir-focus-v1` anahtarı ve `ikra-v1`/eski yedek formatları korunur. Eski kayıtlara kimlik ve şema sürümü eklenir. Servisler güncellemeleri kopya üzerinde hazırlar; depolama başarılı olduktan sonra yayınlar. Ekranlar durumu doğrudan değiştiremez.
 
-Mevcut `mahir-focus-v1` depolama anahtarı, kayıt yapısı ve yedek formatı korunur. Veriler tarayıcı ve alan adına bağlıdır; aynı yayın adresini kullan.
+Veri aynı tarayıcı ve alan adına bağlıdır. Aynı GitHub Pages adresinden yayınlamaya devam et.
 
-Bu geçiş mevcut davranışı korumaya odaklanır. `core/application.js` sayaç ve ekran koordinasyonunu hâlâ yönetir; özellikler sonraki adımlarda bu sınırdan aşamalı olarak ayrılabilir. Ücretli özellik veya ödeme doğrulaması bu değişikliğin kapsamında değildir.
+## Pro temeli
+
+Mevcut özellikler ücretsizdir. `custom-presets` yalnızca gelecekteki bir Pro özelliği için ayrılmış kimliktir; uygulanmış bir özellik değildir. `services/access.js` kontrolü servis komutlarında kullanılır. Yedek veya `localStorage` içindeki Pro alanları erişim sağlamaz.
+
+Gerçek satın alma henüz bağlı değildir. `platform/commerce.js` şu an ücretsiz web sağlayıcısıdır. Microsoft Store doğrulaması yapan bir sağlayıcı composition root'a enjekte edilecektir. İstemci erişim kontrolü tek başına güvenli lisans doğrulaması değildir.
+
+Mimari sözleşmeler ve sonraki ödeme entegrasyonu: [docs/architecture.md](docs/architecture.md).

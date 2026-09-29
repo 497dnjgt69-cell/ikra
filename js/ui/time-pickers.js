@@ -1,4 +1,4 @@
-export default function initialize() {
+export default function initialize({ getWidgetPositions }) {
   (() => {
     const $ = (s) => document.querySelector(s);
     const pickers = [];
@@ -133,12 +133,7 @@ export default function initialize() {
       ["prayer", $("#prayer-peek"), "Namaz vakitleri"],
     ];
     cards.forEach(([, card]) => stack.append(card));
-    let saved = {};
-    try {
-      saved =
-        JSON.parse(localStorage.getItem("mahir-focus-v1"))?.widgetPositions ||
-        {};
-    } catch {}
+    let saved = getWidgetPositions();
     const active = [];
     let topZ = 5;
     for (const [id, card, title] of cards) {

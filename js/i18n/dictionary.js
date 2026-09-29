@@ -1,6 +1,11 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Bu özellik IKRA Pro gerektiriyor.": "This feature requires IKRA Pro.",
+      "İşlem kaydedilemedi. Lütfen tekrar dene.":
+        "Could not save this change. Please try again.",
+      "Satın alma henüz kullanıma açık değil.":
+        "Purchases are not available yet.",
       Odak: "Focus",
       ODAK: "FOCUS",
       Saat: "Clock",

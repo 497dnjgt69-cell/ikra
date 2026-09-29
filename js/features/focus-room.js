@@ -1,4 +1,4 @@
-export default function initialize() {
+export default function initialize({ access }) {
   (() => {
     const app = document.querySelector(".app"),
       clock = document.querySelector("#bigclock");
@@ -76,6 +76,10 @@ export default function initialize() {
       button.focus({ preventScroll: true });
     }
     button.onclick = async () => {
+      if (!access.can("focus-view")) {
+        window.ikraNotify("Bu özellik IKRA Pro gerektiriyor.");
+        return;
+      }
       if (room.open || busy) return;
       busy = true;
       const slot = clock.getBoundingClientRect(),

@@ -1,0 +1,87 @@
+import { datekey } from "../shared/format.js";
+import { prayerNames as names } from "./prayer-timer.js";
+export function prayerWallNow(d, now = new Date()) {
+  const zone =
+    d.prayerTimeZone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+  let parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: zone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h23",
+    })
+      .formatToParts(now)
+      .map((x) => [x.type, x.value]),
+  );
+  return {
+    date: parts.year + "-" + parts.month + "-" + parts.day,
+    seconds: +parts.hour * 3600 + +parts.minute * 60 + +parts.second,
+    zone,
+  };
+}
+function wallEpoch(date, time, zone) {
+  const [y, m, day] = date.split("-").map(Number),
+    [h, min] = time.split(":").map(Number);
+  const desired = Date.UTC(y, m - 1, day, h, min);
+  let epoch = desired;
+  for (let i = 0; i < 3; i++) {
+    const parts = Object.fromEntries(
+      new Intl.DateTimeFormat("en-CA", {
+        timeZone: zone,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hourCycle: "h23",
+      })
+        .formatToParts(new Date(epoch))
+        .map((x) => [x.type, x.value]),
+    );
+    const actual = Date.UTC(
+      +parts.year,
+      +parts.month - 1,
+      +parts.day,
+      +parts.hour,
+      +parts.minute,
+      +parts.second,
+    );
+    epoch += desired - actual;
+  }
+  return epoch;
+}
+export function getNextPrayer(d, now) {
+  const wall = prayerWallNow(d, new Date(now));
+  if (d.prayerDate !== wall.date) return null;
+  for (const name of names) {
+    const time = d.prayerTimes[name];
+    if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(time || "")) continue;
+    const epoch = wallEpoch(wall.date, time, wall.zone);
+    if (epoch > now)
+      return {
+        name,
+        time,
+        minutes: Math.ceil((epoch - now) / 60000),
+        tomorrow: false,
+      };
+  }
+  const tomorrow = new Date(wall.date + "T12:00:00");
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const key = datekey(tomorrow);
+  if (d.prayerTomorrow?.date === key && d.prayerTomorrow.times?.Sabah) {
+    const time = d.prayerTomorrow.times.Sabah,
+      epoch = wallEpoch(key, time, wall.zone);
+    return {
+      name: "Sabah",
+      time,
+      minutes: Math.max(0, Math.ceil((epoch - now) / 60000)),
+      tomorrow: true,
+    };
+  }
+  return null;
+}
