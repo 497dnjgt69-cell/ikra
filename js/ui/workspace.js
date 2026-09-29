@@ -20,10 +20,14 @@ export default function initialize() {
       history: '<path d="M3 11a9 9 0 1 1 2 7M3 5v6h6m3-5v6l4 2"/>',
       settings: '<path d="M4 7h16M4 17h16M8 4v6m8 4v6"/>',
     };
+    const sounds = document.createElement("section");
+    sounds.className = "ambient-content";
+    icons.sounds = '<path d="M4 13v-1a8 8 0 0 1 16 0v1M4 12H3v7h4v-7H4Zm16 0h1v7h-4v-7h3Z"/>';
     const panels = [
       ["tasks", "Planım", cards[1]],
       ["prayer", "Namaz", cards[2]],
       ["history", "İstatistikler", cards[3]],
+      ["sounds", "Ortam Sesleri", sounds],
       ["settings", "Ayarlar", cards[4]],
     ];
     for (const [id, label, card] of panels) {

@@ -1,4 +1,4 @@
-const CACHE = "ikra-v1.2.2";
+const CACHE = "ikra-v1.3.0";
 
 const CORE = [
   "./",
@@ -9,6 +9,7 @@ const CORE = [
   "./icon-192.png",
   "./icon-512.png",
   "./icon-maskable-512.png",
+  "./css/ambient.css",
   "./css/base.css",
   "./css/glass.css",
   "./css/mobile.css",
@@ -35,6 +36,7 @@ const CORE = [
   "./js/domain/prayer-times.js",
   "./js/domain/subjects.js",
   "./js/features/about.js",
+  "./js/features/ambient-sounds.js",
   "./js/features/audio.js",
   "./js/features/focus-room.js",
   "./js/features/prayer-reflections.js",
@@ -48,6 +50,7 @@ const CORE = [
   "./js/platform/prayer-api.js",
   "./js/platform/register-service-worker.js",
   "./js/services/access.js",
+  "./js/services/ambient-audio.js",
   "./js/services/backup.js",
   "./js/services/focus-timer.js",
   "./js/services/planner.js",

@@ -1,4 +1,5 @@
 // Initialization order is intentional: later UI features extend earlier ones.
+import initAmbientSounds from "./features/ambient-sounds.js";
 import initLanguage from "./i18n/dictionary.js";
 import initNotifications from "./ui/notifications.js";
 import initAnimations from "./ui/animations.js";
@@ -26,6 +27,9 @@ export function bootstrap(options) {
   initAnimations(); // ui/animations
   const app = createApplication(options); // services and views
   initWorkspace(); // ui/workspace
+  const ambient = initAmbientSounds();
+  const dispose = app.dispose;
+  app.dispose = () => { ambient.dispose(); dispose(); };
   initFocusRoom({ access: app.access }); // features/focus-room
   initTimePickers({
     getWidgetPositions: () => app.store.state.widgetPositions,
