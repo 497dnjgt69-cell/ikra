@@ -1,4 +1,4 @@
-const CACHE = "ikra-v1.2.1";
+const CACHE = "ikra-v1.2.2";
 
 const CORE = [
   "./",
