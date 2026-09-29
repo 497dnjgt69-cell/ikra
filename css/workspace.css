@@ -2142,3 +2142,7 @@ body.focus-running:not(.prayer-active) .widget-stack {
   line-height: 1.5;
   margin: 10px 0 0;
 }
+
+.brand { display: inline-flex; align-items: center; gap: 9px; }
+.brand-logo { display: block; width: 38px; height: 38px; border-radius: 10px; }
+.release-mark img { display: block; border-radius: 15px; }

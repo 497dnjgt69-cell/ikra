@@ -1,3 +1,4 @@
+import { localizedText } from "../i18n/bindings.js";
 export default function initialize() {
   (() => {
     window.ikraNotify = (
@@ -25,7 +26,8 @@ export default function initialize() {
       const heading = document.createElement("strong");
       heading.textContent = title;
       const text = document.createElement("p");
-      text.textContent = String(message);
+      if (typeof message === "function") localizedText(text, message);
+      else text.textContent = String(message);
       const foot = document.createElement("div");
       foot.className = "notice-foot";
       const track = document.createElement("span");

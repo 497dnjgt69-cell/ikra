@@ -315,6 +315,27 @@ export default function initialize() {
       Aydınlık: "Light",
       Karanlık: "Dark",
     });
+    Object.assign(dictionary, {
+      "Konum ve hesaplama": "Location & calculation",
+      "Tamamlanan görev oranı": "Task completion rate",
+      "Kayıt saklanamadı.": "Could not save the session.",
+      "Namaz vakitleri alınamadı.": "Could not load prayer times.",
+      "Namaz vakti geçersiz.": "Invalid prayer time.",
+      "Odak dakika": "Focus duration in minutes",
+      "Mola dakika": "Break duration in minutes",
+      "Kısa mola dakika": "Short break duration in minutes",
+      "Uzun mola dakika": "Long break duration in minutes",
+      "Namaz dakika": "Prayer duration in minutes",
+      "Yeni logo, daha tutarlı bir deneyim.": "A new logo. A more consistent experience.",
+      "IKRA’nın yeni görünümü ve iyileştirilen dil desteği hazır.": "IKRA’s new look and improved language support are ready.",
+      "IKRA’nın yeni simgesi": "IKRA’s new icon",
+      "Yeşil hilal ve saat tasarımı artık uygulamada.": "The green crescent and clock design is now in the app.",
+      "Daha eksiksiz Türkçe ve İngilizce": "More complete Turkish and English",
+      "Ayarlar, bildirimler ve istatistiklerde daha tutarlı çeviriler.": "More consistent translations in settings, notifications and statistics.",
+      "Dilini değiştir, kaldığın yerden devam et": "Switch languages and keep going",
+      "Derslerin, görevlerin ve çalışma kayıtların korunur.": "Your subjects, tasks and study records are preserved.",
+    });
+    const normalize = (value) => String(value).replace(/\s+/g, " ").trim();
     const reverse = Object.fromEntries(
       Object.entries(dictionary).map(([tr, en]) => [en, tr]),
     );
@@ -323,28 +344,31 @@ export default function initialize() {
       language = localStorage.getItem("ikra-language") === "en" ? "en" : "tr";
     } catch {}
     window.ikraLocale = () => (language === "en" ? "en-CA" : "tr-TR");
-    window.ikraOriginal = (text) => reverse[text] || text;
+    window.ikraOriginal = (text) => Object.hasOwn(reverse, normalize(text)) ? reverse[normalize(text)] : text;
     window.ikraT = (value) => {
       if (language === "tr") return value;
       const raw = String(value),
-        text = raw.trim();
-      let result = dictionary[text];
+        text = normalize(raw);
+      let result = Object.hasOwn(dictionary, text) ? dictionary[text] : undefined;
       if (result === undefined) {
         result = text;
         if (/^“.*”$/.test(text) && dictionary[text.slice(1, -1)])
           result = "“" + dictionary[text.slice(1, -1)] + "”";
         result = result
-          .replace(/^(\d+) gün seri$/, "$1 day streak")
+          .replace(/^(\d+) gün seri$/, (_, n) => `${n}-day streak`)
           .replace(
             /^(\d+) \/ (\d+) görev tamamlandı$/,
             "$1 / $2 tasks completed",
           )
-          .replace(/^Her (\d+) turda$/, "Every $1 sessions")
+          .replace(/^Her (\d+) turda$/, (_, n) => `Every ${n} ${Number(n) === 1 ? "session" : "sessions"}`)
           .replace(/^Daha eski kayıtlar \((\d+)\)$/, "Older sessions ($1)")
           .replace(
             /^(\d+)\. çalışma oturumu tamamlandı$/,
             "Study session $1 complete",
           );
+        result = result.replace(/^(Namaz) · /, "Prayer · ");
+        result = result.replace(/^(İlerleme|Namaz vakitleri)(?= kartını)/, (_, name) => dictionary[name]);
+        result = result.replace(/^(.*) · (\d{4}-\d{2}-\d{2}) kaydı \(güncel değil\)$/, "$1 · saved times from $2 (out of date)");
         result = result
           .replace(/^Toplam /, "Total ")
           .replace(/ · tamamlandı/g, " · completed")
@@ -418,11 +442,7 @@ export default function initialize() {
             " · English rendering of the meaning",
           );
       }
-      return (
-        raw.slice(0, raw.indexOf(text)) +
-        result +
-        raw.slice(raw.indexOf(text) + text.length)
-      );
+      return raw.match(/^\s*/)[0] + result + raw.match(/\s*$/)[0];
     };
     window.ikraSetLanguage = (value) => {
       language = value === "en" ? "en" : "tr";

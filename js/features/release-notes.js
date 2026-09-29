@@ -2,25 +2,25 @@ export default function initialize() {
   (() => {
     // Edit this release record and its dictionary entries for future announcements.
     const release = {
-      version: "1.1.1",
-      title: "Odak alanın yenilendi.",
+      version: "1.2.1",
+      title: "Yeni logo, daha tutarlı bir deneyim.",
       intro:
-        "Daha sakin bir görünüm, daha rahat bir deneyim. İşte IKRA’daki yenilikler.",
+        "IKRA’nın yeni görünümü ve iyileştirilen dil desteği hazır.",
       features: [
         {
           icon: "leaf",
-          title: "Doğadan ilham alan bir tema",
-          text: "Yeşil tonları ve cam efektiyle yeni Doğa teması.",
+          title: "IKRA’nın yeni simgesi",
+          text: "Yeşil hilal ve saat tasarımı artık uygulamada.",
         },
         {
           icon: "phone",
-          title: "Telefonunda daha akıcı",
-          text: "Dokunmaya uygun kontroller, alt menü ve yenilenen paneller.",
+          title: "Daha eksiksiz Türkçe ve İngilizce",
+          text: "Ayarlar, bildirimler ve istatistiklerde daha tutarlı çeviriler.",
         },
         {
           icon: "sparkle",
-          title: "Yenilikleri kaçırma",
-          text: "Her yeni sürümde seni karşılayan, sade bir güncelleme özeti.",
+          title: "Dilini değiştir, kaldığın yerden devam et",
+          text: "Derslerin, görevlerin ve çalışma kayıtların korunur.",
         },
       ],
     };
@@ -77,7 +77,11 @@ export default function initialize() {
       close.type = "button";
       close.setAttribute("aria-label", window.ikraT("Kapat"));
       const mark = element("div", "release-mark");
-      mark.append(icon("sparkle"));
+      const logo = document.createElement("img");
+      logo.src = "./icon-192.png";
+      logo.alt = "";
+      logo.width = logo.height = 56;
+      mark.append(logo);
       const meta = element("div", "release-meta");
       meta.append(
         element("span", "", "IKRA · YENİLİKLER"),

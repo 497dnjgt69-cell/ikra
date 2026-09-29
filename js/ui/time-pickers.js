@@ -24,7 +24,10 @@ export default function initialize({ getWidgetPositions }) {
       wheel.style.display = "block";
       wheel.tabIndex = 0;
       wheel.setAttribute("role", "spinbutton");
-      wheel.setAttribute("aria-label", label.textContent.trim());
+      wheel.setAttribute("aria-label", {
+        focusmin: "Odak dakika", breakmin: "Kısa mola dakika", longmin: "Uzun mola dakika",
+        prayermin: "Namaz dakika", longevery: "Uzun mola aralığı",
+      }[id]);
       wheel.setAttribute("aria-valuemin", min);
       wheel.setAttribute("aria-valuemax", max);
       wrap.append(wheel);

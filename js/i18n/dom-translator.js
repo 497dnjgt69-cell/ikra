@@ -1,3 +1,5 @@
+import { updateLocalized, managesAttribute } from "./bindings.js";
+
 export default function initialize() {
   (() => {
     const buttonGroup = document.createElement("div");
@@ -26,7 +28,7 @@ export default function initialize() {
       if (
         !node.parentElement ||
         node.parentElement.closest(
-          "script,style,[data-user-text],textarea,.digit,.colon,.wheel-item",
+          "script,style,[data-user-text],[data-i18n-managed],textarea,.digit,.colon,.wheel-item",
         )
       )
         return;
@@ -41,6 +43,7 @@ export default function initialize() {
     }
     function element(el) {
       if (el.matches("script,style,[data-user-text]")) return;
+      updateLocalized(el);
       let cache = attributeCache.get(el) || {};
       for (const attr of [
         "aria-label",
@@ -49,7 +52,7 @@ export default function initialize() {
         "data-tooltip",
         "aria-valuetext",
       ]) {
-        if (!el.hasAttribute(attr)) continue;
+        if (!el.hasAttribute(attr) || managesAttribute(el, attr)) continue;
         const current = el.getAttribute(attr),
           old = cache[attr],
           original =

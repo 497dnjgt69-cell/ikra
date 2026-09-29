@@ -1,3 +1,4 @@
+import { t, bilingual, localizedText, localizedAttribute } from "../i18n/bindings.js";
 import { handleAction } from "../shared/actions.js";
 import { $, $$ } from "../shared/dom.js";
 import { datekey, display } from "../shared/format.js";
@@ -65,14 +66,14 @@ export function createStatisticsView({ store, planner, records, access }) {
       let li = document.createElement("li"),
         a = document.createElement("span"),
         b = document.createElement("strong");
-      a.textContent =
-        (s.type === "prayer" ? "Namaz · " + s.name : s.subject) +
-        (s.complete ? " · tamamlandı" : "") +
+      localizedText(a, () =>
+        (s.type === "prayer" ? t("Namaz") + " · " + t(s.name) : s.subject) +
+        (s.complete ? " · " + t("Tamamlandı").toLocaleLowerCase(window.ikraLocale()) : "") +
         " · " +
         new Date(s.at).toLocaleString(window.ikraLocale(), {
           dateStyle: "medium",
           timeStyle: "short",
-        });
+        }));
       b.textContent = display(s.seconds);
       if (s.type === "study") {
         li.style.borderInlineStart = "3px solid " + subjectColor(s.subject);
@@ -82,13 +83,9 @@ export function createStatisticsView({ store, planner, records, access }) {
       remove.type = "button";
       remove.className = "session-delete";
       remove.textContent = "Sil";
-      remove.setAttribute(
-        "aria-label",
-        (s.type === "prayer" ? s.name : s.subject) +
-          " · " +
-          display(s.seconds) +
-          " oturumunu sil",
-      );
+      localizedAttribute(remove, "aria-label", () =>
+        (s.type === "prayer" ? t(s.name) : s.subject) + " · " + t(display(s.seconds)) +
+        bilingual(" oturumunu sil", " — delete session"));
       remove.onclick = handleAction(() => deleteSession(s.record, s.type));
       li.append(a, b, remove);
       h.append(li);
@@ -283,10 +280,8 @@ export function createStatisticsView({ store, planner, records, access }) {
       if (!restore) return;
       renderStats();
       const notice = window.ikraNotify(
-        (record.subject || record.name) +
-          " · " +
-          display(record.seconds) +
-          " silindi.",
+        () => (type === "prayer" ? t(record.name) : record.subject) +
+          " · " + t(display(record.seconds)) + bilingual(" silindi.", " deleted."),
         { title: "Oturum silindi", duration: 8000 },
       );
       const undo = document.createElement("button");

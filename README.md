@@ -38,3 +38,9 @@ Mevcut özellikler ücretsizdir. `custom-presets` yalnızca gelecekteki bir Pro 
 Gerçek satın alma henüz bağlı değildir. `platform/commerce.js` şu an ücretsiz web sağlayıcısıdır. Microsoft Store doğrulaması yapan bir sağlayıcı composition root'a enjekte edilecektir. İstemci erişim kontrolü tek başına güvenli lisans doğrulaması değildir.
 
 Mimari sözleşmeler ve sonraki ödeme entegrasyonu: [docs/architecture.md](docs/architecture.md).
+
+## Dil ve simgeler
+
+Statik TR/EN metinler `js/i18n/dictionary.js` içindedir; HTML satır sonları eşleşmeden önce normalize edilir. Kullanıcı metni içeren cümlelerde `js/i18n/bindings.js` içindeki `localizedText` / `localizedAttribute` kullanılır. Bu bağlar dil değişiminde yeniden çizilir; ders/görev adları sözlüğe gönderilmez. Saf kullanıcı metni `data-user-text` ile işaretlenir.
+
+`icon-*.png` ve `IKRA.ico` yeni yeşil hilalli saat logosunu içerir. `icon-180.png` Apple touch simgesidir; maskable sürümde ek güvenli boşluk bulunur. Manifest kimliği, başlangıç adresi ve kapsamı korunmuştur. Bu depo web/PWA kaynaklarını içerir; Microsoft Store listeleme görselleri ve yüklenen Windows paketi burada yönetilmez.

@@ -1,3 +1,4 @@
+import { bilingual, localizedAttribute } from "../i18n/bindings.js";
 import { handleAction } from "../shared/actions.js";
 import { $, $$ } from "../shared/dom.js";
 import { datekey } from "../shared/format.js";
@@ -25,7 +26,7 @@ export function createPlannerView({ store, planner, render }) {
       "4px solid " +
       (store.state.subject ? subjectColor(store.state.subject) : "var(--line)");
     $("#subject-options").replaceChildren(
-      ...store.state.subjects.map((name) => new Option(name, name)),
+      ...store.state.subjects.map((name) => (() => { const option = new Option(name, name); option.dataset.userText = ""; return option; })()),
     );
     const manager = $("#course-colors");
     manager.replaceChildren();
@@ -38,7 +39,7 @@ export function createPlannerView({ store, planner, render }) {
       text.textContent = name;
       input.type = "color";
       input.value = subjectColor(name);
-      input.setAttribute("aria-label", name + " rengi");
+      localizedAttribute(input, "aria-label", () => bilingual(name + " rengi", name + " colour"));
       input.onchange = handleAction(() => {
         planner.ensureSubject(name, input.value);
         render();
@@ -82,7 +83,7 @@ export function createPlannerView({ store, planner, render }) {
         del = document.createElement("button");
       check.type = "checkbox";
       check.checked = !!t.done;
-      check.setAttribute("aria-label", t.text + " tamamlandı");
+      localizedAttribute(check, "aria-label", () => bilingual(t.text + " tamamlandı", t.text + " completed"));
       check.onchange = handleAction(() => {
         planner.editTask(t.id, { done: check.checked });
         li.animate([{ opacity: 1 }, { opacity: 0.3 }], {
@@ -95,7 +96,7 @@ export function createPlannerView({ store, planner, render }) {
       name.className = "task-name" + (t.done ? " done" : "");
       meta.dataset.userText = "";
       meta.textContent =
-        (t.subject || "Genel") +
+        (t.subject || window.ikraT("Genel")) +
         (t.due
           ? " · " +
             new Date(t.due + "T12:00:00").toLocaleDateString(

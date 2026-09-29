@@ -1,3 +1,4 @@
+import { t, bilingual } from "../i18n/bindings.js";
 import { handleAction } from "../shared/actions.js";
 import { $, $$ } from "../shared/dom.js";
 
@@ -37,10 +38,8 @@ export function bindTimer({ store, focus, prayer, render }) {
     const finished = prayer.leave();
     if (finished)
       window.ikraNotify(
-        finished.name +
-          " · " +
-          Math.round(finished.seconds / 60) +
-          " dakika kaydedildi.",
+        () => t(finished.name) + " · " + Math.round(finished.seconds / 60) +
+          bilingual(" dakika kaydedildi.", " min saved."),
         { completion: true, title: "Namaz oturumu kaydedildi" },
       );
   };

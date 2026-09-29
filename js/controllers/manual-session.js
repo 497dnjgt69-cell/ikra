@@ -1,3 +1,4 @@
+import { t, bilingual, localizedText } from "../i18n/bindings.js";
 import { handleAction } from "../shared/actions.js";
 import { $ } from "../shared/dom.js";
 import { datekey, display } from "../shared/format.js";
@@ -9,7 +10,7 @@ export function bindManualSession({ store, records, render, playSound }) {
     window.animatePanel($("#manual-body"), show);
     if (show) {
       $("#manual-date").value = datekey(Date.now());
-      $("#manual-status").textContent = "";
+      localizedText($("#manual-status"), () => "");
       $("#manual-subject").value = store.state.subject;
     }
   });
@@ -28,7 +29,7 @@ export function bindManualSession({ store, records, render, playSound }) {
   function submitManualSession(e) {
     e?.preventDefault();
     const status = $("#manual-status");
-    status.textContent = "";
+    localizedText(status, () => "");
     try {
       const subject = $("#manual-subject").value,
         minutes = Number($("#manual-minutes").value),
@@ -37,15 +38,15 @@ export function bindManualSession({ store, records, render, playSound }) {
       render();
       $("#manual-minutes").value = "";
       $("#manual-preview").textContent = "";
-      status.textContent =
-        record.subject + " · " + display(record.seconds) + " kaydedildi.";
+      localizedText(status, () => record.subject + " · " + t(display(record.seconds)) +
+        bilingual(" kaydedildi.", " saved."));
       window.ikraNotify(
-        record.subject + " · " + minutes + " dakika istatistiklerine eklendi.",
+        () => record.subject + " · " + minutes + bilingual(" dakika istatistiklerine eklendi.", " min added to your statistics."),
         { completion: true, title: "Oturum kaydedildi" },
       );
       playSound("finish");
     } catch (error) {
-      status.textContent = error.message || "Kayıt saklanamadı.";
+      localizedText(status, () => t(error.message || "Kayıt saklanamadı."));
     }
   }
   return {};

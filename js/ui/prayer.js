@@ -1,7 +1,12 @@
+import { t, bilingual, localizedText } from "../i18n/bindings.js";
 import { $ } from "../shared/dom.js";
 import { datekey } from "../shared/format.js";
 import { prayerNames as names } from "../domain/prayer-timer.js";
 export function createPrayerView({ store, times }) {
+  function locationText() {
+    const name = store.state.prayerLocation;
+    return !name ? t("Konum ekle") : ["Konumum", "Elle girildi"].includes(name) ? t(name) : name;
+  }
   function updateNextPrayer() {
     const el = $("#next-prayer");
     if (!el) return;
@@ -31,10 +36,9 @@ export function createPrayerView({ store, times }) {
   }
   function renderPrayer() {
     $("#cityfetch").disabled = times.loading;
-    let expired = store.state.prayerDate !== datekey(Date.now());
     $("#city").value = store.state.prayerLocation;
     $("#method").value = store.state.method;
-    $("#prayerplace").textContent = store.state.prayerLocation || "Konum ekle";
+    localizedText($("#prayerplace"), locationText);
     $("#prayerstatus").textContent = times.status();
     let grid = $("#prayergrid");
     grid.replaceChildren();
@@ -80,11 +84,12 @@ export function createPrayerView({ store, times }) {
       String(!!store.state.prayerPeek),
     );
     window.animatePanel($("#prayer-peek"), !!store.state.prayerPeek);
-    $("#peek-location").textContent =
-      store.state.prayerLocation || "Konum ekle";
+    localizedText($("#peek-location"), () => locationText() +
+      (store.state.prayerDate && store.state.prayerDate !== datekey(Date.now())
+        ? bilingual(" · " + store.state.prayerDate + " kaydı (güncel değil)",
+          " · saved times from " + store.state.prayerDate + " (out of date)") : ""));
     let grid = $("#peek-times");
     grid.replaceChildren();
-    let current = store.state.prayerDate === datekey(Date.now());
     names.forEach((n) => {
       let box = document.createElement("div"),
         label = document.createElement("b"),
@@ -95,9 +100,7 @@ export function createPrayerView({ store, times }) {
       box.append(label, time);
       grid.append(box);
     });
-    if (!current && store.state.prayerDate)
-      $("#peek-location").textContent +=
-        " · " + store.state.prayerDate + " kaydı (güncel değil)";
+
   }
   return { render: renderPrayer, updateNextPrayer };
 }

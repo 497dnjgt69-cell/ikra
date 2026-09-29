@@ -1,9 +1,11 @@
-const CACHE = "ikra-v1.2.0";
+const CACHE = "ikra-v1.2.1";
 
 const CORE = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
+  "./icon-32.png",
+  "./icon-180.png",
   "./icon-192.png",
   "./icon-512.png",
   "./icon-maskable-512.png",
@@ -39,6 +41,7 @@ const CORE = [
   "./js/features/prayer-settings.js",
   "./js/features/release-notes.js",
   "./js/features/settings.js",
+  "./js/i18n/bindings.js",
   "./js/i18n/dictionary.js",
   "./js/i18n/dom-translator.js",
   "./js/platform/commerce.js",
@@ -71,7 +74,7 @@ const CORE = [
   "./js/ui/time-pickers.js",
   "./js/ui/timer.js",
   "./js/ui/tooltips.js",
-  "./js/ui/workspace.js",
+  "./js/ui/workspace.js"
 ];
 
 self.addEventListener("install", (event) => {

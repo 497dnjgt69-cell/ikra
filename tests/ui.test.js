@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { JSDOM } from "jsdom";
 // DOM integration, not a browser layout test. Animation/dialog/media APIs are stubbed.
 for (const width of [1440, 390])
-  test(`UI workflows and data preservation at media width ${width}`, async (t) => {
+  test(`UI workflows, bilingual round-trips and data preservation at media width ${width}`, async (t) => {
     let app, dom;
     const root = fileURLToPath(new URL("..", import.meta.url));
     const globals = [
@@ -116,7 +116,8 @@ for (const width of [1440, 390])
       this.dispatchEvent(new w.Event("close"));
     };
     global.confirm = () => true;
-    w.localStorage.setItem("ikra-release-seen:1.1.1", "1");
+    w.localStorage.setItem("ikra-release-seen:1.2.1", "1");
+    if (width === 390) w.localStorage.setItem("ikra-language", "en");
     const errors = [];
     w.addEventListener("error", (e) => {
       errors.push(e.error?.stack || e.message);
@@ -230,5 +231,46 @@ for (const width of [1440, 390])
     // User data and account access remain separate after an actual UI import.
     assert.equal(app.access.plan, "free");
 
+    // Language round-trips must update copy, dates and dynamic notices without
+    // translating user data (including names that collide with dictionary entries).
+    app.records.addManual({subject: "Focus", minutes: 61, date: "2026-09-20"});
+    app.planner.addSubject("Saat");
+    app.planner.addTask("Light", "2026-09-20");
+    app.store.update((d) => {
+      d.prayers.push({id: "i18n-prayer", name: "Sabah", seconds: 120, at: "2026-09-20T12:00:00.000Z", complete: true});
+      d.prayerDate = "2026-09-20";
+      d.prayerLocation = "Montréal, Canada";
+    });
+    await flush();
+    for (const lang of ["tr", "en", "tr", "en"]) {
+      w.ikraSetLanguage(lang);
+      await flush();
+      assert.equal($("#title").textContent, lang === "en" ? "Find your focus." : "Odağını topla.");
+      assert.ok($("#about-ikra").textContent.includes(lang === "en" ? "Hi, I'm Mahir" : "Merhaba, ben Mahir"));
+      assert.ok($("#panel-history").textContent.includes(lang === "en" ? "Prayer time is not included" : "Namaz süreleri"));
+      assert.ok($("#prayer-settings").textContent.includes(lang === "en" ? "Automatic times require internet" : "Otomatik vakitler internet"));
+      assert.equal($("#prayer-settings h2").textContent, lang === "en" ? "Location & calculation" : "Konum ve hesaplama");
+      assert.equal($(".number-wheel").getAttribute("aria-label"), lang === "en" ? "Focus duration in minutes" : "Odak dakika");
+      assert.equal($("#plan-progress").getAttribute("aria-label"), lang === "en" ? "Task completion rate" : "Tamamlanan görev oranı");
+      assert.equal($("#tasklist .task-name").textContent, "Light");
+      assert.ok($("#history").textContent.includes("Focus ·"));
+      assert.ok($("#history").textContent.includes(lang === "en" ? "Prayer · Fajr · completed" : "Namaz · Sabah · tamamlandı"));
+      assert.ok($("#peek-location").textContent.includes(lang === "en" ? "(out of date)" : "(güncel değil)"));
+      assert.deepEqual([...$("#subject-options").options].map(o => o.textContent), app.store.state.subjects);
+      assert.ok($("#tasklist input").getAttribute("aria-label").startsWith("Light "));
+    }
+    // Open notices also change language; interpolated course names stay literal.
+    $("#manual-subject").value = "Saat";
+    $("#manual-minutes").value = "1";
+    $("#manual-date").value = "2026-09-20";
+    $("#manual-session-form button").click();
+    await flush();
+    assert.equal($("#manual-status").textContent, "Saat · 1 min saved.");
+    assert.ok($("#completion-notices").textContent.includes("Saat · 1 min added to your statistics."));
+    w.ikraSetLanguage("tr");
+    await flush();
+    assert.equal($("#manual-status").textContent, "Saat · 1 dk kaydedildi.");
+    assert.ok($("#completion-notices").textContent.includes("Saat · 1 dakika istatistiklerine eklendi."));
+    assert.equal(app.store.state.sessions.at(-1).subject, "Saat");
     if (errors.length) throw Error(errors.join("\n"));
   });

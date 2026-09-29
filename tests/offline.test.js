@@ -21,7 +21,7 @@ test("every module and stylesheet is precached and every relative import exists"
     );
     if (file.endsWith(".js"))
       for (const match of readFileSync(file, "utf8").matchAll(
-        /from\s+["']([^"']+)["']/g,
+        /^\s*(?:import|export)\s+[^;]*?\bfrom\s+["']([^"']+)["']/gm,
       ))
         assert.ok(
           existsSync(path.resolve(path.dirname(file), match[1])),

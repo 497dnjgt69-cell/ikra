@@ -1,3 +1,4 @@
+import { t, bilingual } from "../i18n/bindings.js";
 import { createStore } from "../services/store.js";
 import { createAccess } from "../services/access.js";
 import { createFocusTimer } from "../services/focus-timer.js";
@@ -44,11 +45,8 @@ export default function initialize({
       playSound("finish");
       if (event.mode === "focus")
         window.ikraNotify(
-          (event.subject || "Çalışma") +
-            " · " +
-            event.minutes +
-            " dk. " +
-            (event.auto ? "Mola başladı." : "Molan hazır."),
+          () => (event.subject || t("Çalışma")) + " · " + event.minutes +
+            " " + t("dk") + ". " + t(event.auto ? "Mola başladı." : "Molan hazır."),
           {
             completion: true,
             title: event.count + ". çalışma oturumu tamamlandı",
@@ -70,10 +68,8 @@ export default function initialize({
     onComplete: (event) => {
       playSound("finish");
       window.ikraNotify(
-        event.name +
-          " · " +
-          Math.round(event.seconds / 60) +
-          " dakika kaydedildi.",
+        () => t(event.name) + " · " + Math.round(event.seconds / 60) +
+          bilingual(" dakika kaydedildi.", " min saved."),
         { completion: true, title: "Namaz oturumu tamamlandı" },
       );
     },
