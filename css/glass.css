@@ -1,0 +1,557 @@
+/* Focus glass workspace */
+:root {
+  font-family:
+    "Avenir Next",
+    "Aptos",
+    "Segoe UI Variable Display",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  --bg: #e9eef5;
+  --card: rgba(255, 255, 255, 0.53);
+  --fg: #263447;
+  --muted: #67778b;
+  --line: rgba(255, 255, 255, 0.72);
+  --accent: #354c69;
+  --tint: rgba(108, 133, 165, 0.1);
+  --heat: #6688ad;
+}
+body[data-theme="dark"] {
+  --bg: #121b2a;
+  --card: rgba(33, 46, 66, 0.46);
+  --fg: #e8eff9;
+  --muted: #a3b4ca;
+  --line: rgba(201, 220, 247, 0.13);
+  --accent: #d8e7fb;
+  --tint: rgba(196, 219, 250, 0.08);
+  --heat: #8ab2df;
+}
+body {
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse at 15% 20%, #97b8df40, transparent 50%),
+    radial-gradient(ellipse at 85% 75%, #aea5e342, transparent 47%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+body:before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 62% 5%, #ffffff42, transparent 50%);
+  z-index: -1;
+}
+.app {
+  max-width: 1450px;
+  padding: 30px 42px 26px;
+}
+.header {
+  padding: 2px 0;
+}
+.brand {
+  font-size: 1.13rem;
+  font-weight: 650;
+  letter-spacing: -0.045em;
+}
+.header > .row {
+  gap: 9px;
+}
+.button,
+.field,
+.seg,
+.card,
+.digit {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+.button,
+.field {
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 #ffffff17;
+  border-radius: 13px;
+}
+.button {
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    background 0.22s ease;
+}
+.button:hover {
+  transform: translateY(-3px);
+  background: var(--card);
+  box-shadow:
+    0 9px 22px #1f33571c,
+    inset 0 1px 0 #ffffff30;
+}
+.button:active {
+  transform: translateY(0) scale(0.97);
+}
+.button.primary {
+  background: var(--accent);
+  border-color: transparent;
+  box-shadow: 0 7px 22px #263c6321;
+}
+.button:disabled {
+  transform: none;
+}
+.focusstage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 250px;
+  gap: 48px;
+  align-items: center;
+  min-height: calc(100svh - 165px);
+}
+.hero {
+  padding: 40px 0;
+  min-width: 0;
+}
+.overline {
+  font-size: 0.74rem;
+  letter-spacing: 0.24em;
+  font-weight: 550;
+  opacity: 0.85;
+}
+.hero h1 {
+  font-size: 1.45rem;
+  letter-spacing: -0.055em;
+  font-weight: 450;
+  margin: 0 0 27px;
+}
+.seg {
+  background: var(--tint);
+  border: 1px solid var(--line);
+  padding: 4px;
+  border-radius: 14px;
+}
+.seg button {
+  font-size: 0.84rem;
+  border-radius: 10px;
+  transition:
+    background 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.seg button:hover {
+  background: var(--card);
+  transform: translateY(-1px);
+}
+.seg button.active {
+  box-shadow: 0 2px 8px #233c6510;
+}
+.bigclock {
+  gap: 10px;
+  margin: 43px auto 28px;
+}
+.digit {
+  width: clamp(55px, 9.6vw, 120px);
+  height: clamp(88px, 14.8vw, 171px);
+  font-family:
+    "Avenir Next",
+    "Aptos Display",
+    "Segoe UI Variable Display",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  font-size: clamp(4.2rem, 9vw, 7.8rem);
+  font-weight: 300;
+  letter-spacing: -0.065em;
+  border: 1px solid var(--line);
+  border-radius: 23px;
+  background: linear-gradient(155deg, #ffffff26, #ffffff04), var(--card);
+  box-shadow:
+    inset 0 1px 0 #ffffff4a,
+    0 18px 45px #30497310;
+  transition:
+    box-shadow 0.3s,
+    transform 0.3s;
+}
+.digit:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 1px 0 #ffffff5a,
+    0 22px 45px #30497323;
+}
+.digit.changed {
+  animation: glass-number 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes glass-number {
+  from {
+    opacity: 0.4;
+    transform: translateY(9px);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+.colon {
+  font-weight: 200;
+  opacity: 0.6;
+  font-size: 4rem;
+  margin: 0 3px;
+}
+.controls {
+  margin-top: 25px;
+  gap: 10px;
+}
+.controls .button {
+  min-width: 95px;
+  padding: 12px 19px;
+  font-size: 0.87rem;
+}
+.controls .primary {
+  min-width: 130px;
+}
+.small {
+  font-size: 0.8rem;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow:
+    inset 0 1px 0 #ffffff25,
+    0 16px 42px #1934510b;
+  border-radius: 22px;
+  padding: 21px;
+}
+.activity-mini {
+  padding: 20px 17px;
+}
+.activity-mini h2 {
+  font-size: 0.85rem;
+  margin: 0;
+}
+.activity-mini > .row {
+  margin-bottom: 20px;
+}
+.activity-mini #streak {
+  font-size: 0.72rem;
+}
+.activity-mini .stats {
+  gap: 8px;
+  margin-bottom: 23px;
+}
+.activity-mini .stats strong {
+  font-size: 1.12rem;
+  font-weight: 550;
+  letter-spacing: -0.05em;
+}
+.activity-mini .stats span {
+  font-size: 0.7rem;
+}
+.activity-mini .heathead {
+  display: block;
+  margin: 0 0 14px;
+}
+.activity-mini .heathead h3 {
+  font-size: 0.79rem;
+  margin: 0 0 10px;
+  font-weight: 500;
+}
+.activity-mini .seg {
+  padding: 3px;
+}
+.activity-mini .seg button {
+  font-size: 0.75rem;
+  padding: 5px 12px;
+}
+.activity-mini .heatgrid {
+  gap: 5px;
+}
+.activity-mini .heatcell {
+  aspect-ratio: 1;
+  border-radius: 5px;
+  font-size: 0.6rem;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  cursor: default;
+}
+.activity-mini .heatcell:hover {
+  transform: scale(1.18);
+  box-shadow: 0 4px 9px #12294825;
+  z-index: 1;
+}
+.activity-mini .heatcell.today {
+  outline-width: 1px;
+  outline-offset: 1px;
+}
+.activity-mini .legend {
+  font-size: 0.68rem;
+  gap: 3px;
+}
+.activity-mini .legend .heatcell {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+.activity-mini .subjects {
+  display: none;
+}
+.dock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  flex-wrap: wrap;
+  padding: 10px 0 0;
+}
+.dock .button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 17px;
+  font-size: 0.84rem;
+}
+.dock svg {
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.85;
+}
+.dock .button:hover svg {
+  transform: rotate(-6deg);
+}
+.dock svg {
+  transition: transform 0.25s;
+}
+.footer {
+  display: none;
+}
+.quote {
+  background: var(--card);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(20px);
+  border-radius: 18px;
+  max-width: 490px;
+  padding: 18px 22px;
+}
+.quote p {
+  font-size: 0.94rem;
+  line-height: 1.65;
+  font-weight: 400;
+}
+.quote a {
+  font-size: 0.74rem;
+}
+.glass-dialog {
+  background: transparent;
+  border: 0;
+  color: var(--fg);
+  padding: 0;
+  width: min(760px, calc(100% - 28px));
+  max-height: 85svh;
+  overflow: visible;
+}
+.glass-dialog::backdrop {
+  background: #152c4c35;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.dialog-shell {
+  background: var(--bg);
+  background-image: linear-gradient(145deg, #ffffff19, #ffffff05);
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  padding: 20px;
+  box-shadow: 0 35px 100px #10274935;
+  max-height: 85svh;
+  overflow: auto;
+}
+.glass-dialog[open] {
+  animation: panel-in 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.dialog-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 0 4px;
+}
+.dialog-top h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 550;
+  letter-spacing: -0.025em;
+}
+.dialog-top button {
+  padding: 5px 12px;
+  font-size: 1.2rem;
+}
+.glass-dialog .card {
+  box-shadow: none;
+}
+.glass-dialog .settings {
+  align-items: flex-start;
+  gap: 18px;
+}
+.glass-dialog .settings label {
+  min-height: 40px;
+}
+.glass-dialog .row {
+  flex-wrap: wrap;
+}
+.glass-dialog .grow {
+  min-width: 170px;
+}
+.glass-dialog .subjects {
+  display: block;
+}
+.glass-dialog h2 {
+  font-weight: 550;
+}
+.dialog-note {
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--muted);
+  padding: 14px 4px 0;
+  margin: 0;
+}
+.header .button {
+  font-size: 1.15rem;
+  padding: 7px 12px;
+}
+.header select {
+  font-size: 0.8rem;
+  padding: 10px;
+}
+.toast {
+  box-shadow: 0 8px 30px #10274925;
+  font-size: 0.88rem;
+}
+.prayergrid .prayer {
+  background: var(--tint);
+}
+@media (min-width: 1250px) {
+  .focusstage {
+    padding-left: 80px;
+    gap: 70px;
+  }
+  .activity-mini {
+    transform: translateY(10px);
+  }
+}
+@media (max-width: 900px) {
+  .app {
+    padding: 22px;
+  }
+  .focusstage {
+    gap: 24px;
+    grid-template-columns: minmax(0, 1fr) 215px;
+  }
+  .digit {
+    border-radius: 16px;
+  }
+  .bigclock {
+    gap: 6px;
+  }
+  .colon {
+    font-size: 3rem;
+    margin: 0;
+  }
+  .hero h1 {
+    font-size: 1.2rem;
+  }
+  .activity-mini {
+    padding: 17px 13px;
+  }
+  .seg button {
+    padding: 7px 10px;
+  }
+}
+@media (max-width: 690px) {
+  .app {
+    padding: 20px 15px 25px;
+  }
+  .focusstage {
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .hero {
+    width: 100%;
+    padding: 47px 0 20px;
+  }
+  .bigclock {
+    margin: 32px 0 24px;
+    gap: 7px;
+  }
+  .digit {
+    width: clamp(50px, 17vw, 83px);
+    height: clamp(85px, 25vw, 125px);
+    font-size: clamp(3.8rem, 13vw, 5.8rem);
+    border-radius: 16px;
+  }
+  .colon {
+    font-size: 2.8rem;
+  }
+  .activity-mini {
+    width: min(100%, 350px);
+    margin: 9px 0 12px;
+    padding: 16px;
+  }
+  .activity-mini > .row {
+    margin-bottom: 13px;
+  }
+  .activity-mini .stats {
+    margin-bottom: 14px;
+  }
+  .activity-mini .heathead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .activity-mini .heathead h3 {
+    margin: 0;
+  }
+  .activity-mini .heatgrid .heatcell {
+    aspect-ratio: 1.5;
+  }
+  .dock {
+    gap: 7px;
+  }
+  .dock .button {
+    padding: 10px 13px;
+  }
+  .glass-dialog .row {
+    gap: 8px;
+  }
+  .dialog-shell {
+    padding: 14px;
+  }
+  .controls .button {
+    min-width: 85px;
+  }
+  .controls .primary {
+    min-width: 110px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *:before,
+  *:after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
