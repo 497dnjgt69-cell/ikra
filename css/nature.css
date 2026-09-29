@@ -1,0 +1,87 @@
+/* Nature: translucent sage glass over a quiet forest-green atmosphere. */
+body[data-theme="nature"] {
+  color-scheme: light;
+  --bg: #dce8d9;
+  --card: rgba(248, 255, 241, 0.57);
+  --fg: #223d30;
+  --muted: #526a58;
+  --line: rgba(249, 255, 240, 0.77);
+  --accent: #315e44;
+  --tint: rgba(61, 105, 70, 0.1);
+  --heat: #4f7959;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse at 5% 15%, #749b7180, transparent 55%),
+    radial-gradient(ellipse at 95% 85%, #43785e4d, transparent 55%),
+    radial-gradient(ellipse at 80% 5%, #f4efc880, transparent 48%);
+}
+body[data-theme="nature"]:before {
+  background: radial-gradient(ellipse at 55% 0%, #ffffed66, transparent 58%);
+}
+body[data-theme="nature"] .digit {
+  background:
+    linear-gradient(145deg, #ffffee55, #e2f0d908), var(--card) !important;
+  box-shadow:
+    inset 0 1px 0 #ffffed99,
+    0 18px 45px #284f3214 !important;
+  border-color: var(--line) !important;
+}
+body[data-theme="nature"] .dialog-shell {
+  background-color: #e1eadc;
+  background-image: linear-gradient(145deg, #faffed66, #c5d9bb22);
+  box-shadow: 0 25px 90px #163d342b;
+}
+body[data-theme="nature"] .glass-dialog::backdrop {
+  background: #173d303d;
+}
+body[data-theme="nature"] .card,
+body[data-theme="nature"] .prayer-peek {
+  box-shadow:
+    inset 0 1px 0 #ffffed55,
+    0 16px 42px #2348320d;
+}
+body[data-theme="nature"] :is(button, input, select):focus-visible {
+  outline-color: #315e44;
+}
+.theme-picker {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--tint);
+}
+.theme-choice {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 7px;
+  border: 0;
+  border-radius: 9px;
+  color: var(--muted);
+  background: transparent;
+  transition:
+    background 0.18s,
+    color 0.18s;
+}
+.theme-choice svg {
+  width: 19px;
+  height: 19px;
+  stroke: currentColor;
+  stroke-width: 1.55;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.theme-choice[aria-pressed="true"] {
+  background: var(--card);
+  color: var(--fg);
+  box-shadow: 0 2px 7px #233c6510;
+}
+@media (hover: hover) {
+  .theme-choice:hover {
+    background: var(--card);
+    color: var(--fg);
+  }
+}
