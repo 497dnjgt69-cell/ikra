@@ -245,6 +245,9 @@ for (const width of [1440, 390])
     for (const lang of ["tr", "en", "tr", "en"]) {
       w.ikraSetLanguage(lang);
       await flush();
+      assert.equal($("#panel-sounds h2").textContent, lang === "en" ? "Ambient Sounds" : "Ortam Sesleri");
+      assert.equal($('[data-sound="rain"] .ambient-name').textContent, lang === "en" ? "Rain" : "Yağmur");
+      assert.equal($("#ambient-master").getAttribute("aria-label"), lang === "en" ? "Master volume" : "Genel ses seviyesi");
       assert.equal($("#title").textContent, lang === "en" ? "Find your focus." : "Odağını topla.");
       assert.ok($("#about-ikra").textContent.includes(lang === "en" ? "Hi, I'm Mahir" : "Merhaba, ben Mahir"));
       assert.ok($("#panel-history").textContent.includes(lang === "en" ? "Prayer time is not included" : "Namaz süreleri"));

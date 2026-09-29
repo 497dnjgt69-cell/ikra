@@ -1,6 +1,7 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Ortam Sesleri": "Ambient Sounds",
       "Bu özellik IKRA Pro gerektiriyor.": "This feature requires IKRA Pro.",
       "İşlem kaydedilemedi. Lütfen tekrar dene.":
         "Could not save this change. Please try again.",
