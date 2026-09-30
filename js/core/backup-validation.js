@@ -81,6 +81,19 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
       throw Error("Namaz kayıtlarından biri geçersiz.");
     return { ...p };
   });
+  if (raw.prayerChecks != null) {
+    if (typeof raw.prayerChecks !== "object" || Array.isArray(raw.prayerChecks))
+      throw Error("Namaz takip kayıtları geçersiz.");
+    for (const [date, values] of Object.entries(raw.prayerChecks)) {
+      if (!isDateKey(date) || !values || typeof values !== "object" || Array.isArray(values))
+        throw Error("Namaz takip kayıtları geçersiz.");
+      clean.prayerChecks[date] = {};
+      for (const [name, done] of Object.entries(values)) {
+        if (!names.includes(name) || typeof done !== "boolean") throw Error("Namaz takip kayıtları geçersiz.");
+        clean.prayerChecks[date][name] = done;
+      }
+    }
+  }
   for (const mode of ["focus", "break", "long"]) {
     const n = raw.durations?.[mode];
     if (n !== undefined && !finite(n, 1, 240))

@@ -2,9 +2,11 @@ import { t, bilingual, localizedText, localizedAttribute } from "../i18n/binding
 import { handleAction } from "../shared/actions.js";
 import { $, $$ } from "../shared/dom.js";
 import { datekey, display } from "../shared/format.js";
+import { renderFocusInsights, createPrayerInsights } from "./activity-insights.js";
 import { aggregateStats } from "../core/statistics.js";
 export function createStatisticsView({ store, planner, records, access }) {
   const subjectColor = planner.subjectColor;
+  const prayerInsights = createPrayerInsights({ store, records });
   let historyLimit = 20;
   function renderStats() {
     let sums = {},
@@ -111,6 +113,7 @@ export function createStatisticsView({ store, planner, records, access }) {
     }
     renderHeat(sums);
     renderAllStats();
+    prayerInsights.render();
   }
   function renderHeat(sums) {
     $("#weekly").classList.toggle("active", store.state.view === "week");
@@ -166,6 +169,7 @@ export function createStatisticsView({ store, planner, records, access }) {
   }
   function renderAllStats() {
     if (!access.can("statistics")) {
+      $("#focus-insights").replaceChildren();
       $("#stats-bars").textContent = "Bu özellik IKRA Pro gerektiriyor.";
       $("#stats-subjects").replaceChildren();
       for (const id of [
@@ -182,6 +186,7 @@ export function createStatisticsView({ store, planner, records, access }) {
         ? new Date(store.state.statsAnchor + "T12:00:00")
         : new Date(),
       result = aggregateStats(store.state.sessions, view, anchor);
+    renderFocusInsights(store.state.sessions, result.start, result.end);
     $$("[data-stats]").forEach((b) =>
       b.classList.toggle("active", b.dataset.stats === view),
     );

@@ -1,4 +1,4 @@
-const CACHE = "ikra-v1.3.2";
+const CACHE = "ikra-v1.4.0";
 
 const CORE = [
   "./",
@@ -27,6 +27,7 @@ const CORE = [
   "./js/controllers/settings.js",
   "./js/controllers/statistics.js",
   "./js/controllers/timer.js",
+  "./js/core/activity-insights.js",
   "./js/core/application.js",
   "./js/core/backup-snapshot.js",
   "./js/core/backup-validation.js",
@@ -63,6 +64,7 @@ const CORE = [
   "./js/shared/actions.js",
   "./js/shared/dom.js",
   "./js/shared/format.js",
+  "./js/ui/activity-insights.js",
   "./js/ui/animations.js",
   "./js/ui/clock.js",
   "./js/ui/mobile-widgets.js",

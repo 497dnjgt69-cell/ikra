@@ -2,28 +2,37 @@ export default function initialize() {
   (() => {
     // Edit this release record and its dictionary entries for future announcements.
     const release = {
-      version: "1.2.1",
-      title: "Yeni logo, daha tutarlı bir deneyim.",
-      intro:
-        "IKRA’nın yeni görünümü ve iyileştirilen dil desteği hazır.",
-      features: [
-        {
-          icon: "leaf",
-          title: "IKRA’nın yeni simgesi",
-          text: "Yeşil hilal ve saat tasarımı artık uygulamada.",
-        },
-        {
-          icon: "phone",
-          title: "Daha eksiksiz Türkçe ve İngilizce",
-          text: "Ayarlar, bildirimler ve istatistiklerde daha tutarlı çeviriler.",
-        },
-        {
-          icon: "sparkle",
-          title: "Dilini değiştir, kaldığın yerden devam et",
-          text: "Derslerin, görevlerin ve çalışma kayıtların korunur.",
-        },
-      ],
-    };
+  "version": "1.4.0",
+  "title": "Ritmini tanı, gününü takip et.",
+  "intro": "Yeni odak raporları, beş vakit takibi ve son duyurudan bu yana gelen iyileştirmeler.",
+  "features": [
+    {
+      "icon": "sparkle",
+      "title": "Odak ritmini keşfet",
+      "text": "Haftanın günleri ve saatlerine göre yoğunluk haritası, saatlik grafik ve en yoğun çalışma saatlerin."
+    },
+    {
+      "icon": "leaf",
+      "title": "Beş vakit, tek bakışta",
+      "text": "Ayrı namaz istatistikleri, haftalık beş vakit takibi ve elle işaretleme. Kayıtlı namaz oturumların otomatik görünür."
+    },
+    {
+      "icon": "phone",
+      "title": "Temalı Mekânlar",
+      "text": "Boğaz’da bir kafe, Oxford kütüphanesi, gece kampı, uzay ve Japonya’da yağmurlu gece. Çizimli mekân seçimi ayrı menü sekmesinde; sesler yakında."
+    },
+    {
+      "icon": "sparkle",
+      "title": "Saat görünümünde kesintisiz çalışma",
+      "text": "Saat ekranına geçerken çalışma sayacın ve süre kaydın devam eder."
+    },
+    {
+      "icon": "leaf",
+      "title": "Daha anlaşılır namaz hatırlatmaları",
+      "text": "Kalan süre saat ve dakika olarak görünür. Uygulama açıkken vakit girince küçük bir bildirim alırsın."
+    }
+  ]
+};
     const seenKey = "ikra-release-seen:" + release.version;
     const paths = {
       leaf: "M20 4C12 3 5 6 5 12a6 6 0 0 0 6 6c6 0 9-7 9-14ZM4 21l11-11m-7 7v-5m3 2h5",
