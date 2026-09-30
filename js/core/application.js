@@ -89,6 +89,10 @@ export default function initialize({
     access,
     api: prayerAPI,
     onChange: scheduleRender,
+    onPrayerStart: ({ name }) => window.ikraNotify(
+      () => bilingual(name + " vakti girdi.", "It is time for " + t(name) + "."),
+      { title: t("Namaz vakti"), duration: 6000 },
+    ),
   });
   const planner = createPlanner({ store, access, focus });
   const records = createRecords({ store, access });
@@ -130,6 +134,7 @@ export default function initialize({
     store.attempt(() => {
       focus.settle();
       prayer.settle();
+      times.checkStarted();
       prayerView.updateNextPrayer();
       clock.render();
     });

@@ -25,7 +25,7 @@ export function createTimerView({ store }) {
     },
   ];
   function renderQuote() {
-    let show = ["break", "long"].includes(store.state.mode),
+    let show = !store.state.clockView && ["break", "long"].includes(store.state.mode),
       q =
         quotes[
           (store.state.round + (["long"].includes(store.state.mode) ? 1 : 0)) %
@@ -61,10 +61,10 @@ export function createTimerView({ store }) {
       $("#manual-subject").value = store.state.subject;
     if (!$("#manual-date").value) $("#manual-date").value = datekey(Date.now());
     $$("[data-mode]").forEach((b) =>
-      b.classList.toggle("active", b.dataset.mode === store.state.mode),
+      b.classList.toggle("active", b.dataset.mode === (store.state.clockView ? "clock" : store.state.mode)),
     );
     $("#overline").textContent =
-      store.state.mode === "clock"
+      store.state.clockView
         ? "Şu an"
         : store.state.mode === "focus"
           ? "Çalışma zamanı"
@@ -72,17 +72,17 @@ export function createTimerView({ store }) {
             ? "Uzun mola"
             : "Kısa mola";
     $("#title").textContent =
-      store.state.mode === "focus"
-        ? "Odağını topla."
-        : store.state.mode === "clock"
-          ? "Şimdiki an."
+      store.state.clockView
+        ? "Şimdiki an."
+        : store.state.mode === "focus"
+          ? "Odağını topla."
           : "Biraz nefes al.";
     $("#timerinfo").toggleAttribute(
       "data-user-text",
       store.state.mode === "focus" && !store.state.prayerView,
     );
     $("#timerinfo").textContent =
-      store.state.mode === "clock"
+      store.state.clockView
         ? ""
         : store.state.mode === "focus"
           ? store.state.subject
@@ -98,7 +98,7 @@ export function createTimerView({ store }) {
     for (let id of ["start", "reset", "skip"])
       $("#" + id).classList.toggle(
         "hidden",
-        store.state.mode === "clock" && !store.state.prayerView,
+        store.state.clockView && !store.state.prayerView,
       );
     if (store.state.prayerView) {
       $("#overline").textContent = "Namaz vakti";

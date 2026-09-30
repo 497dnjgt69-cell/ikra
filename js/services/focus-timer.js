@@ -40,7 +40,7 @@ export function createFocusTimer({
     access.require(FEATURES.TIMER);
     if (!store.state.subject)
       throw new Error("Önce Planım bölümünden bir ders ekle.");
-    if (store.state.mode === "clock" || store.state.prayerTimer) return;
+    if (store.state.clockView || store.state.prayerTimer) return;
     settle();
     if (store.state.timer.running) return pause();
     store.update((d) => {
@@ -68,7 +68,15 @@ export function createFocusTimer({
     changeMode(mode) {
       access.require(FEATURES.TIMER);
       if (!["focus", "break", "long", "clock"].includes(mode)) return;
+      settle();
       store.update((d) => {
+        if (mode === "clock") {
+          d.clockView = true;
+          return;
+        }
+        const returning = d.clockView && d.mode === mode;
+        d.clockView = false;
+        if (returning) return;
         creditFocus(d, now());
         d.timer.running = false;
         d.mode = mode;

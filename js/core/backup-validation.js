@@ -95,6 +95,7 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
   clean.mode = ["focus", "break", "long", "clock"].includes(raw.mode)
     ? raw.mode
     : "focus";
+  clean.clockView = !!raw.clockView;
   clean.auto = !!raw.auto;
   clean.sound = raw.sound !== false;
   clean.soundVolume = finite(raw.soundVolume, 0, 1) ? raw.soundVolume : 0.22;

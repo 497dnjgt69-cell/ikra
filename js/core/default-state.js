@@ -10,6 +10,7 @@ export const fresh = () => ({
   sessions: [],
   round: 0,
   mode: "focus",
+  clockView: false,
   timer: {
     running: false,
     remaining: 3000,
