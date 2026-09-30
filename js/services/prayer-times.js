@@ -1,5 +1,5 @@
 import { datekey } from "../shared/format.js";
-import { prayerWallNow, getNextPrayer } from "../domain/prayer-times.js";
+import { prayerWallNow, getNextPrayer, getStartedPrayer } from "../domain/prayer-times.js";
 import { FEATURES } from "../config/features.js";
 export function createPrayerTimes({
   store,
@@ -7,13 +7,17 @@ export function createPrayerTimes({
   api,
   now = Date.now,
   onChange = () => {},
+  onPrayerStart = () => {},
 }) {
+  let lastCheck = now();
+  const notified = new Set();
   let generation = 0,
     controller = null,
     loading = false,
     attempt = 0,
     message = "";
   function invalidate() {
+    lastCheck = now();
     generation++;
     controller?.abort();
     controller = null;
@@ -122,6 +126,15 @@ export function createPrayerTimes({
     if (source && source.type !== "manual") return fetchForSource(source);
   }
   return Object.freeze({
+    checkStarted() {
+      const time = now();
+      const event = getStartedPrayer(store.state, time, lastCheck);
+      lastCheck = time;
+      if (!event || notified.has(event.key)) return;
+      notified.add(event.key);
+      if (notified.size > 20) notified.delete(notified.values().next().value);
+      onPrayerStart(event);
+    },
     fetchForSource,
     fetchTomorrow,
     refresh,

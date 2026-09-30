@@ -10,7 +10,7 @@ export function createClockView({ store }) {
             ? store.state.prayerTimer.remaining
             : store.state.prayerDuration * 60,
         )
-      : store.state.mode === "clock"
+      : store.state.clockView
         ? new Date().toLocaleTimeString("en-GB", {
             hour: "2-digit",
             minute: "2-digit",

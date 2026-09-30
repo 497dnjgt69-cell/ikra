@@ -12,6 +12,13 @@ export function migrateState(input, now = Date.now()) {
   for (const key of ["isPro", "plan", "entitlements", "license"])
     delete state[key];
   state.durations = { ...fresh().durations, ...state.durations };
+  // Older versions treated the clock as a timer mode and cleared its timer.
+  if (state.mode === "clock") {
+    state.mode = "focus";
+    state.clockView = true;
+    state.timer = { ...fresh().timer, remaining: state.durations.focus * 60 };
+  }
+  state.clockView = !!state.clockView;
   state.subjectColors ||= {};
   for (const key of ["tasks", "sessions", "prayers"]) {
     state[key] = (Array.isArray(state[key]) ? state[key] : []).map((item) => ({

@@ -12,16 +12,16 @@ export function createPrayerView({ store, times }) {
     if (!el) return;
     const next = times.next();
     const wall = times.wall();
-    let text = next
-      ? (next.tomorrow ? "Yarın " : "") +
-        next.name +
-        " · " +
-        next.minutes +
-        " dk kaldı"
-      : store.state.prayerDate !== wall.date
+    localizedText(el, () => {
+      if (!next) return t(store.state.prayerDate !== wall.date
         ? "Güncel vakitleri getirerek kalan süreyi gör."
-        : "Bugünün vakitleri tamamlandı. Yarın için vakit bekleniyor.";
-    if (el.textContent !== text) el.textContent = text;
+        : "Bugünün vakitleri tamamlandı. Yarın için vakit bekleniyor.");
+      const hours = Math.floor(next.minutes / 60), minutes = next.minutes % 60;
+      const duration = (hours ? hours + bilingual(" saat ", " h ") : "") +
+        minutes + bilingual(" dk", " min");
+      return (next.tomorrow ? bilingual("Yarın ", "Tomorrow ") : "") +
+        t(next.name) + " · " + duration + bilingual(" kaldı", " remaining");
+    });
     $("#peek-times")
       ?.querySelectorAll(".prayer")
       .forEach((card) =>

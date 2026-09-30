@@ -85,3 +85,21 @@ export function getNextPrayer(d, now) {
   }
   return null;
 }
+
+// Only notify near an actual start, never replay old times after opening the app.
+export function getStartedPrayer(d, now, since) {
+  if (since == null || now <= since) return null;
+  const wall = prayerWallNow(d, new Date(now));
+  const times = d.prayerDate === wall.date ? d.prayerTimes
+    : d.prayerTomorrow?.date === wall.date ? d.prayerTomorrow.times : null;
+  if (!times) return null;
+  const threshold = Math.max(since, now - 60000);
+  for (const name of names) {
+    const time = times[name];
+    if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(time || "")) continue;
+    const epoch = wallEpoch(wall.date, time, wall.zone);
+    if (epoch > threshold && epoch <= now)
+      return { name, key: wall.zone + ":" + wall.date + ":" + name };
+  }
+  return null;
+}

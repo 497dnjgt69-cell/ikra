@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import { JSDOM } from "jsdom";
+import { createPrayerView } from "../js/ui/prayer.js";
 // DOM integration, not a browser layout test. Animation/dialog/media APIs are stubbed.
 for (const width of [1440, 390])
   test(`UI workflows, bilingual round-trips and data preservation at media width ${width}`, async (t) => {
@@ -136,6 +137,20 @@ for (const width of [1440, 390])
     const $ = (s) => w.document.querySelector(s);
     const flush = () => new Promise((r) => setTimeout(r, 20));
     await flush();
+    const prayerView = createPrayerView({ store: app.store, times: {
+      next: () => ({ name: "Yatsı", minutes: 411, tomorrow: false }),
+      wall: () => ({ date: "2026-09-30" }),
+    } });
+    $('[data-language=tr]').click();
+    await flush();
+    prayerView.updateNextPrayer();
+    assert.equal($('#next-prayer').textContent, 'Yatsı · 6 saat 51 dk kaldı');
+    $('[data-language=en]').click();
+    await flush();
+    prayerView.updateNextPrayer();
+    assert.equal($('#next-prayer').textContent, 'Isha · 6 h 51 min remaining');
+    $('[data-language=tr]').click();
+    await flush();
     assert.equal(w.document.querySelectorAll(".place-choice").length, 5);
     $('.place-choice[data-place="japan"]').click();
     assert.equal($(".place-preview").dataset.place, "japan");
@@ -154,6 +169,18 @@ for (const width of [1440, 390])
     $("#start").click();
     await flush();
     if (!app.store.state.timer.running) throw Error("timer start");
+    const deadline = app.store.state.timer.endAt;
+    $('[data-mode="clock"]').click();
+    await flush();
+    assert.equal(app.store.state.timer.running, true);
+    assert.equal(app.store.state.timer.endAt, deadline);
+    assert.equal($('#title').textContent, w.ikraT("Şimdiki an."));
+    assert.equal($('#start').classList.contains('hidden'), true);
+    assert.equal($('[data-mode="clock"]').classList.contains('active'), true);
+    $('[data-mode="focus"]').click();
+    await flush();
+    assert.equal(app.store.state.timer.endAt, deadline);
+    assert.equal($('#start').classList.contains('hidden'), false);
     $("#start").click();
     await flush();
     if (app.store.state.timer.running) throw Error("timer pause");
