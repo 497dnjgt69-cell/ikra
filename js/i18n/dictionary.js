@@ -1,6 +1,20 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Ritmini tanı, gününü takip et.": "Know your rhythm, track your day.",
+      "Yeni odak raporları, beş vakit takibi ve son duyurudan bu yana gelen iyileştirmeler.": "New focus reports, daily prayer tracking and improvements since the last announcement.",
+      "Odak ritmini keşfet": "Discover your focus rhythm",
+      "Haftanın günleri ve saatlerine göre yoğunluk haritası, saatlik grafik ve en yoğun çalışma saatlerin.": "A day-by-hour heatmap, hourly chart and your busiest study hours.",
+      "Beş vakit, tek bakışta": "Five prayers at a glance",
+      "Ayrı namaz istatistikleri, haftalık beş vakit takibi ve elle işaretleme. Kayıtlı namaz oturumların otomatik görünür.": "Separate prayer statistics, weekly tracking and manual check-ins. Saved prayer sessions appear automatically.",
+      "Temalı Mekânlar": "Themed Places",
+      "Boğaz’da bir kafe, Oxford kütüphanesi, gece kampı, uzay ve Japonya’da yağmurlu gece. Çizimli mekân seçimi ayrı menü sekmesinde; sesler yakında.": "A Bosphorus café, Oxford library, night camp, space and a rainy night in Japan. Illustrated places in their own menu tab; audio coming soon.",
+      "Saat görünümünde kesintisiz çalışma": "Uninterrupted focus in clock view",
+      "Saat ekranına geçerken çalışma sayacın ve süre kaydın devam eder.": "Your study timer and time tracking continue when you switch to the clock.",
+      "Daha anlaşılır namaz hatırlatmaları": "Clearer prayer reminders",
+      "Kalan süre saat ve dakika olarak görünür. Uygulama açıkken vakit girince küçük bir bildirim alırsın.": "See the time remaining in hours and minutes. A small notification appears when a prayer time begins while the app is open.",
+      "Geçerli bir tarih ve vakit seç.": "Choose a valid date and prayer.",
+
       "Ortam Sesleri": "Ambient Sounds",
       "Temalı Mekânlar": "Themed Places",
       "Mekânlar": "Places",

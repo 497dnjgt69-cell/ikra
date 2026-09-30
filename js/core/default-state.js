@@ -19,6 +19,7 @@ export const fresh = () => ({
     credited: 0,
   },
   prayers: [],
+  prayerChecks: {},
   prayerTimer: null,
   prayerTimes: {},
   prayerLocation: "",

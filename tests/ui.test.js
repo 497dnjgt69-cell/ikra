@@ -117,7 +117,7 @@ for (const width of [1440, 390])
       this.dispatchEvent(new w.Event("close"));
     };
     global.confirm = () => true;
-    w.localStorage.setItem("ikra-release-seen:1.2.1", "1");
+    w.localStorage.setItem("ikra-release-seen:1.4.0", "1");
     if (width === 390) w.localStorage.setItem("ikra-language", "en");
     const errors = [];
     w.addEventListener("error", (e) => {
@@ -151,6 +151,15 @@ for (const width of [1440, 390])
     assert.equal($('#next-prayer').textContent, 'Isha · 6 h 51 min remaining');
     $('[data-language=tr]').click();
     await flush();
+    assert.equal(document.querySelectorAll('.hour-cell').length, 168);
+    assert.equal(document.querySelectorAll('.prayer-check').length, 35);
+    document.querySelector('.prayer-check:not(:disabled)').click();
+    await flush();
+    assert.equal(document.querySelector('.prayer-check:not(:disabled)').getAttribute('aria-pressed'), 'true');
+    assert.equal(Object.keys(app.store.state.prayerChecks).length, 1);
+    app.backup.restore(app.backup.export());
+    await flush();
+    assert.equal(document.querySelector('.prayer-check:not(:disabled)').getAttribute('aria-pressed'), 'true');
     assert.equal(w.document.querySelectorAll(".place-choice").length, 5);
     $('.place-choice[data-place="japan"]').click();
     assert.equal($(".place-preview").dataset.place, "japan");

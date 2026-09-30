@@ -1,8 +1,19 @@
+import { prayerNames } from "../domain/prayer-timer.js";
 import { ensureSubject } from "../domain/subjects.js";
 import { datekey, isDateKey, newId } from "../shared/format.js";
 import { FEATURES } from "../config/features.js";
 export function createRecords({ store, access, now = Date.now }) {
   return Object.freeze({
+    setPrayerCheck(date, name, done) {
+      access.require(FEATURES.PRAYER);
+      if (!isDateKey(date) || date > datekey(now()) || !prayerNames.includes(name) || typeof done !== "boolean")
+        throw Error("Geçerli bir tarih ve vakit seç.");
+      store.update(d => {
+        d.prayerChecks ||= {};
+        d.prayerChecks[date] ||= {};
+        d.prayerChecks[date][name] = done;
+      });
+    },
     addManual({ subject, minutes, date }) {
       access.require(FEATURES.HISTORY);
       subject = String(subject).trim().slice(0, 60);

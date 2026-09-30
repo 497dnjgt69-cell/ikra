@@ -2146,3 +2146,39 @@ body.focus-running:not(.prayer-active) .widget-stack {
 .brand { display: inline-flex; align-items: center; gap: 9px; }
 .brand-logo { display: block; width: 38px; height: 38px; border-radius: 10px; }
 .release-mark img { display: block; border-radius: 15px; }
+
+/* Focus rhythm and independent daily prayer tracking. */
+.activity-insights { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line, #80908b33); min-width: 0; }
+.activity-insights h3 { font-size: 1rem; margin: 0 0 8px; }
+.activity-insights .quiet { font-size: .75rem; line-height: 1.6; }
+.insight-highlight { font-size: .85rem; font-weight: 600; line-height: 1.6; }
+.focus-hour-chart { width: 100%; height: auto; display: block; margin: 16px 0; overflow: visible; }
+.focus-hour-chart text { fill: currentColor; font-size: 10px; opacity: .75; }
+.chart-guide { stroke: currentColor; opacity: .1; }
+.chart-line { stroke: #548e7a; stroke-width: 2.5; fill: none; stroke-linejoin: round; }
+.chart-dot { fill: #548e7a; }
+.insight-scroll { overflow-x: auto; padding-bottom: 6px; }
+.focus-hour-table { border-spacing: 3px; min-width: 600px; width: 100%; }
+.focus-hour-table caption { text-align: start; margin-bottom: 10px; }
+.focus-hour-table th { font-size: .65rem; font-weight: 500; }
+.focus-hour-table th:first-child { text-align: start; width: 42px; }
+.focus-hour-table td { padding: 0; }
+.hour-cell { display: block; width: 100%; min-width: 18px; height: 23px; border: 0; border-radius: 4px; cursor: pointer; background: #80908b18; }
+.hour-cell[data-level="1"] { background: #b5d8c9; }
+.hour-cell[data-level="2"] { background: #81b59e; }
+.hour-cell[data-level="3"] { background: #4b8b70; }
+.hour-cell[data-level="4"] { background: #245942; }
+.hour-cell:focus-visible, .prayer-check:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.insight-detail { min-height: 2.5em; }
+.prayer-week-table { width: 100%; border-spacing: 4px; table-layout: fixed; }
+.prayer-week-table th { font-size: .7rem; font-weight: 500; }
+.prayer-week-table th:first-child { text-align: start; width: 58px; }
+.prayer-check { width: 100%; min-height: 36px; border-radius: 9px; border: 1px solid #80908b33; background: #80908b0a; color: inherit; cursor: pointer; }
+.prayer-check[aria-pressed="true"] { background: #315e44; color: white; border-color: #315e44; }
+.prayer-check:disabled { opacity: .3; cursor: default; }
+.prayer-counts { display: flex; gap: 8px 14px; flex-wrap: wrap; margin-top: 12px; font-size: .75rem; }
+@media(max-width: 480px) {
+  .prayer-week-table { border-spacing: 2px 5px; }
+  .prayer-week-table th { font-size: .62rem; }
+  .prayer-week-table th:first-child { width: 46px; }
+}
