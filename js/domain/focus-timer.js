@@ -7,12 +7,14 @@ export function creditFocus(state, now, complete = false) {
   const end = Math.min(now, Number.isFinite(t.endAt) ? t.endAt : now);
   const seconds = Math.max(0, (end - t.startedAt) / 1000);
   if (seconds > 0) {
+    t.focusSessionId ||= newId();
     state.sessions.push({
       id: newId(),
       at: new Date(end).toISOString(),
       subject: state.subject,
       seconds,
       complete,
+      focusSessionId: t.focusSessionId,
     });
     t.startedAt = end;
     t.credited = 0;

@@ -126,6 +126,8 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
   };
   if (finite(raw.timer?.remaining, 0, 14400))
     clean.timer.remaining = raw.timer.remaining;
+  if (validString(raw.timer?.focusSessionId) && raw.timer.focusSessionId)
+    clean.timer.focusSessionId = raw.timer.focusSessionId;
   const pt = raw.prayerTimer;
   if (pt) {
     if (

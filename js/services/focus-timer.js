@@ -46,7 +46,10 @@ export function createFocusTimer({
     store.update((d) => {
       const time = now(),
         t = d.timer;
-      if (t.remaining <= 0) t.remaining = d.durations[d.mode] * 60;
+      if (t.remaining <= 0) {
+        t.remaining = d.durations[d.mode] * 60;
+        delete t.focusSessionId;
+      }
       Object.assign(t, {
         running: true,
         endAt: time + t.remaining * 1000,
@@ -111,7 +114,10 @@ export function createFocusTimer({
       pause();
       store.update((d) => {
         d.durations[mode] = minutes;
-        if (d.mode === mode) d.timer.remaining = minutes * 60;
+        if (d.mode === mode) {
+          d.timer.remaining = minutes * 60;
+          delete d.timer.focusSessionId;
+        }
       });
       return true;
     },

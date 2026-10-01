@@ -3,11 +3,61 @@ import { handleAction } from "../shared/actions.js";
 import { $, $$ } from "../shared/dom.js";
 import { datekey, display } from "../shared/format.js";
 import { renderFocusInsights, createPrayerInsights } from "./activity-insights.js";
+import { focusStreak } from "../core/focus-streak.js";
 import { aggregateStats } from "../core/statistics.js";
 export function createStatisticsView({ store, planner, records, access }) {
   const subjectColor = planner.subjectColor;
   const prayerInsights = createPrayerInsights({ store, records });
   let historyLimit = 20;
+  const sectionButtons = $$("[data-stat-section]");
+  function selectSection(name) {
+    sectionButtons.forEach(button => {
+      const active = button.dataset.statSection === name;
+      button.setAttribute("aria-pressed", String(active));
+      $("#statistics-" + button.dataset.statSection).hidden = !active;
+    });
+    $("#statistics-records").hidden = name !== "general";
+    $("#statistics-period-controls").hidden = !["general", "focus"].includes(name);
+  }
+  sectionButtons.forEach((button, index) => {
+    button.onclick = () => selectSection(button.dataset.statSection);
+    button.onkeydown = event => {
+      let next;
+      if (event.key === "ArrowRight") next = (index + 1) % sectionButtons.length;
+      if (event.key === "ArrowLeft") next = (index + sectionButtons.length - 1) % sectionButtons.length;
+      if (event.key === "Home") next = 0;
+      if (event.key === "End") next = sectionButtons.length - 1;
+      if (next === undefined) return;
+      event.preventDefault();
+      sectionButtons[next].focus();
+      selectSection(sectionButtons[next].dataset.statSection);
+    };
+  });
+  function renderStreak() {
+    const streak = focusStreak(store.state.sessions);
+    localizedText($("#streak"), () => bilingual(`${streak.current} gün seri`, `${streak.current}-day streak`));
+    const root = $("#focus-streak");
+    root.replaceChildren();
+    const heading = document.createElement("h3");
+    heading.textContent = "Focus Streak";
+    const cards = document.createElement("div");
+    cards.className = "stat-summary streak-summary";
+    for (const [value, tr, en] of [[streak.current, "Mevcut seri", "Current streak"], [streak.longest, "En uzun seri", "Longest streak"]]) {
+      const card = document.createElement("div"), number = document.createElement("strong"), label = document.createElement("span");
+      localizedText(number, () => bilingual(`${value} gün`, `${value} days`));
+      localizedText(label, () => bilingual(tr, en));
+      card.append(number, label); cards.append(card);
+    }
+    const rule = document.createElement("p"), status = document.createElement("p");
+    rule.className = "quiet";
+    localizedText(rule, () => bilingual(
+      "Tüm zamanlar · Bir günün sayılması için en az 15 dakikalık tek bir Focus oturumu tamamla. Kısa oturumlar birleştirilmez. Tamamlanma günü cihazının yerel tarihine göre sayılır.",
+      "All time · Complete one Focus session of at least 15 minutes to earn a day. Short sessions are not combined. The completion day uses your device’s local date."));
+    localizedText(status, () => streak.today
+      ? bilingual("Bugün tamamlandı ✓", "Today earned ✓")
+      : bilingual("Bugünün serisi için 15+ dakikalık bir Focus oturumu tamamla. Dünkü seri gün sonuna kadar korunur.", "Complete a 15+ minute Focus session to earn today. Yesterday’s streak stays active until the end of today."));
+    root.append(heading, cards, status, rule);
+  }
   function renderStats() {
     let sums = {},
       today = datekey(Date.now());
@@ -27,15 +77,7 @@ export function createStatisticsView({ store, planner, records, access }) {
     $("#sessions").textContent = store.state.sessions.filter(
       (s) => s.complete,
     ).length;
-    let streak = 0;
-    day = new Date();
-    day.setHours(12, 0, 0, 0);
-    if (!sums[today]) day.setDate(day.getDate() - 1);
-    while (sums[datekey(day)] > 0) {
-      streak++;
-      day.setDate(day.getDate() - 1);
-    }
-    $("#streak").textContent = streak + " gün seri";
+    renderStreak();
     let subjects = {};
     for (let s of store.state.sessions)
       subjects[s.subject] = (subjects[s.subject] || 0) + (+s.seconds || 0);

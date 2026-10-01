@@ -26,6 +26,13 @@ export function renderFocusInsights(records, start, end) {
   root.append(node('p', 'insight-highlight', result.total
     ? bilingual('En yoğun saat: ', 'Busiest hour: ') + peak
     : bilingual('Saat raporun ilk sayaç oturumundan sonra oluşacak.', 'Your hourly report will appear after your first timer session.')));
+  const dayTotals = result.cells.map(hours => hours.reduce((sum, seconds) => sum + seconds, 0));
+  const maxDay = Math.max(...dayTotals);
+  if (maxDay) {
+    const names = dayTotals.flatMap((total, index) => total === maxDay
+      ? [new Date(2026, 8, 28 + index).toLocaleDateString(window.ikraLocale(), { weekday: 'long' })] : []);
+    root.append(node('p', 'insight-highlight', bilingual('En yoğun gün: ', 'Busiest day: ') + names.join(', ') + ' · ' + t(display(maxDay))));
+  }
   const graph = svgNode('svg', { viewBox: '0 0 600 150', role: 'img', 'aria-label': bilingual('Saatlik toplam odak süresi', 'Total focus duration by hour'), class: 'focus-hour-chart' });
   const max = Math.max(60, ...result.hours), x = h => 40 + h * 23, y = v => 116 - v / max * 90;
   for (const fraction of [0, .5, 1]) {

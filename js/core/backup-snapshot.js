@@ -1,17 +1,21 @@
+import { newId } from "../shared/format.js";
 export function backupSnapshot(source, now) {
   const copy = JSON.parse(JSON.stringify(source)),
     t = copy.timer;
   if (t?.running && Number.isFinite(t.endAt) && Number.isFinite(t.startedAt)) {
     const end = Math.min(now, t.endAt),
       seconds = Math.max(0, (end - t.startedAt) / 1000);
-    if (copy.mode === "focus" && seconds > 0 && Array.isArray(copy.sessions))
+    if (copy.mode === "focus" && seconds > 0 && Array.isArray(copy.sessions)) {
+      t.focusSessionId ||= newId();
       copy.sessions.push({
         id: globalThis.crypto?.randomUUID?.() || String(now) + Math.random(),
         at: new Date(end).toISOString(),
         subject: copy.subject || "Derssiz",
         seconds,
+        focusSessionId: t.focusSessionId,
         complete: end >= t.endAt,
       });
+    }
     t.remaining = Math.max(0, (t.endAt - now) / 1000);
     t.running = false;
     t.endAt = null;
