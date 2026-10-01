@@ -2182,3 +2182,25 @@ body.focus-running:not(.prayer-active) .widget-stack {
   .prayer-week-table th { font-size: .62rem; }
   .prayer-week-table th:first-child { width: 46px; }
 }
+
+/* Statistics: clear sections, comfortable reading, keyboard-visible controls. */
+#panel-history { width: min(820px, calc(100% - 24px)); }
+.statistics-nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: 12px 0 24px; padding: 5px; border: 1px solid var(--line); border-radius: 16px; }
+.statistics-nav button { padding: 12px 6px; border: 0; border-radius: 11px; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.statistics-nav button[aria-pressed="true"] { background: var(--accent); color: var(--bg); font-weight: 700; }
+.statistics-nav button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+#stats-panel [hidden], #statistics-records[hidden] { display: none !important; }
+.statistics-section { min-width: 0; }
+.statistics-section h3 { margin: 0 0 12px; }
+.statistics-section p { line-height: 1.65; }
+.streak-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 18px 0; }
+.statistics-empty { text-align: center; padding: 38px 18px; border: 1px dashed var(--line); border-radius: 18px; }
+#statistics-records { border-top: 1px solid var(--line); padding-top: 20px; }
+#statistics-records h3 { margin: 20px 0 12px; }
+#focus-streak { margin-top: 0; }
+@media (max-width: 480px) {
+  .statistics-nav { gap: 2px; }
+  .statistics-nav button { font-size: .85rem; min-height: 44px; }
+  .stat-summary { gap: 8px; }
+  .stat-summary strong { font-size: 1.2rem; }
+}

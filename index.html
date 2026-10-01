@@ -273,10 +273,17 @@
           </section>
           <section class="card wide">
             <div class="row between">
-              <h2>Son kayıtlar</h2>
+              <h2>Çalışma özeti</h2>
               <span id="total" class="small"> </span>
             </div>
             <section id="stats-panel">
+              <nav class="statistics-nav" aria-label="İstatistik bölümleri">
+                <button type="button" data-stat-section="general" aria-controls="statistics-general" aria-pressed="true">Genel</button>
+                <button type="button" data-stat-section="focus" aria-controls="statistics-focus" aria-pressed="false">Focus</button>
+                <button type="button" data-stat-section="anki" aria-controls="statistics-anki" aria-pressed="false">Anki</button>
+                <button type="button" data-stat-section="prayer" aria-controls="statistics-prayer" aria-pressed="false">Namaz</button>
+              </nav>
+              <div id="statistics-period-controls">
               <div class="seg stat-tabs" aria-label="İstatistik dönemi">
                 <button data-stats="week">Hafta</button>
                 <button data-stats="month">Ay</button>
@@ -300,6 +307,8 @@
                   ›
                 </button>
               </div>
+              </div>
+              <section id="statistics-general" class="statistics-section">
               <div class="stat-summary">
                 <div>
                   <strong id="stats-duration"> </strong>
@@ -320,14 +329,31 @@
                 aria-label="Döneme göre çalışma süreleri"
               ></div>
               <div id="stats-subjects" class="subjects"></div>
-              <section id="focus-insights" class="activity-insights"></section>
-              <section id="prayer-insights" class="activity-insights"></section>
+
               <p class="quiet">
                 Tüm kayıtlı çalışmalar burada birikir. Namaz süreleri çalışma
                 toplamına eklenmez.
               </p>
+              </section>
+              <section id="statistics-focus" class="statistics-section" hidden>
+                <div id="focus-streak" class="activity-insights"></div>
+                <section id="focus-insights" class="activity-insights"></section>
+              </section>
+              <section id="statistics-anki" class="statistics-section" hidden>
+                <div class="statistics-empty">
+                  <h3>Anki</h3>
+                  <p>Anki verisi henüz bağlı değil.</p>
+                  <p class="quiet">Tekrar sayısı, kartlar ve çalışma süresi için Anki verisi gerekir.</p>
+                </div>
+              </section>
+              <section id="statistics-prayer" class="statistics-section" hidden>
+                <section id="prayer-insights" class="activity-insights"></section>
+              </section>
             </section>
+            <div id="statistics-records">
+            <h3>Son kayıtlar</h3>
             <ul id="history" class="history"></ul>
+            </div>
             <section class="manual-session">
               <button
                 type="button"

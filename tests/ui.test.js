@@ -137,6 +137,15 @@ for (const width of [1440, 390])
     const $ = (s) => w.document.querySelector(s);
     const flush = () => new Promise((r) => setTimeout(r, 20));
     await flush();
+    assert.equal($('#statistics-general').hidden, false);
+    for (const section of ['focus', 'anki', 'prayer', 'general']) {
+      $(`[data-stat-section="${section}"]`).click();
+      assert.equal($(`#statistics-${section}`).hidden, false);
+      assert.equal($('#statistics-records').hidden, section !== 'general');
+      assert.equal($('#statistics-period-controls').hidden, !['general', 'focus'].includes(section));
+      assert.equal(w.document.querySelectorAll('.statistics-section:not([hidden])').length, 1);
+    }
+    assert.match($('#focus-streak').textContent, /Focus Streak/);
     const prayerView = createPrayerView({ store: app.store, times: {
       next: () => ({ name: "Yatsı", minutes: 411, tomorrow: false }),
       wall: () => ({ date: "2026-09-30" }),
