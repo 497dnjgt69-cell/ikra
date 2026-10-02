@@ -1,14 +1,14 @@
-const CACHE = "ikra-v1.4.1";
+const CACHE = "ikra-v1.4.2";
 
 const CORE = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./icon-32.png",
-  "./icon-180.png",
-  "./icon-192.png",
-  "./icon-512.png",
-  "./icon-maskable-512.png",
+  "./ikra-icon-v2-32.png",
+  "./ikra-icon-v2-180.png",
+  "./ikra-icon-v2-192.png",
+  "./ikra-icon-v2-512.png",
+  "./ikra-icon-v2-maskable-512.png",
   "./css/ambient.css",
   "./css/base.css",
   "./css/glass.css",
