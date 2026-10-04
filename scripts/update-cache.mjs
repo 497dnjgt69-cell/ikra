@@ -15,11 +15,11 @@ const assets = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./icon-32.png",
-  "./icon-180.png",
-  "./icon-192.png",
-  "./icon-512.png",
-  "./icon-maskable-512.png",
+  "./ikra-icon-v2-32.png",
+  "./ikra-icon-v2-180.png",
+  "./ikra-icon-v2-192.png",
+  "./ikra-icon-v2-512.png",
+  "./ikra-icon-v2-maskable-512.png",
   ...(await files("css"))
     .filter((f) => f.endsWith(".css"))
     .sort()

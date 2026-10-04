@@ -1,3 +1,4 @@
+import { normalizeAnki } from "../core/anki.js";
 import { fresh } from "../core/default-state.js";
 import { newId } from "../shared/format.js";
 export const STORAGE_KEY = "mahir-focus-v1";
@@ -8,6 +9,7 @@ export function migrateState(input, now = Date.now()) {
     input && input.timer && input.durations && Array.isArray(input.sessions);
   const state = { ...fresh(), ...(valid ? structuredClone(input) : {}) };
   state.schemaVersion = SCHEMA_VERSION;
+  try { state.anki = normalizeAnki(state.anki); } catch { state.anki = null; }
   // Licensing is deliberately outside study data, including legacy/imported payloads.
   for (const key of ["isPro", "plan", "entitlements", "license"])
     delete state[key];

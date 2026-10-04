@@ -1,3 +1,5 @@
+import { createAnkiConnect } from "../platform/anki-connect.js";
+import { createAnkiView } from "../ui/anki.js";
 import { t, bilingual } from "../i18n/bindings.js";
 import { createStore } from "../services/store.js";
 import { createAccess } from "../services/access.js";
@@ -29,6 +31,7 @@ export default function initialize({
   storage = localStorage,
   commerce,
   prayerAPI = createPrayerAPI(),
+  ankiAPI = createAnkiConnect(),
 } = {}) {
   const toast = (message) => window.ikraNotify(message);
   const store = createStore({
@@ -105,12 +108,14 @@ export default function initialize({
     planner,
     render: scheduleRender,
   });
+  const ankiView = createAnkiView({ store, api: ankiAPI });
   const statsView = createStatisticsView({ store, planner, records, access });
   const prayerView = createPrayerView({ store, times });
   function render() {
     plannerView.renderSubjectChoices();
     timerView.render();
     statsView.render();
+    ankiView.render();
     plannerView.renderTasks();
     prayerView.render();
     prayerView.updateNextPrayer();
@@ -124,7 +129,7 @@ export default function initialize({
     renderTasks: plannerView.renderTasks,
   });
   bindSettings({ store, settings, focus, render: scheduleRender, playSound });
-  bindStatistics({ store, settings, renderAllStats: statsView.render });
+  bindStatistics({ store, settings, renderAllStats: render });
   bindManualSession({ store, records, render, playSound });
   bindPrayerTimes({ times, render, toast });
   bindBackup({ backup, times, render, toast });
@@ -185,6 +190,7 @@ export default function initialize({
       clearInterval(refresh);
       clearTimeout(initialFetch);
       times.invalidate();
+      ankiView.dispose();
       document.removeEventListener("ikra-action-failed", scheduleRender);
       unsubscribe();
       unsubscribeAccess();

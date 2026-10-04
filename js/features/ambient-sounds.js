@@ -27,16 +27,31 @@ export default function initAmbientSounds() {
   const waiting = text('div', ['Ses yakında', 'Audio coming soon'], 'place-waiting');
   const note = text('p', ['Mekânını seçebilirsin. Sesler henüz eklenmedi.', 'Choose your place. Audio has not been added yet.'], 'places-note');
   const announcement = document.createElement('p'); announcement.className = 'places-sr-only'; announcement.setAttribute('role', 'status');
+  let audio;
+  const audioSlot = document.createElement('div');
   const buttons = new Map();
   function render(announce = false) {
     for (const [id, button] of buttons) button.setAttribute('aria-pressed', String(id === selected.id));
     preview.dataset.place = selected.id;
+    if (audio) { audio.pause(); audio.removeAttribute('src'); audio.load(); audio.remove(); audio = null; }
+    waiting.hidden = !!selected.audioSrc;
+    if (selected.audioSrc) {
+      audio = document.createElement('audio');
+      audio.className = 'place-audio'; audio.controls = true; audio.loop = true;
+      audio.preload = 'none'; audio.src = selected.audioSrc;
+      localizedAttribute(audio, 'aria-label', () => bilingual(...selected.name));
+      audio.addEventListener('error', () => localizedText(announcement, () => bilingual('Ses yüklenemedi. İnternet bağlantını kontrol edip tekrar dene.', 'Audio could not load. Check your connection and try again.')));
+      audioSlot.append(audio);
+    }
+    localizedText(note, () => selected.audioSrc
+      ? bilingual('Bu mekânın ortam kaydı hazır. Oynatıcıdan başlat; ses paneli kapalıyken de çalmaya devam eder.', 'This place’s recording is ready. Start it in the player; it keeps playing when you close this panel.')
+      : bilingual('Bu mekânın sesi henüz eklenmedi.', 'Audio for this place has not been added yet.'));
     art.innerHTML = `<svg viewBox="0 0 240 180" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="${selected.art}"/></svg>`;
     localizedText(location, () => bilingual(...selected.location));
     localizedText(name, () => bilingual(...selected.name));
     localizedText(mood, () => bilingual(...selected.mood));
     tagNodes.forEach((node, i) => localizedText(node, () => bilingual(...selected.tags[i])));
-    if (announce) localizedText(announcement, () => `${bilingual(...selected.name)}. ${bilingual('Seçildi. Ses yakında.', 'Selected. Audio coming soon.')}`);
+    if (announce) localizedText(announcement, () => `${bilingual(...selected.name)}. ${(selected.audioSrc ? bilingual('Seçildi. Ses hazır.', 'Selected. Audio ready.') : bilingual('Seçildi. Ses yakında.', 'Selected. Audio coming soon.'))}`);
   }
   for (const place of PLACES) {
     const button = document.createElement('button'); button.type = 'button'; button.className = 'place-choice'; button.dataset.place = place.id;
@@ -46,11 +61,11 @@ export default function initAmbientSounds() {
     copy.append(text('span', place.name, 'place-choice-name'), text('span', place.location, 'place-choice-location'));
     const check = document.createElement('span'); check.className = 'place-check'; check.textContent = '✓'; check.setAttribute('aria-hidden', 'true');
     button.append(symbol, copy, check);
-    button.onclick = () => { selected = place; try { localStorage.setItem(KEY, place.id); } catch {} render(true); };
+    button.onclick = () => { if (selected.id === place.id) return; selected = place; try { localStorage.setItem(KEY, place.id); } catch {} render(true); };
     list.append(button); buttons.set(place.id, button);
   }
-  details.append(location, name, mood, tags, waiting);
+  details.append(location, name, mood, tags, waiting, audioSlot);
   preview.append(art, details); layout.append(list, preview); panel.append(layout, note, announcement);
   render();
-  return { dispose() {} };
+  return { dispose() { if (audio) { audio.pause(); audio.removeAttribute('src'); audio.load(); } } };
 }

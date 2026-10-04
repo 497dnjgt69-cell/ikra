@@ -2204,3 +2204,14 @@ body.focus-running:not(.prayer-active) .widget-stack {
   .stat-summary { gap: 8px; }
   .stat-summary strong { font-size: 1.2rem; }
 }
+
+/* Anki connection stays readable on both desktop and phone. */
+.anki-setup { margin: 16px 0; padding: 14px; border-radius: 14px; background: var(--tint); }
+.anki-setup summary { cursor: pointer; font-weight: 600; }
+.anki-setup li { margin: 12px 0; line-height: 1.6; }
+.anki-setup label { display: grid; gap: 8px; margin-top: 16px; }
+#anki-status { line-height: 1.6; overflow-wrap: anywhere; }
+#anki-summary { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); }
+#anki-api-key { width: 100%; box-sizing: border-box; }
+#manual-session-form input { max-width: 100%; box-sizing: border-box; }
+.place-audio { width: 100%; margin-top: 16px; }

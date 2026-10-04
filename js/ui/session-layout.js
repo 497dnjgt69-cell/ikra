@@ -2,7 +2,7 @@ export default function initialize() {
   (() => {
     const $ = (s) => document.querySelector(s);
     const manual = $(".manual-session");
-    $("#statistics-records").prepend(manual);
+    $("#stats-panel").after(manual);
     const select = $("#prayerselect"),
       group = document.createElement("div");
     group.className = "prayer-selection";

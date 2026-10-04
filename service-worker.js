@@ -1,4 +1,4 @@
-const CACHE = "ikra-v1.4.2";
+const CACHE = "ikra-v1.5.0";
 
 const CORE = [
   "./",
@@ -28,6 +28,7 @@ const CORE = [
   "./js/controllers/statistics.js",
   "./js/controllers/timer.js",
   "./js/core/activity-insights.js",
+  "./js/core/anki.js",
   "./js/core/application.js",
   "./js/core/backup-snapshot.js",
   "./js/core/backup-validation.js",
@@ -49,6 +50,7 @@ const CORE = [
   "./js/i18n/bindings.js",
   "./js/i18n/dictionary.js",
   "./js/i18n/dom-translator.js",
+  "./js/platform/anki-connect.js",
   "./js/platform/commerce.js",
   "./js/platform/prayer-api.js",
   "./js/platform/register-service-worker.js",
@@ -67,6 +69,7 @@ const CORE = [
   "./js/shared/format.js",
   "./js/ui/activity-insights.js",
   "./js/ui/animations.js",
+  "./js/ui/anki.js",
   "./js/ui/clock.js",
   "./js/ui/mobile-widgets.js",
   "./js/ui/notifications.js",
@@ -114,7 +117,7 @@ self.addEventListener("fetch", (event) => {
   const request = event.request;
   const url = new URL(request.url);
 
-  if (request.method !== "GET" || url.origin !== self.location.origin) {
+  if (request.method !== "GET" || url.origin !== self.location.origin || url.pathname.endsWith(".mp3")) {
     return;
   }
 

@@ -14,7 +14,7 @@ export function createRecords({ store, access, now = Date.now }) {
         d.prayerChecks[date][name] = done;
       });
     },
-    addManual({ subject, minutes, date }) {
+    addManual({ subject, minutes, date, time = "12:00" }) {
       access.require(FEATURES.HISTORY);
       subject = String(subject).trim().slice(0, 60);
       if (!subject) throw Error("Bir ders seç veya dersin adını yaz.");
@@ -22,13 +22,17 @@ export function createRecords({ store, access, now = Date.now }) {
         throw Error("1–1440 arasında tam sayı olarak dakika gir.");
       if (!isDateKey(date) || date > datekey(now()))
         throw Error("Bugün veya geçmişte geçerli bir tarih seç.");
+      if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) throw Error("Geçerli bir saat seç.");
+      const at = new Date(date + "T" + time + ":00");
+      if (at.getTime() > now()) throw Error("Geleceğe oturum eklenemez.");
       const record = {
         id: newId(),
         subject,
         seconds: minutes * 60,
-        at: new Date(date + "T12:00:00").toISOString(),
+        at: at.toISOString(),
         complete: true,
         manual: true,
+        timeKnown: true,
       };
       store.update((d) => {
         ensureSubject(d, subject);

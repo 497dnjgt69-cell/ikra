@@ -9,7 +9,7 @@ export function focusDistribution(records, start, end) {
   for (const record of records) {
     const finish = Date.parse(record.at), duration = Number(record.seconds) * 1000;
     if (!Number.isFinite(finish) || !Number.isFinite(duration) || duration <= 0) continue;
-    if (record.manual) {
+    if (record.manual && record.timeKnown !== true) {
       if (finish >= +start && finish < +end) excluded += duration / 1000;
       continue;
     }

@@ -1,6 +1,23 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Anki ve Boğaz’ın sesi burada.": "Anki and the sound of the Bosphorus are here.",
+      "Çalışmalarını daha kolay ekle, ilerlemeni daha sade takip et.": "Add study sessions more easily and see your progress more clearly.",
+      "Bosphorus Cafe sesi hazır": "Bosphorus Cafe audio is ready",
+      "Boğaz’da bir kafe artık kendi ortam kaydıyla çalıyor. Oynat, duraklat ve sesi ayarla; kayıt döngüde devam eder.": "Bosphorus café now plays its ambient recording. Play, pause and adjust the volume; the recording loops.",
+      "Anki verilerini getir": "Bring in your Anki data",
+      "Masaüstü AnkiConnect bağlantısıyla tekrar sayısı, farklı kartlar, çalışma süresi ve günlük geçmiş. Kurulum adımları Anki sekmesinde.": "Review counts, unique cards, study time and daily history through desktop AnkiConnect. Setup steps are in the Anki tab.",
+      "Oturum ekleme yenilendi": "Session entry improved",
+      "Enter ile kaydet, tarih ve saat seç. Elle eklenen çalışmalar saat analizinde seçtiğin saatte görünür.": "Save with Enter and choose a date and time. Manual sessions appear at your chosen time in the activity analysis.",
+      "Daha sade süreler": "Clearer durations",
+      "İstatistiklerde süreler yalnızca saat ve dakika olarak gösterilir. Bir dakikadan kısa çalışmalar <1 dk olarak görünür.": "Statistics show hours and minutes only. Sessions shorter than a minute appear as <1 min.",
+      "Focus Streak ve ayrı bölümler": "Focus Streak and separate sections",
+      "Genel, Focus, Anki ve Namaz bölümleri. Bir günde tamamlanan en az 15 dakikalık tek bir Focus oturumu serine eklenir.": "General, Focus, Anki and Prayer sections. Complete a single Focus session of at least 15 minutes to earn a streak day.",
+      "Geçerli bir saat seç.": "Choose a valid time.",
+      "Geleceğe oturum eklenemez.": "Sessions cannot be added in the future.",
+      "Bitiş saati": "End time",
+      "<1 dk": "<1 min",
+
       "Ritmini tanı, gününü takip et.": "Know your rhythm, track your day.",
       "Yeni odak raporları, beş vakit takibi ve son duyurudan bu yana gelen iyileştirmeler.": "New focus reports, daily prayer tracking and improvements since the last announcement.",
       "Odak ritmini keşfet": "Discover your focus rhythm",

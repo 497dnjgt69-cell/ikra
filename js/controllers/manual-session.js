@@ -1,7 +1,7 @@
 import { t, bilingual, localizedText } from "../i18n/bindings.js";
 import { handleAction } from "../shared/actions.js";
 import { $ } from "../shared/dom.js";
-import { datekey, display } from "../shared/format.js";
+import { datekey, display, pad } from "../shared/format.js";
 
 export function bindManualSession({ store, records, render, playSound }) {
   $("#manual-open").onclick = handleAction(() => {
@@ -9,23 +9,25 @@ export function bindManualSession({ store, records, render, playSound }) {
     $("#manual-open").setAttribute("aria-expanded", String(show));
     window.animatePanel($("#manual-body"), show);
     if (show) {
-      $("#manual-date").value = datekey(Date.now());
+      const now = new Date();
+      $("#manual-date").max = datekey(now);
+      $("#manual-date").value ||= datekey(now);
+      $("#manual-time").value ||= pad(now.getHours()) + ":" + pad(now.getMinutes());
       localizedText($("#manual-status"), () => "");
-      $("#manual-subject").value = store.state.subject;
+      $("#manual-subject").value ||= store.state.subject;
+      $("#manual-subject").focus();
     }
   });
   $("#manual-minutes").addEventListener("input", () => {
     const n = Number($("#manual-minutes").value);
-    $("#manual-preview").textContent =
-      Number.isInteger(n) && n > 0 && n <= 1440
-        ? display(n * 60)
-        : "Dakika olarak gir: 1 saat = 60 dakika";
+    localizedText($("#manual-preview"), () => Number.isInteger(n) && n > 0 && n <= 1440
+      ? t(display(n * 60))
+      : bilingual("Dakika olarak gir: 1 saat = 60 dakika", "Enter minutes: 1 hour = 60 minutes"));
   });
   $("#manual-minutes").dispatchEvent(new Event("input"));
   $("#manual-session-form").onsubmit = handleAction(submitManualSession);
   const manualSave = $('#manual-session-form button[type="submit"]');
-  manualSave.type = "button";
-  manualSave.onclick = handleAction(submitManualSession);
+  manualSave.type = "submit";
   function submitManualSession(e) {
     e?.preventDefault();
     const status = $("#manual-status");
@@ -34,10 +36,11 @@ export function bindManualSession({ store, records, render, playSound }) {
       const subject = $("#manual-subject").value,
         minutes = Number($("#manual-minutes").value),
         date = $("#manual-date").value;
-      const record = records.addManual({ subject, minutes, date });
+      const record = records.addManual({ subject, minutes, date, time: $("#manual-time").value });
       render();
       $("#manual-minutes").value = "";
-      $("#manual-preview").textContent = "";
+      localizedText($("#manual-preview"), () => "");
+      $("#manual-minutes").focus();
       localizedText(status, () => record.subject + " · " + t(display(record.seconds)) +
         bilingual(" kaydedildi.", " saved."));
       window.ikraNotify(

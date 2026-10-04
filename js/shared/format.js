@@ -14,17 +14,16 @@ export function fmt(value) {
   return pad(Math.floor(seconds / 60)) + ":" + pad(seconds % 60);
 }
 export function display(value) {
-  const seconds = Math.max(0, Math.round(Number(value) || 0));
+  const seconds = Math.max(0, Math.floor(Number(value) || 0));
   return (
     [
       Math.floor(seconds / 3600) ? Math.floor(seconds / 3600) + " sa" : "",
       Math.floor((seconds % 3600) / 60)
         ? Math.floor((seconds % 3600) / 60) + " dk"
         : "",
-      seconds % 60 ? (seconds % 60) + " sn" : "",
     ]
       .filter(Boolean)
-      .join(" ") || "0 dk"
+      .join(" ") || (seconds > 0 ? "<1 dk" : "0 dk")
   );
 }
 export const newId = () =>

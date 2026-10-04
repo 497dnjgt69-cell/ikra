@@ -16,8 +16,9 @@ export function createStatisticsView({ store, planner, records, access }) {
       button.setAttribute("aria-pressed", String(active));
       $("#statistics-" + button.dataset.statSection).hidden = !active;
     });
+    $(".manual-session").hidden = !["general", "focus"].includes(name);
     $("#statistics-records").hidden = name !== "general";
-    $("#statistics-period-controls").hidden = !["general", "focus"].includes(name);
+    $("#statistics-period-controls").hidden = !["general", "focus", "anki"].includes(name);
   }
   sectionButtons.forEach((button, index) => {
     button.onclick = () => selectSection(button.dataset.statSection);

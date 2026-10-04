@@ -127,6 +127,7 @@ for (const width of [1440, 390])
     const { bootstrap } = await import(root + "/js/bootstrap.js");
     app = bootstrap({
       storage: w.localStorage,
+      ankiAPI: {async sync(){return {profile:"Test",syncedAt:new Date().toISOString(),reviews:[{id:Date.now()-1000,card:1,seconds:75,ease:3}]};}},
       prayerAPI: {
         load() {
           throw Error("No network expected");
@@ -134,6 +135,8 @@ for (const width of [1440, 390])
       },
     });
 
+    w.HTMLMediaElement.prototype.pause = function() {};
+    w.HTMLMediaElement.prototype.load = function() {};
     const $ = (s) => w.document.querySelector(s);
     const flush = () => new Promise((r) => setTimeout(r, 20));
     await flush();
@@ -142,9 +145,15 @@ for (const width of [1440, 390])
       $(`[data-stat-section="${section}"]`).click();
       assert.equal($(`#statistics-${section}`).hidden, false);
       assert.equal($('#statistics-records').hidden, section !== 'general');
-      assert.equal($('#statistics-period-controls').hidden, !['general', 'focus'].includes(section));
+      assert.equal($('#statistics-period-controls').hidden, !['general', 'focus', 'anki'].includes(section));
       assert.equal(w.document.querySelectorAll('.statistics-section:not([hidden])').length, 1);
     }
+    $('#anki-sync').click();
+    await flush();
+    assert.equal(app.store.state.anki.reviews.length, 1);
+    assert.match($('#anki-summary').textContent, /1 (dk|min)/);
+    app.backup.restore(app.backup.export());
+    assert.equal(app.store.state.anki.profile, 'Test');
     assert.match($('#focus-streak').textContent, /Focus Streak/);
     const prayerView = createPrayerView({ store: app.store, times: {
       next: () => ({ name: "Yatsı", minutes: 411, tomorrow: false }),

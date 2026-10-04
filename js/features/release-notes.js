@@ -2,34 +2,34 @@ export default function initialize() {
   (() => {
     // Edit this release record and its dictionary entries for future announcements.
     const release = {
-  "version": "1.4.0",
-  "title": "Ritmini tanı, gününü takip et.",
-  "intro": "Yeni odak raporları, beş vakit takibi ve son duyurudan bu yana gelen iyileştirmeler.",
+  "version": "1.5.0",
+  "title": "Anki ve Boğaz’ın sesi burada.",
+  "intro": "Çalışmalarını daha kolay ekle, ilerlemeni daha sade takip et.",
   "features": [
     {
-      "icon": "sparkle",
-      "title": "Odak ritmini keşfet",
-      "text": "Haftanın günleri ve saatlerine göre yoğunluk haritası, saatlik grafik ve en yoğun çalışma saatlerin."
-    },
-    {
-      "icon": "leaf",
-      "title": "Beş vakit, tek bakışta",
-      "text": "Ayrı namaz istatistikleri, haftalık beş vakit takibi ve elle işaretleme. Kayıtlı namaz oturumların otomatik görünür."
-    },
-    {
       "icon": "phone",
-      "title": "Temalı Mekânlar",
-      "text": "Boğaz’da bir kafe, Oxford kütüphanesi, gece kampı, uzay ve Japonya’da yağmurlu gece. Çizimli mekân seçimi ayrı menü sekmesinde; sesler yakında."
+      "title": "Bosphorus Cafe sesi hazır",
+      "text": "Boğaz’da bir kafe artık kendi ortam kaydıyla çalıyor. Oynat, duraklat ve sesi ayarla; kayıt döngüde devam eder."
     },
     {
       "icon": "sparkle",
-      "title": "Saat görünümünde kesintisiz çalışma",
-      "text": "Saat ekranına geçerken çalışma sayacın ve süre kaydın devam eder."
+      "title": "Anki verilerini getir",
+      "text": "Masaüstü AnkiConnect bağlantısıyla tekrar sayısı, farklı kartlar, çalışma süresi ve günlük geçmiş. Kurulum adımları Anki sekmesinde."
     },
     {
       "icon": "leaf",
-      "title": "Daha anlaşılır namaz hatırlatmaları",
-      "text": "Kalan süre saat ve dakika olarak görünür. Uygulama açıkken vakit girince küçük bir bildirim alırsın."
+      "title": "Oturum ekleme yenilendi",
+      "text": "Enter ile kaydet, tarih ve saat seç. Elle eklenen çalışmalar saat analizinde seçtiğin saatte görünür."
+    },
+    {
+      "icon": "sparkle",
+      "title": "Daha sade süreler",
+      "text": "İstatistiklerde süreler yalnızca saat ve dakika olarak gösterilir. Bir dakikadan kısa çalışmalar <1 dk olarak görünür."
+    },
+    {
+      "icon": "leaf",
+      "title": "Focus Streak ve ayrı bölümler",
+      "text": "Genel, Focus, Anki ve Namaz bölümleri. Bir günde tamamlanan en az 15 dakikalık tek bir Focus oturumu serine eklenir."
     }
   ]
 };
