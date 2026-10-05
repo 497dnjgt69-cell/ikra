@@ -2,14 +2,11 @@ export default function initialize() {
   (() => {
     // Edit this release record and its dictionary entries for future announcements.
     const release = {
-  version: "1.7.0",
-  title: "Menün artık sana göre.",
-  intro: "Anki bir dokunuş uzağında; vakitler ve açılış daha anlaşılır.",
-  features: [
-    {icon:"sparkle",title:"Anki için ayrı düğme",text:"Anki panelini doğrudan saatin altındaki menüden aç. İstatistikler içindeki Anki sekmesi de yerinde."},
-    {icon:"phone",title:"Menüyü kendine göre düzenle",text:"Araçları göster veya gizle, oklarla sıralarını değiştir. Canlı önizleme, otomatik kayıt ve varsayılana dönüş tek yerde."},
-    {icon:"leaf",title:"Sabah vaktinin bitişi",text:"Sabah vakti içinde güneş doğana kadar kalan dakikaları gör. Güneş doğuş saati otomatik alınır veya elle girilebilir."},
-    {icon:"sparkle",title:"Daha düzgün açılış",text:"Kaydettiğin tema ilk andan itibaren uygulanır. Arayüz hazırlanırken eski düzenin kısa süre görünmesi giderildi."}
+  version:"1.8.0",title:"Daha sade, daha sana göre.",intro:"Üç küçük yenilik, daha rahat bir deneyim.",
+  features:[
+    {icon:"sparkle",title:"Anki yanında",text:"Özet istatistiklerin sürüklenebilir kartta."},
+    {icon:"phone",title:"Dock senin elinde",text:"Ayarlar’dan sürükle, ekle, kaldır."},
+    {icon:"leaf",title:"BISMILLAH",text:"Sayaçsız, sakin bir namaz deneyimi."}
   ]
 };
     const seenKey = "ikra-release-seen:" + release.version;

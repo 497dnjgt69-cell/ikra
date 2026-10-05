@@ -13,8 +13,9 @@ export function createPrayerView({ store, times }) {
     const fajr = times.fajrEnd?.();
     for(const target of ['#fajr-end','#fajr-end-peek']) {
       const label=$(target);if(!label) continue;
+      label.hidden=!fajr?.active;
       localizedText(label,()=>!fajr ? bilingual('Sabah bitişi için güncel güneş doğuş saatini getir veya elle ekle.','Refresh sunrise times or enter sunrise manually to see when Fajr ends.')
-        : fajr.active ? bilingual(`Sabah vaktinin çıkmasına ${fajr.minutes} dk kaldı · Güneş ${fajr.time}`,`Fajr ends in ${fajr.minutes} min · Sunrise ${fajr.time}`)
+        : fajr.active ? bilingual(`Sabah · ${fajr.minutes} dk kaldı`,`Fajr · ${fajr.minutes} min left`)
         : bilingual(`Sabah bitişi · Güneş ${fajr.time}${fajr.ended?' · Vakit sona erdi.':''}`,`Fajr ends · Sunrise ${fajr.time}${fajr.ended?' · Time has ended.':''}`));
       label.classList.toggle('fajr-active',!!fajr?.active);
     }
@@ -81,7 +82,7 @@ export function createPrayerView({ store, times }) {
       String(!!store.state.prayerView),
     );
     $("#prayerfinish").classList.toggle("hidden", !store.state.prayerTimer);
-    $("#prayerselect").disabled = false;
+    $("#prayerselect").disabled = !!store.state.prayerTimer;
     if (store.state.prayerTimer)
       $("#prayerselect").value = store.state.prayerTimer.name;
     renderPeek();

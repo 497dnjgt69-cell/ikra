@@ -4,6 +4,7 @@ export default function initialize() {
     for (const [id, buttonId, title] of [
       ["progress-card", null, "İlerleme"],
       ["prayer-peek", "peek-toggle", "Namaz vakitleri"],
+      ["anki-widget", "anki-toggle", "Anki"],
     ]) {
       const card = document.getElementById(id),
         button = buttonId

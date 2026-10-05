@@ -277,3 +277,9 @@ body[data-theme="dark"] #release-dialog .release-continue {
     transition: none;
   }
 }
+/* Compact announcements: only the highlights. */
+#release-dialog .release-shell { padding:24px; }
+#release-dialog .release-mark { display:none; }
+#release-dialog .release-features { gap:8px; margin:16px 0; }
+#release-dialog .release-feature { padding:12px; }
+#release-dialog .release-feature p { margin-top:3px; line-height:1.45; }

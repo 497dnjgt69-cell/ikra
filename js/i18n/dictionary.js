@@ -1,6 +1,13 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Daha sade, daha sana göre.":"Simpler. More you.",
+      "Üç küçük yenilik, daha rahat bir deneyim.":"Three improvements for a calmer experience.",
+      "Anki yanında":"Anki at a glance",
+      "Özet istatistiklerin sürüklenebilir kartta.":"Your key stats in a draggable card.",
+      "Dock senin elinde":"Make the dock yours",
+      "Ayarlar’dan sürükle, ekle, kaldır.":"Drag, add and remove in Settings.",
+      "Sayaçsız, sakin bir namaz deneyimi.":"A calm prayer experience without a timer.",
       "Güneş": "Sunrise",
       "Menün artık sana göre.": "Your menu, your way.",
       "Anki bir dokunuş uzağında; vakitler ve açılış daha anlaşılır.": "Anki is one tap away, with clearer prayer times and a smoother start.",

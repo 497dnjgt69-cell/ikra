@@ -16,6 +16,7 @@ export default function initialize() {
       b.textContent = option.text;
       b.dataset.value = option.value;
       b.onclick = () => {
+        if(select.disabled)return;
         select.value = b.dataset.value;
         select.dispatchEvent(new Event("change", { bubbles: true }));
       };
@@ -26,6 +27,7 @@ export default function initialize() {
       group.hidden = !active;
       $("#focus-toggle").classList.toggle("hidden", active);
       for (const b of group.children) {
+        b.disabled=select.disabled;
         b.classList.toggle("active", b.dataset.value === select.value);
         b.setAttribute(
           "aria-pressed",

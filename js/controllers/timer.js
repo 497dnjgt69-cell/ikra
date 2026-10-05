@@ -33,16 +33,8 @@ export function bindTimer({ store, focus, prayer, render }) {
     prayerTransitioning = false;
   }
   const beginPrayer = () => prayer.begin($("#prayerselect").value);
-  const leavePrayer = () => {
-    if (prayerTransitioning) return;
-    const finished = prayer.leave();
-    if (finished)
-      window.ikraNotify(
-        () => t(finished.name) + " · " + Math.round(finished.seconds / 60) +
-          bilingual(" dakika kaydedildi.", " min saved."),
-        { completion: true, title: "Namaz oturumu kaydedildi" },
-      );
-  };
+  const leavePrayer=()=>{if(!prayerTransitioning)prayer.leave();};
+  const finishPrayer=()=>{const done=prayer.finish();if(done)window.ikraNotify(()=>t(done.name)+bilingual(" kılındı olarak kaydedildi."," marked as completed."));};
   $("#prayerstart").onclick = handleAction(() => {
     if (store.state.prayerView || prayerTransitioning) return;
     transitionPrayer(() => prayer.enter());
@@ -50,7 +42,7 @@ export function bindTimer({ store, focus, prayer, render }) {
   $("#prayerselect").onchange = handleAction((e) =>
     prayer.select(e.target.value),
   );
-  $("#prayerfinish").onclick = handleAction(leavePrayer);
+  $("#prayerfinish").onclick = handleAction(finishPrayer);
   document.addEventListener("prayer-begin", beginPrayer);
   document.addEventListener("prayer-leave", leavePrayer);
   $("#prayermin").onchange = handleAction((e) => {

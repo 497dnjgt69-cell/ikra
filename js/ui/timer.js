@@ -103,11 +103,7 @@ export function createTimerView({ store }) {
     if (store.state.prayerView) {
       $("#overline").textContent = "Namaz vakti";
       $("#title").textContent = "Rabbine yönel.";
-      $("#timerinfo").textContent =
-        (store.state.prayerTimer?.name || $("#prayerselect").value) +
-        " · " +
-        store.state.prayerDuration +
-        " dk";
+      $("#timerinfo").textContent = "";
       $$("[data-mode]").forEach((b) => b.classList.remove("active"));
     }
     renderQuote();

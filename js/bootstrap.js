@@ -1,3 +1,4 @@
+import {createAnkiWidget} from "./ui/anki-widget.js";
 import { createDockCustomizer } from "./ui/dock-customizer.js";
 // Initialization order is intentional: later UI features extend earlier ones.
 import initAmbientSounds from "./features/ambient-sounds.js";
@@ -28,10 +29,11 @@ export function bootstrap(options) {
   initAnimations(); // ui/animations
   const app = createApplication(options); // services and views
   const workspace = initWorkspace({store:app.store});
-  let dockCustomizer; // ui/workspace
+  let dockCustomizer;
+  const ankiWidget=createAnkiWidget({store:app.store}); // ui/workspace
   const ambient = initAmbientSounds();
   const dispose = app.dispose;
-  app.dispose = () => { dockCustomizer?.dispose(); workspace.dispose(); ambient.dispose(); dispose(); };
+  app.dispose = () => { ankiWidget.dispose(); dockCustomizer?.dispose(); workspace.dispose(); ambient.dispose(); dispose(); };
   initFocusRoom({ access: app.access }); // features/focus-room
   initTimePickers({
     getWidgetPositions: () => app.store.state.widgetPositions,
@@ -39,6 +41,7 @@ export function bootstrap(options) {
   initProgressWidget(); // ui/progress-widget
   initTooltips(); // ui/tooltips
   initSettingsLayout(); // features/settings
+  document.querySelector("#prayermin").closest("label").style.display="none";
   initPrayerSettings(); // features/prayer-settings
   initPrayerLayout(); // ui/prayer-layout
   initPrayerControls(); // ui/prayer-controls

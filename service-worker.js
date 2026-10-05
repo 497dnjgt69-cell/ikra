@@ -1,4 +1,4 @@
-const CACHE = "ikra-v1.7.0";
+const CACHE = "ikra-v1.8.0";
 
 const CORE = [
   "./",
@@ -70,6 +70,7 @@ const CORE = [
   "./js/shared/format.js",
   "./js/ui/activity-insights.js",
   "./js/ui/animations.js",
+  "./js/ui/anki-widget.js",
   "./js/ui/anki.js",
   "./js/ui/clock.js",
   "./js/ui/dock-customizer.js",

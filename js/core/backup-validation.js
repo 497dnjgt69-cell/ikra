@@ -133,26 +133,10 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
     clean.timer.remaining = raw.timer.remaining;
   if (validString(raw.timer?.focusSessionId) && raw.timer.focusSessionId)
     clean.timer.focusSessionId = raw.timer.focusSessionId;
-  const pt = raw.prayerTimer;
-  if (pt) {
-    if (
-      !names.includes(pt.name) ||
-      !finite(pt.remaining, 0, 14400) ||
-      !finite(pt.elapsed, 0, 31536000) ||
-      !finite(pt.duration, 1, 14400)
-    )
-      throw Error("Namaz sayacı geçersiz.");
-    clean.prayerTimer = {
-      name: pt.name,
-      remaining: pt.remaining,
-      elapsed: pt.elapsed,
-      duration: pt.duration,
-      running: false,
-      endAt: null,
-      segmentStartedAt: null,
-      recorded: !!pt.recorded,
-    };
-    clean.prayerView = true;
+  const pt=raw.prayerTimer;
+  if(pt?.untimed){
+    if(!names.includes(pt.name)||!isDateKey(pt.startedDate))throw Error("Namaz kaydı geçersiz.");
+    clean.prayerTimer={name:pt.name,untimed:true,startedDate:pt.startedDate};clean.prayerView=true;
   }
   clean.prayerLocation = validString(raw.prayerLocation)
     ? raw.prayerLocation
@@ -187,7 +171,7 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
   clean.widgetPositions = Object.fromEntries(
     Object.entries(raw.widgetPositions || {}).filter(
       ([name, pos]) =>
-        ["heatmap", "prayer"].includes(name) &&
+        ["heatmap", "prayer", "anki"].includes(name) &&
         pos &&
         finite(pos.x, 0, 1) &&
         finite(pos.y, 0, 1),

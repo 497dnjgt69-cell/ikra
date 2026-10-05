@@ -22,16 +22,10 @@ export default function initialize({store}) {
     const sounds = document.createElement("section");
     sounds.className = "ambient-content";
     icons.sounds = '<path d="M4 13v-1a8 8 0 0 1 16 0v1M4 12H3v7h4v-7H4Zm16 0h1v7h-4v-7h3Z"/>';
-    const ankiHost=document.createElement('section');
-    const ankiRoot=$('#statistics-anki'),period=$('#statistics-period-controls');
-    const ankiHome=document.createComment('Anki home'),periodHome=document.createComment('Period home');
-    ankiRoot.before(ankiHome);period.before(periodHome);
-    icons.anki='<path d="M5 3h12v16H5zM9 7h4m-4 4h4m7-5v16H9"/>';
     const panels = [
       ["tasks", "Planım", cards[1]],
       ["prayer", "Namaz", cards[2]],
       ["history", "İstatistikler", cards[3]],
-      ["anki", "Anki", ankiHost],
       ["sounds", "Temalı Mekânlar", sounds],
       ["settings", "Ayarlar", cards[4]],
     ];
@@ -81,16 +75,8 @@ export default function initialize({store}) {
       button.querySelector("span").textContent = id === "sounds" ? "Mekânlar" : label;
       button.setAttribute("aria-expanded", "false");
       button.onclick = () => {
-        if(id==='anki') {
-          ankiHost.append(period,ankiRoot);period.hidden=false;ankiRoot.hidden=false;
-        }
         dialog.showModal(); button.setAttribute("aria-expanded", "true");
       };
-      if(id==='anki')dialog.addEventListener('close',()=>{
-        ankiHome.after(ankiRoot);periodHome.after(period);
-        const selected=$('[data-stat-section][aria-pressed="true"]');
-        selected?.click();
-      });
       dialog.addEventListener("close", () => button.setAttribute("aria-expanded", "false"));
       dock.append(button);
       if (id === "prayer") {

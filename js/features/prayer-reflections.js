@@ -97,7 +97,7 @@ export default function initialize() {
     link.rel = "noopener noreferrer";
     position.className = "quote-position";
     panel.append(text, link, position);
-    $(".prayer-main-times").after(panel);
+    $("#prayer-presence").after(panel);
     let timer = null,
       index = 0,
       active = false,

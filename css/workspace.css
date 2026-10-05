@@ -2286,3 +2286,38 @@ body.focus-running:not(.prayer-active) .widget-stack {
 .fajr-end.fajr-active { color:var(--fg); font-weight:650; }
 #panel-anki .dialog-shell>section { padding:8px 4px; }
 @media(max-width:480px) { .dock-editor-row { padding:8px; gap:6px; }.dock-editor .dialog-top h2 { font-size:1.2rem; } }
+/* Untimed prayer presence */
+#prayer-presence { display:none; }
+.prayer-active #prayer-presence { display:flex; position:relative; min-height:220px; width:min(400px,100%); align-items:center; justify-content:center; flex-direction:column; gap:24px; text-align:center; }
+.prayer-active #bigclock,.prayer-active #prayerelapsed { display:none!important; }
+.bismillah-button { appearance:none; border:1px solid var(--line); color:var(--fg); background:color-mix(in srgb,var(--card) 75%,transparent); border-radius:24px; padding:28px 44px; cursor:pointer; box-shadow:0 12px 40px #173c3010; }
+.bismillah-button span { display:block; font:inherit; font-size:.8rem; color:var(--muted); margin-bottom:12px; }
+.bismillah-button strong { font-size:1.6rem; letter-spacing:.16em; font-weight:500; }
+.bismillah-button[hidden] { display:none; }
+#prayer-presence-status { position:relative; font-size:.9rem; line-height:1.7; color:var(--muted); }
+.prayer-aura { display:none; width:100px; height:100px; border:1px solid #699d8855; border-radius:50%; background:radial-gradient(circle,#76a58d35,transparent 70%); box-shadow:0 0 50px #7eaa8220; }
+.is-praying .prayer-aura { display:block; animation:prayer-breathe 6s ease-in-out infinite; }
+.is-praying #prayer-presence-status { animation:prayer-text-breathe 6s ease-in-out infinite; }
+.prayer-main-controls #prayerfinish,.prayer-main-controls #prayer-back { width:auto; height:auto; min-height:44px; padding:12px 20px!important; font-size:.85rem; }
+body.prayer-active .prayer-selection { order:-1; margin-bottom:20px; }
+.prayer-selection button:disabled { cursor:default; }
+@keyframes prayer-breathe { 0%,100% { transform:scale(.88); opacity:.4; } 50% { transform:scale(1.12); opacity:1; } }
+@keyframes prayer-text-breathe { 0%,100% { opacity:.65; } 50% { opacity:1; } }
+@media(prefers-reduced-motion:reduce) {.is-praying .prayer-aura,.is-praying #prayer-presence-status { animation:none; }}
+.anki-mini { width:250px; padding:14px; box-sizing:border-box; background:var(--card); border:1px solid var(--line); border-radius:18px; }
+.anki-mini-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; text-align:center; margin:12px 0; }
+.anki-mini-stats strong { display:block; font-size:1.2rem; }.anki-mini-stats span,.anki-mini>small { color:var(--muted); font-size:.68rem; line-height:1.5; }
+.anki-mini.hidden { display:none; }
+.dock-settings-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.dock-settings-heading h3 { font-size:1rem; margin:0; }
+.dock-settings>p { font-size:.78rem; line-height:1.6; }
+.dock-icon-preview { display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:18px 10px; background:var(--tint); border-radius:20px; margin:16px 0; }
+.dock-icon-tile { position:relative; border-radius:14px; flex:0 0 72px; }
+.dock-icon-grip { display:flex; flex-direction:column; align-items:center; gap:8px; width:100%; min-height:74px; padding:12px 4px; border:1px solid var(--line); border-radius:14px; background:var(--card); color:var(--fg); }
+.dock-icon-grip svg { width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.6; }
+.dock-icon-grip span { font-size:.63rem; }
+.is-editing .dock-icon-grip { cursor:grab; touch-action:none; }
+.dock-icon-tile.dragging { opacity:.5; }.dock-icon-tile.drop-target { outline:2px solid var(--heat); }
+.dock-remove { position:absolute; top:-9px; right:-7px; width:27px; height:27px; border-radius:50%; border:1px solid var(--line); background:var(--fg); color:var(--card); font-size:20px; line-height:1; cursor:pointer; }
+.dock-available { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }.dock-available[hidden] { display:none; }
+.dock-available>small { flex-basis:100%; color:var(--muted); }

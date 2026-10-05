@@ -119,27 +119,17 @@ test("switching subjects attributes elapsed segments to the correct course", () 
     ],
   );
 });
-test("prayer pauses focus, resumes only remaining time, and records once at completion", () => {
-  const f = fixture();
-  f.planner.addSubject("ANAT");
-  f.focus.start();
-  f.advance(10000);
-  f.prayer.enter();
-  assert.equal(f.store.state.timer.running, false);
-  assert.equal(f.store.state.sessions[0].seconds, 10);
-  f.prayer.setDuration(1);
-  f.prayer.begin("Sabah");
-  f.advance(20000);
-  f.prayer.pause();
-  assert.equal(f.store.state.prayerTimer.remaining, 40);
-  f.advance(30000);
-  f.prayer.begin("Sabah");
-  f.advance(50000);
-  f.prayer.settle();
-  f.prayer.settle();
-  f.prayer.leave();
-  assert.equal(f.store.state.prayers.length, 1);
-  assert.equal(f.store.state.prayers[0].seconds, 60);
+test("untimed prayer pauses focus, survives reload, and only explicit finish marks completion",()=>{
+ const f=fixture();f.planner.addSubject('ANAT');f.focus.start();f.advance(10000);f.prayer.enter();
+ assert.equal(f.store.state.timer.running,false);assert.equal(f.store.state.sessions[0].seconds,10);
+ f.prayer.begin('Sabah');assert.equal(f.store.state.prayerTimer.untimed,true);
+ f.prayer.select('Yatsı');assert.equal(f.store.state.prayerTimer.name,'Sabah');
+ f.advance(86400000);f.prayer.settle();assert.ok(f.store.state.prayerTimer);assert.equal(f.store.state.prayers.length,0);
+ const restored=createStore({storage:f.disk,now:f.now});assert.equal(restored.state.prayerTimer.untimed,true);
+ f.backup.restore(f.backup.export());assert.equal(f.store.state.prayerTimer.name,'Sabah');
+ f.prayer.finish();f.prayer.finish();assert.equal(f.store.state.prayerChecks['2026-09-28'].Sabah,true);
+ assert.equal(f.store.state.prayers.length,0);
+ f.prayer.enter();f.prayer.begin('Yatsı');f.prayer.leave();assert.equal(f.store.state.prayerChecks['2026-09-29']?.Yatsı,undefined);
 });
 test("record deletion/undo preserves other concurrent additions and undo is idempotent", () => {
   const f = fixture();

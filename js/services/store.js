@@ -39,19 +39,7 @@ export function migrateState(input, now = Date.now()) {
     state.subject = state.subjects[0] || "";
   state.prayerPeek = false;
   state.prayerView = !!state.prayerTimer;
-  if (state.prayerTimer && !Number.isFinite(state.prayerTimer.remaining)) {
-    const elapsed = Math.max(0, (now - state.prayerTimer.startedAt) / 1000);
-    state.prayerTimer = {
-      ...state.prayerTimer,
-      elapsed,
-      remaining: Math.max(0, state.prayerDuration * 60 - elapsed),
-      duration: state.prayerDuration * 60,
-      running: false,
-      endAt: null,
-      segmentStartedAt: null,
-      recorded: false,
-    };
-  }
+  if(state.prayerTimer && !state.prayerTimer.untimed){state.prayerTimer=null;state.prayerView=false;}
   if (!["light", "dark", "nature"].includes(state.theme))
     state.theme = state.theme === "rose" ? "light" : "dark";
   return state;

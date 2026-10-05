@@ -163,21 +163,28 @@ for (const width of [1440, 390])
     assert.equal(document.querySelectorAll('.anki-badge').length,6);
     assert.equal(document.querySelector('.anki-ring').getAttribute('aria-valuemax'),'50');
     assert.match($('#focus-streak').textContent, /Focus Streak/);
-    $('.dock [data-dock-id="anki"]').click();
-    assert.equal($('#panel-anki').open,true);
-    assert.equal($('#panel-anki #statistics-anki').hidden,false);
-    assert.ok($('#panel-anki #statistics-period-controls'));
-    $('#panel-anki').close();$('#panel-anki').dispatchEvent(new w.Event('close'));
+    $('#anki-toggle').click();
+    assert.equal($('#anki-toggle').getAttribute('aria-expanded'),'true');
+    assert.ok($('#anki-widget .widget-handle'));
+    if(width<690){assert.ok($('#mobile-anki-widget #anki-widget'));$('#mobile-anki-widget').close();$('#mobile-anki-widget').dispatchEvent(new w.Event('close'));}
+    else assert.ok($('.widget-stack #anki-widget'));
+    assert.equal($('#panel-anki'),null);
     assert.ok($('#panel-history #statistics-anki'));
-    $('#dock-edit').click();
-    const toggle=$('[data-control="sounds-show"]');toggle.checked=false;toggle.dispatchEvent(new w.Event('change'));
+    assert.ok($('#panel-settings #dock-edit'));assert.equal($('.dock #dock-edit'),null);
+    $('#dock-edit').click();$('[data-remove="sounds"]').click();
     assert.equal($('.dock [data-dock-id="sounds"]').hidden,true);
-    $('[data-control="anki-up"]').click();
+    $('[data-tool="anki"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowLeft',altKey:true,bubbles:true}));
     assert.ok(app.store.state.dock.order.indexOf('anki')<app.store.state.dock.order.indexOf('history'));
-    const order=[...app.store.state.dock.order];app.backup.restore(app.backup.export());
-    assert.deepEqual(app.store.state.dock.order,order);
-    $('#dock-reset').click();assert.equal($('.dock [data-dock-id="sounds"]').hidden,false);
-    $('#dock-editor').close();
+    const order=[...app.store.state.dock.order];app.backup.restore(app.backup.export());assert.deepEqual(app.store.state.dock.order,order);
+    $('[data-add="sounds"]').click();assert.equal($('.dock [data-dock-id="sounds"]').hidden,false);
+    $('#dock-reset').click();
+    const grip=$('[data-tool="anki"]');
+    const originalPoint=w.document.elementFromPoint;
+    w.document.elementFromPoint=()=> $('[data-dock-tool="tasks"]');
+    const down=new w.Event('pointerdown');Object.assign(down,{button:0,pointerId:1});grip.dispatchEvent(down);
+    const move=new w.Event('pointermove');Object.assign(move,{clientX:0,clientY:0});grip.dispatchEvent(move);grip.dispatchEvent(new w.Event('pointerup'));
+    assert.equal(app.store.state.dock.order[0],'anki');w.document.elementFromPoint=originalPoint;
+    $('#dock-reset').click();
     assert.equal($('.dock [data-dock-id="prayer"]'),null);
     assert.ok($('.dock [data-dock-id="progress"]'));
 
@@ -254,12 +261,11 @@ for (const width of [1440, 390])
     $("#prayerstart").click();
     await flush();
     if (!app.store.state.prayerView) throw Error("prayer enter");
-    $("#start").click();
+    $("#prayer-go").click();
     await flush();
-    if (!app.store.state.prayerTimer?.running) throw Error("prayer start");
-    $("#start").click();
-    await flush();
-    $("#skip").click();
+    assert.equal(app.store.state.prayerTimer.untimed,true);
+    assert.match($("#prayer-presence-status").textContent,/Praying|kılınıyor/);
+    $("#prayerfinish").click();
     await flush();
     if (app.store.state.prayerView) throw Error("prayer leave");
     const historyCount =

@@ -134,6 +134,7 @@ export default function initialize({ getWidgetPositions }) {
     const cards = [
       ["heatmap", $(".activity-mini"), "İlerleme"],
       ["prayer", $("#prayer-peek"), "Namaz vakitleri"],
+      ["anki", $("#anki-widget"), "Anki"],
     ];
     cards.forEach(([, card]) => stack.append(card));
     let saved = getWidgetPositions();
