@@ -2270,3 +2270,19 @@ body.focus-running:not(.prayer-active) .widget-stack {
  .anki-goal-label { justify-content:space-between; }
 }
 @media(prefers-reduced-motion:reduce) { .anki-celebrate .anki-ring { animation:none; } }
+/* Keep hidden dock items hidden even when button styles set display:flex. */
+.dock>[hidden] { display:none!important; }
+.dock-edit { border-style:dashed; }
+.dock-editor { max-width:560px; }
+.dock-editor-list { display:grid; gap:8px; margin:18px 0; }
+.dock-editor-row { display:flex; align-items:center; gap:8px; padding:10px 12px; border:1px solid var(--line); border-radius:12px; background:var(--card); }
+.dock-editor-row label { flex:1; display:flex; align-items:center; gap:12px; min-height:40px; cursor:pointer; }
+.dock-editor-row input { width:20px; height:20px; accent-color:var(--heat); }
+.dock-editor-row button { min-width:42px; min-height:42px; }
+.dock-editor-row button:disabled { opacity:.35; }
+.dock-preview { display:flex; flex-wrap:wrap; gap:6px; padding:12px; border-radius:14px; background:var(--tint); font-size:.8rem; }
+.dock-preview-chip { border:1px solid var(--line); background:var(--card); padding:7px 10px; border-radius:9px; }
+.fajr-end { color:var(--muted); font-size:.85rem; line-height:1.5; padding:8px 0; }
+.fajr-end.fajr-active { color:var(--fg); font-weight:650; }
+#panel-anki .dialog-shell>section { padding:8px 4px; }
+@media(max-width:480px) { .dock-editor-row { padding:8px; gap:6px; }.dock-editor .dialog-top h2 { font-size:1.2rem; } }

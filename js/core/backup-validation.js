@@ -1,3 +1,4 @@
+import { normalizeDock } from "./dock.js";
 import { normalizeAnki, normalizeAnkiGoal } from "./anki.js";
 import { backupSnapshot } from "./backup-snapshot.js";
 export function normalizeBackup(payload, { fresh, isDateKey, names }) {
@@ -15,6 +16,7 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
   )
     throw Error("Yedekte çalışma, görev veya ders listesi eksik.");
   const clean = fresh();
+  clean.dock = normalizeDock(raw.dock);
   clean.anki = normalizeAnki(raw.anki);
   clean.ankiGoal = normalizeAnkiGoal(raw.ankiGoal);
   const finite = (n, min, max) => Number.isFinite(n) && n >= min && n <= max;
@@ -160,7 +162,7 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
     ? String(raw.method)
     : "2";
   clean.prayerTimes = Object.fromEntries(
-    names
+    [...names, "Güneş"]
       .filter((n) =>
         /^([01]\d|2[0-3]):[0-5]\d$/.test(raw.prayerTimes?.[n] || ""),
       )

@@ -1,3 +1,4 @@
+import { createDockCustomizer } from "./ui/dock-customizer.js";
 // Initialization order is intentional: later UI features extend earlier ones.
 import initAmbientSounds from "./features/ambient-sounds.js";
 import initLanguage from "./i18n/dictionary.js";
@@ -26,10 +27,11 @@ export function bootstrap(options) {
   initNotifications(); // ui/notifications
   initAnimations(); // ui/animations
   const app = createApplication(options); // services and views
-  initWorkspace(); // ui/workspace
+  const workspace = initWorkspace({store:app.store});
+  let dockCustomizer; // ui/workspace
   const ambient = initAmbientSounds();
   const dispose = app.dispose;
-  app.dispose = () => { ambient.dispose(); dispose(); };
+  app.dispose = () => { dockCustomizer?.dispose(); workspace.dispose(); ambient.dispose(); dispose(); };
   initFocusRoom({ access: app.access }); // features/focus-room
   initTimePickers({
     getWidgetPositions: () => app.store.state.widgetPositions,
@@ -46,6 +48,9 @@ export function bootstrap(options) {
   initAbout(); // features/about
   initTranslation(); // i18n/dom-translator
   initMobileWidgets(); // ui/mobile-widgets
+  const progressButton=document.querySelector('.dock [aria-controls="progress-card"]');
+  if(progressButton)progressButton.dataset.dockId='progress';
+  dockCustomizer=createDockCustomizer({store:app.store,dock:document.querySelector('.dock')});
   initReleaseNotes(); // features/release-notes
 
   return app;

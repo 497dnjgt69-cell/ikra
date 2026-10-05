@@ -10,6 +10,14 @@ export function createPrayerView({ store, times }) {
   function updateNextPrayer() {
     const el = $("#next-prayer");
     if (!el) return;
+    const fajr = times.fajrEnd?.();
+    for(const target of ['#fajr-end','#fajr-end-peek']) {
+      const label=$(target);if(!label) continue;
+      localizedText(label,()=>!fajr ? bilingual('Sabah bitişi için güncel güneş doğuş saatini getir veya elle ekle.','Refresh sunrise times or enter sunrise manually to see when Fajr ends.')
+        : fajr.active ? bilingual(`Sabah vaktinin çıkmasına ${fajr.minutes} dk kaldı · Güneş ${fajr.time}`,`Fajr ends in ${fajr.minutes} min · Sunrise ${fajr.time}`)
+        : bilingual(`Sabah bitişi · Güneş ${fajr.time}${fajr.ended?' · Vakit sona erdi.':''}`,`Fajr ends · Sunrise ${fajr.time}${fajr.ended?' · Time has ended.':''}`));
+      label.classList.toggle('fajr-active',!!fajr?.active);
+    }
     const next = times.next();
     const wall = times.wall();
     localizedText(el, () => {
@@ -42,7 +50,7 @@ export function createPrayerView({ store, times }) {
     $("#prayerstatus").textContent = times.status();
     let grid = $("#prayergrid");
     grid.replaceChildren();
-    names.forEach((n) => {
+    [names[0], "Güneş", ...names.slice(1)].forEach((n) => {
       let e = document.createElement("div"),
         b = document.createElement("b"),
         v = document.createElement("span");
@@ -54,7 +62,7 @@ export function createPrayerView({ store, times }) {
     });
     let fields = $("#prayerfields");
     fields.replaceChildren();
-    names.forEach((n) => {
+    [names[0], "Güneş", ...names.slice(1)].forEach((n) => {
       let l = document.createElement("label"),
         i = document.createElement("input");
       l.textContent = n;
@@ -90,7 +98,7 @@ export function createPrayerView({ store, times }) {
           " · saved times from " + store.state.prayerDate + " (out of date)") : ""));
     let grid = $("#peek-times");
     grid.replaceChildren();
-    names.forEach((n) => {
+    [names[0], "Güneş", ...names.slice(1)].forEach((n) => {
       let box = document.createElement("div"),
         label = document.createElement("b"),
         time = document.createElement("span");

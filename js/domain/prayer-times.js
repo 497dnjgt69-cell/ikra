@@ -103,3 +103,12 @@ export function getStartedPrayer(d, now, since) {
   }
   return null;
 }
+
+export function getFajrEnd(d, now) {
+  const wall=prayerWallNow(d,new Date(now));
+  const time=d.prayerTimes?.['Güneş'],start=d.prayerTimes?.Sabah;
+  if(d.prayerDate!==wall.date || !/^([01]\d|2[0-3]):[0-5]\d$/.test(time||'') || !/^([01]\d|2[0-3]):[0-5]\d$/.test(start||'')) return null;
+  const end=wallEpoch(wall.date,time,wall.zone),begin=wallEpoch(wall.date,start,wall.zone);
+  if(end<=begin) return null;
+  return {time,active:now>=begin&&now<end,ended:now>=end,minutes:Math.max(0,Math.ceil((end-now)/60000))};
+}

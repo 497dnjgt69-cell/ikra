@@ -1,5 +1,5 @@
 import { datekey } from "../shared/format.js";
-import { prayerWallNow, getNextPrayer, getStartedPrayer } from "../domain/prayer-times.js";
+import { prayerWallNow, getNextPrayer, getStartedPrayer, getFajrEnd } from "../domain/prayer-times.js";
 import { FEATURES } from "../config/features.js";
 export function createPrayerTimes({
   store,
@@ -112,7 +112,7 @@ export function createPrayerTimes({
     if (
       !force &&
       (now() - attempt < 300000 ||
-        (d.prayerDate === datekey(now()) &&
+        (d.prayerDate === datekey(now()) && d.prayerTimes["Güneş"] &&
           (!d.prayerMethod || d.prayerMethod === d.method)))
     )
       return;
@@ -155,6 +155,7 @@ export function createPrayerTimes({
       );
     },
     next: () => getNextPrayer(store.state, now()),
+    fajrEnd: () => getFajrEnd(store.state, now()),
     wall: () => prayerWallNow(store.state, new Date(now())),
     setMethod(method) {
       if (!["2", "3", "13"].includes(String(method))) return;
@@ -167,7 +168,7 @@ export function createPrayerTimes({
     setManual(name, time, location) {
       access.require(FEATURES.PRAYER);
       if (
-        !["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"].includes(name) ||
+        !["Sabah", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"].includes(name) ||
         (time && !/^([01]\d|2[0-3]):[0-5]\d$/.test(time))
       )
         return;

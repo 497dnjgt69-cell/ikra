@@ -7,6 +7,24 @@
       content="width=device-width,initial-scale=1,viewport-fit=cover"
     />
     <title>IKRA</title>
+    <script>
+      document.documentElement.classList.add('ikra-booting');
+      try { const state=JSON.parse(localStorage.getItem('mahir-focus-v1')||'{}');
+        const theme=['light','dark','nature'].includes(state.theme)?state.theme:'light';
+        document.documentElement.dataset.bootTheme=theme;
+        document.documentElement.style.backgroundColor=({light:'#f5f5f7',dark:'#111214',nature:'#e8eee6'})[theme];
+      } catch (_) {}
+      window.ikraBootGuard=setTimeout(function(){
+        if(document.documentElement.classList.contains('ikra-booting')){
+          document.body.textContent='IKRA yüklenemedi. Lütfen sayfayı yenile. / IKRA could not load. Please reload.';
+          document.documentElement.classList.remove('ikra-booting');
+        }
+      },15000);
+    </script>
+    <style>
+      html.ikra-booting body { visibility:hidden; }
+      html[data-boot-theme="dark"] { color-scheme:dark; }
+    </style>
     <link rel="stylesheet" href="./css/base.css" />
     <link rel="stylesheet" href="./css/glass.css" />
     <link rel="stylesheet" href="./css/workspace.css" />
@@ -24,6 +42,8 @@
     <link rel="apple-touch-icon" href="./ikra-icon-v2-180.png" />
   </head>
   <body data-theme="light">
+    <script>document.body.dataset.theme=document.documentElement.dataset.bootTheme||'light';</script>
+    <noscript><style>body{visibility:visible!important}</style>IKRA için JavaScript’i etkinleştir. / Enable JavaScript to use IKRA.</noscript>
     <div class="app">
       <header class="header">
         <button
@@ -244,6 +264,7 @@
             </div>
             <div id="prayerfields" class="prayerfields hidden"></div>
             <div id="prayergrid" class="prayergrid"></div>
+            <p id="fajr-end" class="fajr-end" role="status"></p>
             <p class="quiet">
               Otomatik vakitler internet ister ve hesaplama yöntemine göre
               değişebilir. Konum izni dosya olarak açıldığında çalışmazsa
@@ -505,6 +526,7 @@
           aria-label="Namaz vakitleri özeti"
         >
           <div id="peek-location" class="quiet"></div>
+          <div id="fajr-end-peek" class="fajr-end" role="status"></div>
           <div id="next-prayer" class="next-prayer" role="status"></div>
           <div id="peek-times" class="prayergrid"></div>
           <button id="peek-config" class="button">

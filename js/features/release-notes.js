@@ -2,36 +2,14 @@ export default function initialize() {
   (() => {
     // Edit this release record and its dictionary entries for future announcements.
     const release = {
-  "version": "1.6.0",
-  "title": "Anki ile her gün bir adım",
-  "intro": "Hedefini seç, ritmini bul, ilerlemeni gör.",
-  "features": [
-    {"icon":"sparkle","title":"Anki ile her gün bir adım","text":"Günlük hedef halkası, XP ve seviyeler, Anki serisi, 28 günlük aktivite takvimi ve altı başarı rozeti. Kurulum adımları artık daha kolay."},
-    {
-      "icon": "phone",
-      "title": "Bosphorus Cafe sesi hazır",
-      "text": "Boğaz’da bir kafe artık kendi ortam kaydıyla çalıyor. Oynat, duraklat ve sesi ayarla; kayıt döngüde devam eder."
-    },
-    {
-      "icon": "sparkle",
-      "title": "Anki verilerini getir",
-      "text": "Masaüstü AnkiConnect bağlantısıyla tekrar sayısı, farklı kartlar, çalışma süresi ve günlük geçmiş. Kurulum adımları Anki sekmesinde."
-    },
-    {
-      "icon": "leaf",
-      "title": "Oturum ekleme yenilendi",
-      "text": "Enter ile kaydet, tarih ve saat seç. Elle eklenen çalışmalar saat analizinde seçtiğin saatte görünür."
-    },
-    {
-      "icon": "sparkle",
-      "title": "Daha sade süreler",
-      "text": "İstatistiklerde süreler yalnızca saat ve dakika olarak gösterilir. Bir dakikadan kısa çalışmalar <1 dk olarak görünür."
-    },
-    {
-      "icon": "leaf",
-      "title": "Focus Streak ve ayrı bölümler",
-      "text": "Genel, Focus, Anki ve Namaz bölümleri. Bir günde tamamlanan en az 15 dakikalık tek bir Focus oturumu serine eklenir."
-    }
+  version: "1.7.0",
+  title: "Menün artık sana göre.",
+  intro: "Anki bir dokunuş uzağında; vakitler ve açılış daha anlaşılır.",
+  features: [
+    {icon:"sparkle",title:"Anki için ayrı düğme",text:"Anki panelini doğrudan saatin altındaki menüden aç. İstatistikler içindeki Anki sekmesi de yerinde."},
+    {icon:"phone",title:"Menüyü kendine göre düzenle",text:"Araçları göster veya gizle, oklarla sıralarını değiştir. Canlı önizleme, otomatik kayıt ve varsayılana dönüş tek yerde."},
+    {icon:"leaf",title:"Sabah vaktinin bitişi",text:"Sabah vakti içinde güneş doğana kadar kalan dakikaları gör. Güneş doğuş saati otomatik alınır veya elle girilebilir."},
+    {icon:"sparkle",title:"Daha düzgün açılış",text:"Kaydettiğin tema ilk andan itibaren uygulanır. Arayüz hazırlanırken eski düzenin kısa süre görünmesi giderildi."}
   ]
 };
     const seenKey = "ikra-release-seen:" + release.version;

@@ -1,3 +1,4 @@
+import { normalizeDock } from "../core/dock.js";
 import { normalizeAnki, normalizeAnkiGoal } from "../core/anki.js";
 import { fresh } from "../core/default-state.js";
 import { newId } from "../shared/format.js";
@@ -9,6 +10,7 @@ export function migrateState(input, now = Date.now()) {
     input && input.timer && input.durations && Array.isArray(input.sessions);
   const state = { ...fresh(), ...(valid ? structuredClone(input) : {}) };
   state.schemaVersion = SCHEMA_VERSION;
+  state.dock = normalizeDock(state.dock);
   state.ankiGoal = normalizeAnkiGoal(state.ankiGoal);
   try { state.anki = normalizeAnki(state.anki); } catch { state.anki = null; }
   // Licensing is deliberately outside study data, including legacy/imported payloads.

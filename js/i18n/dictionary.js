@@ -1,6 +1,17 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Güneş": "Sunrise",
+      "Menün artık sana göre.": "Your menu, your way.",
+      "Anki bir dokunuş uzağında; vakitler ve açılış daha anlaşılır.": "Anki is one tap away, with clearer prayer times and a smoother start.",
+      "Anki için ayrı düğme": "A dedicated Anki button",
+      "Anki panelini doğrudan saatin altındaki menüden aç. İstatistikler içindeki Anki sekmesi de yerinde.": "Open Anki directly from the menu below the clock. The Anki tab in Statistics stays available too.",
+      "Menüyü kendine göre düzenle": "Customize your menu",
+      "Araçları göster veya gizle, oklarla sıralarını değiştir. Canlı önizleme, otomatik kayıt ve varsayılana dönüş tek yerde.": "Show or hide tools and use the arrows to reorder them. Live preview, automatic saving and restore defaults in one place.",
+      "Sabah vaktinin bitişi": "Time until Fajr ends",
+      "Sabah vakti içinde güneş doğana kadar kalan dakikaları gör. Güneş doğuş saati otomatik alınır veya elle girilebilir.": "During Fajr, see the minutes remaining until sunrise. Sunrise is fetched automatically or can be entered manually.",
+      "Daha düzgün açılış": "A smoother start",
+      "Kaydettiğin tema ilk andan itibaren uygulanır. Arayüz hazırlanırken eski düzenin kısa süre görünmesi giderildi.": "Your saved theme is applied from the start. The old layout no longer flashes while the interface is being prepared.",
       "Hedefini seç, ritmini bul, ilerlemeni gör.": "Set your goal, find your rhythm, see your progress.",
       "Anki ile her gün bir adım": "A little Anki, every day",
       "Günlük hedef halkası, XP ve seviyeler, Anki serisi, 28 günlük aktivite takvimi ve altı başarı rozeti. Kurulum adımları artık daha kolay.": "Daily goal ring, XP and levels, an Anki streak, a 28-day activity calendar and six milestone badges. Easier connection steps, too.",

@@ -163,6 +163,24 @@ for (const width of [1440, 390])
     assert.equal(document.querySelectorAll('.anki-badge').length,6);
     assert.equal(document.querySelector('.anki-ring').getAttribute('aria-valuemax'),'50');
     assert.match($('#focus-streak').textContent, /Focus Streak/);
+    $('.dock [data-dock-id="anki"]').click();
+    assert.equal($('#panel-anki').open,true);
+    assert.equal($('#panel-anki #statistics-anki').hidden,false);
+    assert.ok($('#panel-anki #statistics-period-controls'));
+    $('#panel-anki').close();$('#panel-anki').dispatchEvent(new w.Event('close'));
+    assert.ok($('#panel-history #statistics-anki'));
+    $('#dock-edit').click();
+    const toggle=$('[data-control="sounds-show"]');toggle.checked=false;toggle.dispatchEvent(new w.Event('change'));
+    assert.equal($('.dock [data-dock-id="sounds"]').hidden,true);
+    $('[data-control="anki-up"]').click();
+    assert.ok(app.store.state.dock.order.indexOf('anki')<app.store.state.dock.order.indexOf('history'));
+    const order=[...app.store.state.dock.order];app.backup.restore(app.backup.export());
+    assert.deepEqual(app.store.state.dock.order,order);
+    $('#dock-reset').click();assert.equal($('.dock [data-dock-id="sounds"]').hidden,false);
+    $('#dock-editor').close();
+    assert.equal($('.dock [data-dock-id="prayer"]'),null);
+    assert.ok($('.dock [data-dock-id="progress"]'));
+
     const prayerView = createPrayerView({ store: app.store, times: {
       next: () => ({ name: "Yatsı", minutes: 411, tomorrow: false }),
       wall: () => ({ date: "2026-09-30" }),

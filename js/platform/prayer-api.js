@@ -23,6 +23,8 @@ export function createPrayerAPI({ fetcher = globalThis.fetch } = {}) {
         if (!time) throw Error("Namaz vakti geçersiz.");
         times[name] = time[0];
       });
+      const sunrise = String(json?.data?.timings?.Sunrise || '').match(/\b([01]\d|2[0-3]):[0-5]\d\b/);
+      if(sunrise) times['Güneş']=sunrise[0];
       const timezone = json.data.meta?.timezone;
       if (timezone) new Intl.DateTimeFormat("en", { timeZone: timezone });
       return { times, timezone };
