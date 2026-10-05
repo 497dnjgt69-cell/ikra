@@ -123,6 +123,10 @@ test("untimed prayer pauses focus, survives reload, and only explicit finish mar
  const f=fixture();f.planner.addSubject('ANAT');f.focus.start();f.advance(10000);f.prayer.enter();
  assert.equal(f.store.state.timer.running,false);assert.equal(f.store.state.sessions[0].seconds,10);
  f.prayer.begin('Sabah');assert.equal(f.store.state.prayerTimer.untimed,true);
+ f.prayer.pause();assert.equal(f.store.state.prayerTimer.paused,true);
+ f.prayer.resume();assert.equal(f.store.state.prayerTimer.paused,false);
+ f.prayer.exitFocus();assert.equal(f.store.state.prayerTimer.immersed,false);
+ f.prayer.resume();assert.equal(f.store.state.prayerTimer.immersed,true);
  f.prayer.select('Yatsı');assert.equal(f.store.state.prayerTimer.name,'Sabah');
  f.advance(86400000);f.prayer.settle();assert.ok(f.store.state.prayerTimer);assert.equal(f.store.state.prayers.length,0);
  const restored=createStore({storage:f.disk,now:f.now});assert.equal(restored.state.prayerTimer.untimed,true);

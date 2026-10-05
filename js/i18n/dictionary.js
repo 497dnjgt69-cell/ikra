@@ -1,6 +1,12 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Namaza sakin bir başlangıç.":"A calmer start to prayer.",
+      "Seç, niyet et, odağını bul.":"Choose, set your intention, find your focus.",
+      "Yeni namaz odağı":"A new prayer focus",
+      "Nefes animasyonu, durdur/devam et ve ayet-hadis seçkisi.":"A breathing animation, pause/resume and selected verses and hadith.",
+      "Daha temiz açılış":"A cleaner start",
+      "IKRA logolu, temana uygun yükleme ekranı.":"A themed loading screen with the IKRA logo.",
       "Daha sade, daha sana göre.":"Simpler. More you.",
       "Üç küçük yenilik, daha rahat bir deneyim.":"Three improvements for a calmer experience.",
       "Anki yanında":"Anki at a glance",

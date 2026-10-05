@@ -5,12 +5,16 @@ import {FEATURES} from '../config/features.js';
 export function createPrayerTimer({store,access,focus,now=Date.now}) {
   const leave=()=>store.update(d=>{d.prayerTimer=null;d.prayerView=false;});
   return Object.freeze({
-    settle(){},pause(){},leave,
+    settle(){},
+    pause(){if(store.state.prayerTimer)store.update(d=>{d.prayerTimer.paused=true;});},
+    resume(){if(store.state.prayerTimer)store.update(d=>{d.prayerTimer.paused=false;d.prayerTimer.immersed=true;});},
+    exitFocus(){if(store.state.prayerTimer)store.update(d=>{d.prayerTimer.paused=true;d.prayerTimer.immersed=false;});},
+    leave,
     enter(){access.require(FEATURES.PRAYER);focus.pause();store.update(d=>{d.prayerView=true;});},
     begin(name){
       access.require(FEATURES.PRAYER);
       if(!store.state.prayerView||store.state.prayerTimer||!prayerNames.includes(name))return;
-      focus.pause();store.update(d=>{d.prayerTimer={name,untimed:true,startedDate:prayerWallNow(d,new Date(now())).date};});
+      focus.pause();store.update(d=>{d.prayerTimer={name,untimed:true,paused:false,immersed:true,startedDate:prayerWallNow(d,new Date(now())).date};});
     },
     finish(){
       if(!store.state.prayerTimer)return null;

@@ -136,7 +136,7 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
   const pt=raw.prayerTimer;
   if(pt?.untimed){
     if(!names.includes(pt.name)||!isDateKey(pt.startedDate))throw Error("Namaz kaydı geçersiz.");
-    clean.prayerTimer={name:pt.name,untimed:true,startedDate:pt.startedDate};clean.prayerView=true;
+    clean.prayerTimer={name:pt.name,untimed:true,paused:true,immersed:false,startedDate:pt.startedDate};clean.prayerView=true;
   }
   clean.prayerLocation = validString(raw.prayerLocation)
     ? raw.prayerLocation

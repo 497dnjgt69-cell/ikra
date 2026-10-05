@@ -2,11 +2,10 @@ export default function initialize() {
   (() => {
     // Edit this release record and its dictionary entries for future announcements.
     const release = {
-  version:"1.8.0",title:"Daha sade, daha sana göre.",intro:"Üç küçük yenilik, daha rahat bir deneyim.",
+  version:"1.9.0",title:"Namaza sakin bir başlangıç.",intro:"Seç, niyet et, odağını bul.",
   features:[
-    {icon:"sparkle",title:"Anki yanında",text:"Özet istatistiklerin sürüklenebilir kartta."},
-    {icon:"phone",title:"Dock senin elinde",text:"Ayarlar’dan sürükle, ekle, kaldır."},
-    {icon:"leaf",title:"BISMILLAH",text:"Sayaçsız, sakin bir namaz deneyimi."}
+    {icon:"leaf",title:"Yeni namaz odağı",text:"Nefes animasyonu, durdur/devam et ve ayet-hadis seçkisi."},
+    {icon:"sparkle",title:"Daha temiz açılış",text:"IKRA logolu, temana uygun yükleme ekranı."}
   ]
 };
     const seenKey = "ikra-release-seen:" + release.version;

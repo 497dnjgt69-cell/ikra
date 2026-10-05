@@ -37,13 +37,16 @@ export function bindTimer({ store, focus, prayer, render }) {
   const finishPrayer=()=>{const done=prayer.finish();if(done)window.ikraNotify(()=>t(done.name)+bilingual(" kılındı olarak kaydedildi."," marked as completed."));};
   $("#prayerstart").onclick = handleAction(() => {
     if (store.state.prayerView || prayerTransitioning) return;
-    transitionPrayer(() => prayer.enter());
+    transitionPrayer(() => {$("#prayerselect").value="";prayer.enter();});
   });
   $("#prayerselect").onchange = handleAction((e) =>
     prayer.select(e.target.value),
   );
   $("#prayerfinish").onclick = handleAction(finishPrayer);
-  document.addEventListener("prayer-begin", beginPrayer);
+  document.addEventListener("prayer-begin", handleAction(beginPrayer));
+  document.addEventListener("prayer-pause", handleAction(()=>prayer.pause()));
+  document.addEventListener("prayer-resume", handleAction(()=>prayer.resume()));
+  document.addEventListener("prayer-exit-focus", handleAction(()=>prayer.exitFocus()));
   document.addEventListener("prayer-leave", leavePrayer);
   $("#prayermin").onchange = handleAction((e) => {
     if (!prayer.setDuration(Number(e.target.value)))

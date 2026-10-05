@@ -15,7 +15,6 @@ import initSettingsLayout from "./features/settings.js";
 import initPrayerSettings from "./features/prayer-settings.js";
 import initPrayerLayout from "./ui/prayer-layout.js";
 import initPrayerControls from "./ui/prayer-controls.js";
-import initPrayerReflections from "./features/prayer-reflections.js";
 import initPrayerPicker from "./ui/prayer-picker.js";
 import initSessionLayout from "./ui/session-layout.js";
 import initAbout from "./features/about.js";
@@ -44,10 +43,10 @@ export function bootstrap(options) {
   document.querySelector("#prayermin").closest("label").style.display="none";
   initPrayerSettings(); // features/prayer-settings
   initPrayerLayout(); // ui/prayer-layout
-  initPrayerControls(); // ui/prayer-controls
-  initPrayerReflections(); // features/prayer-reflections
   initPrayerPicker(); // ui/prayer-picker
   initSessionLayout(); // ui/session-layout
+  const prayerControls=initPrayerControls({store:app.store});
+  const previousDispose=app.dispose;app.dispose=()=>{prayerControls.dispose();previousDispose();};
   initAbout(); // features/about
   initTranslation(); // i18n/dom-translator
   initMobileWidgets(); // ui/mobile-widgets

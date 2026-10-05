@@ -35,6 +35,7 @@ export default function initialize() {
         );
       }
     }
+    select.addEventListener("change",sync);
     document.addEventListener("focus-render", sync);
     document.addEventListener("backup-restored", () => {
       document.querySelectorAll(".floating-widget").forEach((card) => {

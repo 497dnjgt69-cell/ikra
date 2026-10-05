@@ -24,6 +24,13 @@
     <style>
       html.ikra-booting body { visibility:hidden; }
       html[data-boot-theme="dark"] { color-scheme:dark; }
+      #ikra-loading { visibility:visible;position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:#283c34;font-family:system-ui,sans-serif; }
+      #ikra-loading img { width:76px;height:76px;object-fit:contain; }
+      #ikra-loading strong { font-size:17px;letter-spacing:.3em;padding-left:.3em; }
+      #ikra-loading span { font-size:13px;opacity:.65;animation:boot-pulse 1.6s ease-in-out infinite; }
+      html[data-boot-theme="dark"] #ikra-loading { color:#eef4f0; }
+      @keyframes boot-pulse { 50% { opacity:.35; } }
+      @media(prefers-reduced-motion:reduce) { #ikra-loading span { animation:none; } }
     </style>
     <link rel="stylesheet" href="./css/base.css" />
     <link rel="stylesheet" href="./css/glass.css" />
@@ -32,6 +39,7 @@
     <link rel="stylesheet" href="./css/mobile.css" />
     <link rel="stylesheet" href="./css/release-notes.css" />
     <link rel="stylesheet" href="./css/ambient.css" />
+    <link rel="stylesheet" href="./css/prayer-focus.css" />
     <link rel="manifest" href="./manifest.webmanifest?v=2" />
     <meta name="theme-color" content="#e9eef5" />
     <meta name="application-name" content="IKRA" />
@@ -43,7 +51,9 @@
   </head>
   <body data-theme="light">
     <script>document.body.dataset.theme=document.documentElement.dataset.bootTheme||'light';</script>
-    <noscript><style>body{visibility:visible!important}</style>IKRA için JavaScript’i etkinleştir. / Enable JavaScript to use IKRA.</noscript>
+    <noscript><style>body{visibility:visible!important}#ikra-loading{display:none}</style>IKRA için JavaScript’i etkinleştir. / Enable JavaScript to use IKRA.</noscript>
+    <div id="ikra-loading" role="status" aria-live="polite"><img src="./ikra-icon-v2-192.png" alt="" width="76" height="76"/><strong>IKRA</strong><span id="ikra-loading-label">Yükleniyor…</span></div>
+    <script>try{if(localStorage.getItem('ikra-language')==='en')document.getElementById('ikra-loading-label').textContent='Loading…';}catch(_){}</script>
     <div class="app">
       <header class="header">
         <button
