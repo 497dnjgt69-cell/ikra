@@ -41,3 +41,17 @@ test('manual sessions with a known end time enter hourly analysis; legacy entrie
   assert.equal(result.total,3600);assert.equal(result.excluded,3600);
   assert.equal(result.hours[10],1800);assert.equal(result.hours[11],1800);
 });
+
+import {ankiJourney,normalizeAnkiGoal} from '../js/core/anki.js';
+test('journey deduplicates XP, ignores future reviews, preserves yesterday streak and counts longest streak',()=>{
+ const now=new Date(2026,9,4,12), review=d=>({id:+new Date(2026,9,d,10),card:1,seconds:10,ease:3});
+ const data={reviews:[review(1),review(2),review(3),review(3),review(5)]};
+ const journey=ankiJourney(data,10,now);
+ assert.equal(journey.xp,30);assert.equal(journey.streak,3);assert.equal(journey.today,0);
+ assert.equal(journey.longest,3);assert.equal(journey.badges[3],true);
+ assert.equal(ankiJourney(data,25,new Date(2026,9,7)).streak,0);
+ assert.equal(journey.days.length,28);assert.equal(normalizeAnkiGoal(-5),25);
+ const total=Array.from({length:100},(_,i)=>({...review(4),id:+now-1000+i}));
+ assert.equal(ankiJourney({reviews:total},50,now).level,2);
+ assert.equal(ankiJourney({reviews:total},50,now).levelXP,0);
+});

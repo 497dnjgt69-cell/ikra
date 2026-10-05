@@ -1,4 +1,4 @@
-import { normalizeAnki } from "./anki.js";
+import { normalizeAnki, normalizeAnkiGoal } from "./anki.js";
 import { backupSnapshot } from "./backup-snapshot.js";
 export function normalizeBackup(payload, { fresh, isDateKey, names }) {
   if (!payload || typeof payload !== "object")
@@ -16,6 +16,7 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
     throw Error("Yedekte çalışma, görev veya ders listesi eksik.");
   const clean = fresh();
   clean.anki = normalizeAnki(raw.anki);
+  clean.ankiGoal = normalizeAnkiGoal(raw.ankiGoal);
   const finite = (n, min, max) => Number.isFinite(n) && n >= min && n <= max;
   const validString = (x) => typeof x === "string" && x.length <= 200;
   let derived = new Set();

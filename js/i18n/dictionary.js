@@ -1,6 +1,9 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Hedefini seç, ritmini bul, ilerlemeni gör.": "Set your goal, find your rhythm, see your progress.",
+      "Anki ile her gün bir adım": "A little Anki, every day",
+      "Günlük hedef halkası, XP ve seviyeler, Anki serisi, 28 günlük aktivite takvimi ve altı başarı rozeti. Kurulum adımları artık daha kolay.": "Daily goal ring, XP and levels, an Anki streak, a 28-day activity calendar and six milestone badges. Easier connection steps, too.",
       "Anki ve Boğaz’ın sesi burada.": "Anki and the sound of the Bosphorus are here.",
       "Çalışmalarını daha kolay ekle, ilerlemeni daha sade takip et.": "Add study sessions more easily and see your progress more clearly.",
       "Bosphorus Cafe sesi hazır": "Bosphorus Cafe audio is ready",

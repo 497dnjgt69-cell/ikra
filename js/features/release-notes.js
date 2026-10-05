@@ -2,10 +2,11 @@ export default function initialize() {
   (() => {
     // Edit this release record and its dictionary entries for future announcements.
     const release = {
-  "version": "1.5.0",
-  "title": "Anki ve Boğaz’ın sesi burada.",
-  "intro": "Çalışmalarını daha kolay ekle, ilerlemeni daha sade takip et.",
+  "version": "1.6.0",
+  "title": "Anki ile her gün bir adım",
+  "intro": "Hedefini seç, ritmini bul, ilerlemeni gör.",
   "features": [
+    {"icon":"sparkle","title":"Anki ile her gün bir adım","text":"Günlük hedef halkası, XP ve seviyeler, Anki serisi, 28 günlük aktivite takvimi ve altı başarı rozeti. Kurulum adımları artık daha kolay."},
     {
       "icon": "phone",
       "title": "Bosphorus Cafe sesi hazır",

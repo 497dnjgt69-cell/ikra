@@ -154,6 +154,14 @@ for (const width of [1440, 390])
     assert.match($('#anki-summary').textContent, /1 (dk|min)/);
     app.backup.restore(app.backup.export());
     assert.equal(app.store.state.anki.profile, 'Test');
+    $('#anki-goal').value='50';$('#anki-goal').dispatchEvent(new w.Event('change'));
+    await flush();
+    assert.equal(app.store.state.ankiGoal,50);
+    app.backup.restore(app.backup.export());
+    assert.equal(app.store.state.ankiGoal,50);
+    assert.equal(document.querySelectorAll('.anki-day').length,28);
+    assert.equal(document.querySelectorAll('.anki-badge').length,6);
+    assert.equal(document.querySelector('.anki-ring').getAttribute('aria-valuemax'),'50');
     assert.match($('#focus-streak').textContent, /Focus Streak/);
     const prayerView = createPrayerView({ store: app.store, times: {
       next: () => ({ name: "Yatsı", minutes: 411, tomorrow: false }),
