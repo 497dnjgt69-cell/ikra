@@ -105,7 +105,7 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
       throw Error("Sayaç süresi geçersiz.");
     if (n !== undefined) clean.durations[mode] = n;
   }
-  clean.theme = ["light", "dark", "nature"].includes(raw.theme)
+  clean.theme = ["light", "dark", "nature", "neumorphism"].includes(raw.theme)
     ? raw.theme
     : raw.theme === "cream" || raw.theme === "rose"
       ? "light"

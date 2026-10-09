@@ -41,7 +41,7 @@ export function migrateState(input, now = Date.now()) {
   state.prayerView = !!state.prayerTimer;
   if(state.prayerTimer && !state.prayerTimer.untimed){state.prayerTimer=null;state.prayerView=false;}
   if(state.prayerTimer?.untimed){state.prayerTimer.paused=true;state.prayerTimer.immersed=false;}
-  if (!["light", "dark", "nature"].includes(state.theme))
+  if (!["light", "dark", "nature", "neumorphism"].includes(state.theme))
     state.theme = state.theme === "rose" ? "light" : "dark";
   return state;
 }

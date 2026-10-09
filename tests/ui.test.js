@@ -252,9 +252,16 @@ for (const width of [1440, 390])
     await flush();
     if (!app.store.state.sessions.some((s) => s.manual && s.seconds === 3600))
       throw Error("manual record");
-    $("#theme").value = "nature";
+    $('[data-mode="clock"]').click();await flush();
+    assert.equal($('#modes').classList.contains('breaks-open'),false);
+    $('[data-mode="focus"]').click();await flush();
+    assert.equal($('#modes').classList.contains('breaks-open'),true);
+    assert.equal($('#mode-breaks').children.length,2);
+    $("#theme").value = "neumorphism";
     $("#theme").dispatchEvent(new w.Event("change"));
     await flush();
+    assert.equal(app.store.state.theme,"neumorphism");
+    assert.equal(document.body.dataset.theme,"neumorphism");
     $("[data-language=en]").click();
     await flush();
     if (w.document.documentElement.lang !== "en") throw Error("language");
@@ -267,17 +274,13 @@ for (const width of [1440, 390])
     $("#prayer-go").click();
     await flush();
     assert.equal(app.store.state.prayerTimer.untimed,true);
-    assert.equal($('#prayer-focus-room').open,true);
+    assert.equal($('#prayer-focus-room').hidden,false);
+    assert.equal($('#prayer-focus-room').closest('#prayer-presence'),$('#prayer-presence'));
+    assert.equal($('#prayer-focus-room').tagName,'SECTION');
     $('#prayer-pause').click();await flush();
     assert.equal(app.store.state.prayerTimer.paused,true);
     assert.equal($('#prayer-focus-room').classList.contains('is-paused'),true);
     $('#prayer-pause').click();await flush();assert.equal(app.store.state.prayerTimer.paused,false);
-    $('#prayer-focus-exit').click();await flush();assert.equal($('#prayer-focus-room').open,false);
-    assert.equal(app.store.state.prayerTimer.paused,true);
-    $('#prayer-go').click();await flush();assert.equal($('#prayer-focus-room').open,true);
-    $('#prayer-focus-room').dispatchEvent(new w.Event('cancel',{cancelable:true}));await flush();
-    assert.equal(app.store.state.prayerTimer.immersed,false);
-    $('#prayer-go').click();await flush();
     $("#prayerfinish").click();
     await flush();
     if (app.store.state.prayerView) throw Error("prayer leave");

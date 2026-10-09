@@ -10,9 +10,9 @@
     <script>
       document.documentElement.classList.add('ikra-booting');
       try { const state=JSON.parse(localStorage.getItem('mahir-focus-v1')||'{}');
-        const theme=['light','dark','nature'].includes(state.theme)?state.theme:'light';
+        const theme=['light','dark','nature','neumorphism'].includes(state.theme)?state.theme:'light';
         document.documentElement.dataset.bootTheme=theme;
-        document.documentElement.style.backgroundColor=({light:'#f5f5f7',dark:'#111214',nature:'#e8eee6'})[theme];
+        document.documentElement.style.backgroundColor=({light:'#f5f5f7',dark:'#111214',nature:'#e8eee6',neumorphism:'#e5e9ef'})[theme];
       } catch (_) {}
       window.ikraBootGuard=setTimeout(function(){
         if(document.documentElement.classList.contains('ikra-booting')){
@@ -24,11 +24,14 @@
     <style>
       html.ikra-booting body { visibility:hidden; }
       html[data-boot-theme="dark"] { color-scheme:dark; }
-      #ikra-loading { visibility:visible;position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:#283c34;font-family:system-ui,sans-serif; }
+      #ikra-loading { visibility:visible;background:#f5f5f7;position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:#283c34;font-family:system-ui,sans-serif; }
       #ikra-loading img { width:76px;height:76px;object-fit:contain; }
       #ikra-loading strong { font-size:17px;letter-spacing:.3em;padding-left:.3em; }
       #ikra-loading span { font-size:13px;opacity:.65;animation:boot-pulse 1.6s ease-in-out infinite; }
-      html[data-boot-theme="dark"] #ikra-loading { color:#eef4f0; }
+      html[data-boot-theme="dark"] #ikra-loading { color:#eef4f0;background:#111214; }
+      html[data-boot-theme="nature"] #ikra-loading { background:#e8eee6; }
+      html[data-boot-theme="neumorphism"] #ikra-loading { background:#e5e9ef; }
+      html.ikra-booting body > :not(#ikra-loading) { visibility:hidden!important; }
       @keyframes boot-pulse { 50% { opacity:.35; } }
       @media(prefers-reduced-motion:reduce) { #ikra-loading span { animation:none; } }
     </style>
@@ -40,6 +43,7 @@
     <link rel="stylesheet" href="./css/release-notes.css" />
     <link rel="stylesheet" href="./css/ambient.css" />
     <link rel="stylesheet" href="./css/prayer-focus.css" />
+    <link rel="stylesheet" href="./css/neumorphism.css" />
     <link rel="manifest" href="./manifest.webmanifest?v=2" />
     <meta name="theme-color" content="#e9eef5" />
     <meta name="application-name" content="IKRA" />
@@ -52,7 +56,7 @@
   <body data-theme="light">
     <script>document.body.dataset.theme=document.documentElement.dataset.bootTheme||'light';</script>
     <noscript><style>body{visibility:visible!important}#ikra-loading{display:none}</style>IKRA için JavaScript’i etkinleştir. / Enable JavaScript to use IKRA.</noscript>
-    <div id="ikra-loading" role="status" aria-live="polite"><img src="./ikra-icon-v2-192.png" alt="" width="76" height="76"/><strong>IKRA</strong><span id="ikra-loading-label">Yükleniyor…</span></div>
+    <div id="ikra-loading" role="status" aria-live="polite"><img src="./ikra-icon-v2-192.png" alt="IKRA" width="76" height="76"/><span id="ikra-loading-label">Yükleniyor…</span></div>
     <script>try{if(localStorage.getItem('ikra-language')==='en')document.getElementById('ikra-loading-label').textContent='Loading…';}catch(_){}</script>
     <div class="app">
       <header class="header">
@@ -75,6 +79,7 @@
             <option value="light">Açık</option>
             <option value="dark">Koyu</option>
             <option value="nature">Doğa</option>
+            <option value="neumorphism">Neumorphism</option>
           </select>
         </div>
       </header>
