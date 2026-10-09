@@ -267,23 +267,11 @@ for (const width of [1440, 390])
     if (w.document.documentElement.lang !== "en") throw Error("language");
     $("#prayerstart").click();
     await flush();
-    if (!app.store.state.prayerView) throw Error("prayer enter");
-    assert.equal($("#prayer-go").disabled,true);
-    $('.prayer-selection [data-value="Sabah"]').click();
-    assert.equal($("#prayer-go").disabled,false);
-    $("#prayer-go").click();
-    await flush();
-    assert.equal(app.store.state.prayerTimer.untimed,true);
-    assert.equal($('#prayer-focus-room').hidden,false);
-    assert.equal($('#prayer-focus-room').closest('#prayer-presence'),$('#prayer-presence'));
-    assert.equal($('#prayer-focus-room').tagName,'SECTION');
-    $('#prayer-pause').click();await flush();
-    assert.equal(app.store.state.prayerTimer.paused,true);
-    assert.equal($('#prayer-focus-room').classList.contains('is-paused'),true);
-    $('#prayer-pause').click();await flush();assert.equal(app.store.state.prayerTimer.paused,false);
-    $("#prayerfinish").click();
-    await flush();
-    if (app.store.state.prayerView) throw Error("prayer leave");
+    assert.equal(app.store.state.prayerView,false);
+    assert.equal(app.store.state.prayerTimer,null);
+    assert.equal($('#prayer-presence'),null);
+    assert.ok($('#completion-notices').textContent.includes('Coming soon'));
+    assert.equal($('#prayerstart').previousElementSibling.dataset.mode,'clock');
     const historyCount =
       app.store.state.sessions.length + app.store.state.prayers.length;
     $("#history .session-delete").click();

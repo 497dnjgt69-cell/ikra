@@ -10,10 +10,10 @@
     <script>
       document.documentElement.classList.add('ikra-booting');
       try { const state=JSON.parse(localStorage.getItem('mahir-focus-v1')||'{}');
-        const theme=['light','dark','nature','neumorphism'].includes(state.theme)?state.theme:'light';
+        const theme=['light','dark','nature','neumorphism'].includes(state.theme)?state.theme:'neumorphism';
         document.documentElement.dataset.bootTheme=theme;
         document.documentElement.style.backgroundColor=({light:'#f5f5f7',dark:'#111214',nature:'#e8eee6',neumorphism:'#e5e9ef'})[theme];
-      } catch (_) {}
+      } catch (_) { document.documentElement.dataset.bootTheme='neumorphism'; document.documentElement.style.backgroundColor='#e5e9ef'; }
       window.ikraBootGuard=setTimeout(function(){
         if(document.documentElement.classList.contains('ikra-booting')){
           document.body.textContent='IKRA yüklenemedi. Lütfen sayfayı yenile. / IKRA could not load. Please reload.';
@@ -24,10 +24,11 @@
     <style>
       html.ikra-booting body { visibility:hidden; }
       html[data-boot-theme="dark"] { color-scheme:dark; }
-      #ikra-loading { visibility:visible;background:#f5f5f7;position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:#283c34;font-family:system-ui,sans-serif; }
+      #ikra-loading { visibility:visible;background:#e5e9ef;position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:#283c34;font-family:system-ui,sans-serif; }
       #ikra-loading img { width:76px;height:76px;object-fit:contain; }
       #ikra-loading strong { font-size:17px;letter-spacing:.3em;padding-left:.3em; }
       #ikra-loading span { font-size:13px;opacity:.65;animation:boot-pulse 1.6s ease-in-out infinite; }
+      html[data-boot-theme="light"] #ikra-loading { background:#f5f5f7; }
       html[data-boot-theme="dark"] #ikra-loading { color:#eef4f0;background:#111214; }
       html[data-boot-theme="nature"] #ikra-loading { background:#e8eee6; }
       html[data-boot-theme="neumorphism"] #ikra-loading { background:#e5e9ef; }
@@ -53,8 +54,8 @@
     <link rel="icon" type="image/png" sizes="192x192" href="./ikra-icon-v2-192.png" />
     <link rel="apple-touch-icon" href="./ikra-icon-v2-180.png" />
   </head>
-  <body data-theme="light">
-    <script>document.body.dataset.theme=document.documentElement.dataset.bootTheme||'light';</script>
+  <body data-theme="neumorphism">
+    <script>document.body.dataset.theme=document.documentElement.dataset.bootTheme||'neumorphism';</script>
     <noscript><style>body{visibility:visible!important}#ikra-loading{display:none}</style>IKRA için JavaScript’i etkinleştir. / Enable JavaScript to use IKRA.</noscript>
     <div id="ikra-loading" role="status" aria-live="polite"><img src="./ikra-icon-v2-192.png" alt="IKRA" width="76" height="76"/><span id="ikra-loading-label">Yükleniyor…</span></div>
     <script>try{if(localStorage.getItem('ikra-language')==='en')document.getElementById('ikra-loading-label').textContent='Loading…';}catch(_){}</script>

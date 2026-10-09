@@ -119,7 +119,7 @@ test("switching subjects attributes elapsed segments to the correct course", () 
     ],
   );
 });
-test("untimed prayer pauses focus, survives reload, and only explicit finish marks completion",()=>{
+test("legacy prayer service only marks explicit completion; reload clears retired active flow",()=>{
  const f=fixture();f.planner.addSubject('ANAT');f.focus.start();f.advance(10000);f.prayer.enter();
  assert.equal(f.store.state.timer.running,false);assert.equal(f.store.state.sessions[0].seconds,10);
  f.prayer.begin('Sabah');assert.equal(f.store.state.prayerTimer.untimed,true);
@@ -129,10 +129,10 @@ test("untimed prayer pauses focus, survives reload, and only explicit finish mar
  f.prayer.resume();assert.equal(f.store.state.prayerTimer.immersed,true);
  f.prayer.select('Yatsı');assert.equal(f.store.state.prayerTimer.name,'Sabah');
  f.advance(86400000);f.prayer.settle();assert.ok(f.store.state.prayerTimer);assert.equal(f.store.state.prayers.length,0);
- const restored=createStore({storage:f.disk,now:f.now});assert.equal(restored.state.prayerTimer.untimed,true);
- f.backup.restore(f.backup.export());assert.equal(f.store.state.prayerTimer.name,'Sabah');
+ const restored=createStore({storage:f.disk,now:f.now});assert.equal(restored.state.prayerTimer,null);assert.equal(restored.state.prayerView,false);
  f.prayer.finish();f.prayer.finish();assert.equal(f.store.state.prayerChecks['2026-09-28'].Sabah,true);
  assert.equal(f.store.state.prayers.length,0);
+ f.backup.restore(f.backup.export());assert.equal(f.store.state.prayerChecks['2026-09-28'].Sabah,true);
  f.prayer.enter();f.prayer.begin('Yatsı');f.prayer.leave();assert.equal(f.store.state.prayerChecks['2026-09-29']?.Yatsı,undefined);
 });
 test("record deletion/undo preserves other concurrent additions and undo is idempotent", () => {

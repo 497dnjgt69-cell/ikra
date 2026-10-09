@@ -1,6 +1,12 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Daha yumuşak bir IKRA.":"A softer IKRA.",
+      "Neumorphism artık varsayılan tema.":"Neumorphism is now the default theme.",
+      "Yumuşak yüzeyler, net kontroller":"Soft surfaces, clear controls",
+      "Daha dengeli gölgeler, belirgin seçimler ve sade bir görünüm.":"Balanced shadows, distinct selections and a cleaner appearance.",
+      "Namaz yeniden hazırlanıyor":"Prayer is being redesigned",
+      "Namaz butonunda şimdilik Coming soon göreceksin.":"The Prayer button shows Coming soon for now.",
       "Namaza sakin bir başlangıç.":"A calmer start to prayer.",
       "Seç, niyet et, odağını bul.":"Choose, set your intention, find your focus.",
       "Yeni namaz odağı":"A new prayer focus",

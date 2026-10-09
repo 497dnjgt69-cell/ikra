@@ -1,5 +1,5 @@
 export const fresh = () => ({
-  theme: "light",
+  theme: "neumorphism",
   dock: null,
   durations: { focus: 50, break: 10, long: 20 },
   auto: false,

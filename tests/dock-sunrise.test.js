@@ -31,8 +31,18 @@ test('startup applies saved themes before showing content and tolerates corrupt 
   const dom=new JSDOM(html,{url:'https://ikra.test',runScripts:'outside-only'});
   dom.window.localStorage.setItem('mahir-focus-v1',value);
   for(const script of dom.window.document.querySelectorAll('script:not([src])'))dom.window.eval(script.textContent);
-  assert.equal(dom.window.document.body.dataset.theme,value.includes('dark')?'dark':value.includes('nature')?'nature':'light');
+  assert.equal(dom.window.document.body.dataset.theme,value.includes('dark')?'dark':value.includes('nature')?'nature':'neumorphism');
   assert.ok(dom.window.document.documentElement.classList.contains('ikra-booting'));
   dom.window.clearTimeout(dom.window.ikraBootGuard);dom.window.close();
  }
+});
+
+import {migrateState} from '../js/services/store.js';
+import {fresh} from '../js/core/default-state.js';
+test('default theme and retired prayer flow preserve saved choices and history',()=>{
+ assert.equal(migrateState(null).theme,'neumorphism');
+ const saved={...fresh(),theme:'dark',prayerTimer:{untimed:true,name:'Sabah'},prayerView:true,prayerChecks:{'2026-10-09':{Sabah:true}}};
+ const result=migrateState(saved);
+ assert.equal(result.theme,'dark');assert.equal(result.prayerView,false);assert.equal(result.prayerTimer,null);
+ assert.deepEqual(result.prayerChecks,saved.prayerChecks);
 });
