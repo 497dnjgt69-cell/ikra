@@ -2,10 +2,10 @@ export default function initialize() {
   (() => {
     // Edit this release record and its dictionary entries for future announcements.
     const release = {
-  version:"1.12.0",title:"Dokunuşlar daha doğal.",intro:"Neumorphism için mermer tınısı ve daha tutarlı kontroller.",
+  version:"1.13.0",title:"Her temanın kendi sesi.",intro:"Tıklama, başlatma, duraklatma ve bitiş için ayrı sesler.",
   features:[
-    {icon:"sparkle",title:"Tok ve kısa tıklamalar",text:"Buton sesleri ses ayarlarına uyar. Seçili alanlar daha belirgin."},
-    {icon:"leaf",title:"Vakitler güncel kalsın",text:"Şehrinin saat dilimine göre gün geçişi, çevrimdışı kayıt ve otomatik yeniden deneme."}
+    {icon:"leaf",title:"Uzun ve yumuşak hışırtı",text:"Doğa temasında katmanlı yaprak sesi, yavaşça sönen bir kuyruk."},
+    {icon:"sparkle",title:"Dinle, seç, dene",text:"Ayarlar’daki ses önizlemesinden her sesi ayrı ayrı dinle."}
   ]
 };
     const seenKey = "ikra-release-seen:" + release.version;

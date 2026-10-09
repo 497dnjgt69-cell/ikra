@@ -1,6 +1,14 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Her temanın kendi sesi.":"Every theme has its own sound.",
+      "Tıklama, başlatma, duraklatma ve bitiş için ayrı sesler.":"Distinct sounds for clicks, start, pause and completion.",
+      "Uzun ve yumuşak hışırtı":"A longer, softer rustle",
+      "Doğa temasında katmanlı yaprak sesi, yavaşça sönen bir kuyruk.":"Layered leaf sounds with a gentle fade in the Nature theme.",
+      "Dinle, seç, dene":"Choose and listen",
+      "Ayarlar’daki ses önizlemesinden her sesi ayrı ayrı dinle.":"Preview each sound individually in Settings.",
+      "Ses önizlemesi":"Sound preview",
+      "Tıklama":"Click",
       "Dokunuşlar daha doğal.":"A more natural touch.",
       "Neumorphism için mermer tınısı ve daha tutarlı kontroller.":"Marble-like sounds and more consistent Neumorphism controls.",
       "Tok ve kısa tıklamalar":"Soft, solid clicks",

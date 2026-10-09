@@ -30,16 +30,18 @@ export function bindSettings({ store, settings, focus, render, playSound }) {
   });
   $("#soundenabled").onchange = handleAction((e) => {
     settings.setSound(e.target.checked);
+    playSound.syncSettings();
     if (store.state.sound) playSound("tap");
   });
   $("#soundvolume").oninput = handleAction((e) => {
     settings.setVolume(Number(e.target.value) / 100);
+    playSound.syncSettings();
   });
-  $("#soundtest").onclick = handleAction(() => playSound(["neumorphism", "nature"].includes(store.state.theme) ? "tap" : "finish"));
+  $("#soundtest").onclick = handleAction(() => playSound($("#sound-preview-kind").value));
   const clickSound = (e) => {
     let b = e.target.closest("button");
     if (!b || b.disabled || b.getAttribute("aria-disabled") === "true" || b.id === "soundtest" || b.closest("#manual-session-form")) return;
-    if (b.id === "focus-toggle") playSound(["neumorphism", "nature"].includes(store.state.theme) ? "tap" : "wind");
+    if (b.id === "focus-toggle") playSound("wind");
     else if (b.id === "start")
       playSound(
         (
