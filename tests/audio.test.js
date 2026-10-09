@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createAudio} from '../js/features/audio.js';
-test('marble sound reuses its buffer, respects mute/volume, throttles clicks, and releases nodes',()=>{
+test('theme sounds reuse its buffer, respects mute/volume, throttles clicks, and releases nodes',()=>{
  const old=globalThis.window;
  let ctx,buffers=0,closed=0;const nodes=[];
  const param=()=>({value:0,setValueAtTime(){},linearRampToValueAtTime(){},exponentialRampToValueAtTime(){}});
@@ -23,6 +23,14 @@ test('marble sound reuses its buffer, respects mute/volume, throttles clicks, an
   source.onended();assert.ok(source.disconnected&&gain.disconnected);
   state.soundVolume=0;ctx.currentTime+=1;play();assert.equal(nodes.length,4);
   state.soundVolume=0.5;state.theme='dark';play();assert.equal(buffers,1);assert.equal(nodes.length,6);
+  state.theme='nature';ctx.currentTime+=1;play();assert.equal(buffers,2);
+  const leaf=nodes[6],leafGain=nodes[7];assert.equal(leafGain.gain.value,0.19);
+  const leafSamples=leaf.buffer.getChannelData();assert.equal(leafSamples.length,11520);
+  assert.ok(leafSamples.every(Number.isFinite));assert.ok(Math.max(...leafSamples)<1);
+  assert.notDeepEqual(leafSamples.slice(0,100),samples.slice(0,100));
+  ctx.currentTime+=0.3;play('start');assert.equal(buffers,2);
+  leaf.onended();assert.ok(leaf.disconnected&&leafGain.disconnected);
+  state.sound=false;ctx.currentTime+=1;play();assert.equal(nodes.length,10);
   play.dispose();assert.equal(closed,1);
  } finally { if(old===undefined)delete globalThis.window;else globalThis.window=old; }
 });

@@ -35,11 +35,11 @@ export function bindSettings({ store, settings, focus, render, playSound }) {
   $("#soundvolume").oninput = handleAction((e) => {
     settings.setVolume(Number(e.target.value) / 100);
   });
-  $("#soundtest").onclick = handleAction(() => playSound(store.state.theme === "neumorphism" ? "tap" : "finish"));
+  $("#soundtest").onclick = handleAction(() => playSound(["neumorphism", "nature"].includes(store.state.theme) ? "tap" : "finish"));
   const clickSound = (e) => {
     let b = e.target.closest("button");
     if (!b || b.disabled || b.getAttribute("aria-disabled") === "true" || b.id === "soundtest" || b.closest("#manual-session-form")) return;
-    if (b.id === "focus-toggle") playSound(store.state.theme === "neumorphism" ? "tap" : "wind");
+    if (b.id === "focus-toggle") playSound(["neumorphism", "nature"].includes(store.state.theme) ? "tap" : "wind");
     else if (b.id === "start")
       playSound(
         (
