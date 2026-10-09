@@ -3,7 +3,7 @@ export function createSettings({ store, access }) {
   return Object.freeze({
     setTheme(theme) {
       access.require(FEATURES.THEMES);
-      if (["light", "dark", "nature"].includes(theme))
+      if (["light", "dark", "nature", "neumorphism"].includes(theme))
         store.update((d) => {
           d.theme = theme;
         });

@@ -1,0 +1,22 @@
+/* Soft raised surfaces, inset selections, and visible keyboard focus. */
+body[data-theme="neumorphism"] {
+  color-scheme:light;
+  --bg:#e5e9ef; --card:#e5e9ef; --fg:#293749; --muted:#536377;
+  --line:#c5cdd8; --accent:#345b86; --tint:#d8dfe8; --heat:#456b94;
+  --neu-raised:7px 7px 16px #bec6d1,-7px -7px 16px #ffffff;
+  --neu-inset:inset 4px 4px 9px #bec6d1,inset -4px -4px 9px #ffffff;
+  background:var(--bg);
+}
+body[data-theme="neumorphism"]::before { background:none; }
+body[data-theme="neumorphism"] :is(.card,.digit,.dialog-shell,.prayer-peek,.dock,.seg,.theme-picker,.bismillah-button,.prayer-pause-button) {
+  background:var(--bg)!important; border-color:transparent!important;
+  box-shadow:var(--neu-raised)!important; backdrop-filter:none;
+}
+body[data-theme="neumorphism"] :is(.field,input,select,.theme-choice[aria-pressed="true"],.seg button.active,.prayer-selection button.active) {
+  background:var(--bg); color:var(--fg); box-shadow:var(--neu-inset); border-color:transparent;
+}
+body[data-theme="neumorphism"] .button { background:var(--bg);color:var(--fg);box-shadow:4px 4px 9px #bec6d1,-4px -4px 9px #ffffff;border-color:transparent; }
+body[data-theme="neumorphism"] :is(button,input,select,a):focus-visible { outline:3px solid var(--accent);outline-offset:4px; }
+body[data-theme="neumorphism"] button:active { box-shadow:var(--neu-inset)!important; }
+body[data-theme="neumorphism"] .glass-dialog::backdrop { background:#29374955; }
+body[data-theme="neumorphism"] #release-dialog { background:var(--bg);color:var(--fg); }
