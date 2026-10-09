@@ -2,10 +2,10 @@ export default function initialize() {
   (() => {
     // Edit this release record and its dictionary entries for future announcements.
     const release = {
-  version:"1.11.0",title:"Daha yumuşak bir IKRA.",intro:"Neumorphism artık varsayılan tema.",
+  version:"1.12.0",title:"Dokunuşlar daha doğal.",intro:"Neumorphism için mermer tınısı ve daha tutarlı kontroller.",
   features:[
-    {icon:"sparkle",title:"Yumuşak yüzeyler, net kontroller",text:"Daha dengeli gölgeler, belirgin seçimler ve sade bir görünüm."},
-    {icon:"leaf",title:"Namaz yeniden hazırlanıyor",text:"Namaz butonunda şimdilik Coming soon göreceksin."}
+    {icon:"sparkle",title:"Tok ve kısa tıklamalar",text:"Buton sesleri ses ayarlarına uyar. Seçili alanlar daha belirgin."},
+    {icon:"leaf",title:"Vakitler güncel kalsın",text:"Şehrinin saat dilimine göre gün geçişi, çevrimdışı kayıt ve otomatik yeniden deneme."}
   ]
 };
     const seenKey = "ikra-release-seen:" + release.version;

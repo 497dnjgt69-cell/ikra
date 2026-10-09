@@ -128,7 +128,7 @@ export default function initialize({
     render: scheduleRender,
     renderTasks: plannerView.renderTasks,
   });
-  bindSettings({ store, settings, focus, render: scheduleRender, playSound });
+  const settingsControls = bindSettings({ store, settings, focus, render: scheduleRender, playSound });
   bindStatistics({ store, settings, renderAllStats: render });
   bindManualSession({ store, records, render, playSound });
   bindPrayerTimes({ times, render, toast });
@@ -163,6 +163,8 @@ export default function initialize({
     }
   };
   window.addEventListener("online", online);
+  window.addEventListener("pageshow", visible);
+  window.addEventListener("focus", visible);
   document.addEventListener("visibilitychange", visible);
   document.addEventListener("ikra-language", scheduleRender);
   document.addEventListener("ikra-action-failed", scheduleRender);
@@ -190,11 +192,15 @@ export default function initialize({
       clearInterval(refresh);
       clearTimeout(initialFetch);
       times.invalidate();
+      settingsControls.dispose();
+      playSound.dispose();
       ankiView.dispose();
       document.removeEventListener("ikra-action-failed", scheduleRender);
       unsubscribe();
       unsubscribeAccess();
       window.removeEventListener("online", online);
+      window.removeEventListener("pageshow", visible);
+      window.removeEventListener("focus", visible);
       document.removeEventListener("visibilitychange", visible);
       document.removeEventListener("ikra-language", scheduleRender);
     },

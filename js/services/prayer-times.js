@@ -14,12 +14,19 @@ export function createPrayerTimes({
   let generation = 0,
     controller = null,
     loading = false,
-    attempt = 0,
+    attempt = -Infinity,
+    tomorrowAttempt = -Infinity,
+    tomorrowController = null,
+    retrySource = null,
     message = "";
   function invalidate() {
     lastCheck = now();
     generation++;
     controller?.abort();
+    tomorrowController?.abort();
+    tomorrowController = null;
+    tomorrowAttempt = -Infinity;
+    retrySource = null;
     controller = null;
     loading = false;
     message = "";
@@ -30,7 +37,7 @@ export function createPrayerTimes({
   async function fetchTomorrow() {
     const d = store.state,
       source = d.prayerSource;
-    if (!source || source.type === "manual") return;
+    if (!source || source.type === "manual" || tomorrowController || now() - tomorrowAttempt < 300000) return;
     const wall = prayerWallNow(d, new Date(now())),
       tomorrow = new Date(wall.date + "T12:00:00");
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -40,6 +47,8 @@ export function createPrayerTimes({
       method = d.method,
       abort = new AbortController(),
       timer = setTimeout(() => abort.abort(), 12000);
+    tomorrowController = abort;
+    tomorrowAttempt = now();
     try {
       const data = await request(date, source, method, abort.signal);
       if (token !== generation) return;
@@ -49,6 +58,7 @@ export function createPrayerTimes({
     } catch {
     } finally {
       clearTimeout(timer);
+      if (tomorrowController === abort) tomorrowController = null;
     }
   }
   async function fetchForSource(source) {
@@ -59,14 +69,21 @@ export function createPrayerTimes({
     controller = new AbortController();
     const abort = controller,
       timer = setTimeout(() => abort.abort(), 12000);
-    const date = datekey(now()),
-      method = store.state.method;
+    let date = prayerWallNow(store.state, new Date(now())).date;
+    const method = store.state.method;
     loading = true;
     attempt = now();
     message = "Vakitler yenileniyor…";
     onChange();
     try {
-      const result = await request(date, source, method, abort.signal);
+      let result = await request(date, source, method, abort.signal);
+      if (token !== generation) return;
+      // A newly selected location can be on a different calendar day.
+      const localDate = prayerWallNow({prayerTimeZone: result.timezone || store.state.prayerTimeZone}, new Date(now())).date;
+      if (localDate !== date) {
+        date = localDate;
+        result = await request(date, source, method, abort.signal);
+      }
       if (token !== generation) return;
       store.update((d) => {
         if (
@@ -87,15 +104,17 @@ export function createPrayerTimes({
             ? source.address
             : d.prayerLocation || "Konumum";
       });
+      retrySource = null;
       message = "";
       void fetchTomorrow();
     } catch {
       if (token !== generation) return;
+      retrySource = source;
       message =
         "Yenilenemedi. " +
         (store.state.prayerDate
           ? store.state.prayerDate +
-            " tarihli kayıt korunuyor; bugünün vakitleri değildir."
+            " tarihli kayıt korunuyor. Otomatik olarak tekrar denenecek."
           : "İnternet bağlantısını kontrol et.");
     } finally {
       clearTimeout(timer);
@@ -108,22 +127,31 @@ export function createPrayerTimes({
   }
   function refresh(force = false) {
     if (loading) return;
-    const d = store.state;
-    if (
-      !force &&
-      (now() - attempt < 300000 ||
-        (d.prayerDate === datekey(now()) && d.prayerTimes["Güneş"] &&
-          (!d.prayerMethod || d.prayerMethod === d.method)))
-    )
-      return;
-    let source = d.prayerSource;
-    if (
-      !source &&
-      d.prayerLocation &&
-      !["Konumum", "Elle girildi"].includes(d.prayerLocation)
-    )
-      source = { type: "address", address: d.prayerLocation };
-    if (source && source.type !== "manual") return fetchForSource(source);
+    let d = store.state;
+    const today = prayerWallNow(d, new Date(now())).date;
+    let source = retrySource || d.prayerSource;
+    if (!source && d.prayerLocation && !["Konumum", "Elle girildi"].includes(d.prayerLocation))
+      source = {type: "address", address: d.prayerLocation};
+    if (!source || source.type === "manual") return;
+    // Promote prefetched times at local midnight, including while offline.
+    if (!retrySource && d.prayerDate !== today && d.prayerTomorrow?.date === today &&
+        d.prayerMethod === d.method && d.prayerTomorrow.times?.["Güneş"]) {
+      store.update(next => {
+        next.prayerTimes = next.prayerTomorrow.times;
+        next.prayerDate = today;
+        next.prayerTomorrow = null;
+      });
+      d = store.state;
+      message = "";
+      tomorrowAttempt = -Infinity;
+      onChange();
+    }
+    const current = d.prayerDate === today &&
+      ["Sabah", "Güneş", "Öğle", "İkindi", "Akşam", "Yatsı"].every(name => d.prayerTimes[name]) &&
+      (!d.prayerMethod || d.prayerMethod === d.method);
+    if (!force && current && !retrySource) return fetchTomorrow();
+    if (!force && now() - attempt < 300000) return;
+    return fetchForSource(source);
   }
   return Object.freeze({
     checkStarted() {
@@ -146,7 +174,7 @@ export function createPrayerTimes({
       const date = store.state.prayerDate;
       return (
         message ||
-        (date && date !== datekey(now())
+        (date && date !== prayerWallNow(store.state, new Date(now())).date
           ? date +
             " tarihli kayıt gösteriliyor; güncel vakitler henüz alınmadı."
           : date
@@ -176,7 +204,7 @@ export function createPrayerTimes({
       store.update((d) => {
         d.prayerSource = { type: "manual" };
         d.prayerTimes[name] = time;
-        d.prayerDate = datekey(now());
+        d.prayerDate = prayerWallNow(d, new Date(now())).date;
         d.prayerLocation = location || d.prayerLocation || "Elle girildi";
         d.prayerTomorrow = null;
       });

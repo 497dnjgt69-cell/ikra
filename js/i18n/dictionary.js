@@ -1,6 +1,13 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Dokunuşlar daha doğal.":"A more natural touch.",
+      "Neumorphism için mermer tınısı ve daha tutarlı kontroller.":"Marble-like sounds and more consistent Neumorphism controls.",
+      "Tok ve kısa tıklamalar":"Soft, solid clicks",
+      "Buton sesleri ses ayarlarına uyar. Seçili alanlar daha belirgin.":"Button sounds follow your sound settings. Selected controls are easier to see.",
+      "Vakitler güncel kalsın":"Keep prayer times current",
+      "Şehrinin saat dilimine göre gün geçişi, çevrimdışı kayıt ve otomatik yeniden deneme.":"Day rollover in your city's timezone, cached times and automatic retries.",
+      " tarihli kayıt korunuyor. Otomatik olarak tekrar denenecek.":" record retained. An automatic retry is scheduled.",
       "Daha yumuşak bir IKRA.":"A softer IKRA.",
       "Neumorphism artık varsayılan tema.":"Neumorphism is now the default theme.",
       "Yumuşak yüzeyler, net kontroller":"Soft surfaces, clear controls",

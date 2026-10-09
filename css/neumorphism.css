@@ -3,8 +3,8 @@ body[data-theme="neumorphism"] {
   color-scheme:light;
   --bg:#e5e9ef; --card:#e5e9ef; --fg:#293749; --muted:#536377;
   --line:#c5cdd8; --accent:#345b86; --tint:#d8dfe8; --heat:#456b94;
-  --neu-raised:7px 7px 16px #bec6d1,-7px -7px 16px #ffffff;
-  --neu-inset:inset 4px 4px 9px #bec6d1,inset -4px -4px 9px #ffffff;
+  --neu-raised:6px 6px 14px #c1c9d4,-6px -6px 14px #ffffff;
+  --neu-inset:inset 3px 3px 7px #c1c9d4,inset -3px -3px 7px #ffffff;
   background:var(--bg);
 }
 body[data-theme="neumorphism"]::before { background:none; }
@@ -22,10 +22,6 @@ body[data-theme="neumorphism"] .glass-dialog::backdrop { background:#29374955; }
 body[data-theme="neumorphism"] #release-dialog { background:var(--bg);color:var(--fg); }
 
 /* Limit depth to surfaces and actionable controls, not every nested element. */
-body[data-theme="neumorphism"] {
-  --neu-raised:6px 6px 14px #c1c9d4,-6px -6px 14px #ffffff;
-  --neu-inset:inset 3px 3px 7px #c1c9d4,inset -3px -3px 7px #ffffff;
-}
 body[data-theme="neumorphism"] :is(.dialog-shell,.digit,.dock,.prayer-peek,.glass-dialog) {
   backdrop-filter:none!important; -webkit-backdrop-filter:none!important;
 }
@@ -36,7 +32,7 @@ body[data-theme="neumorphism"] :is(.theme-choice[aria-pressed="true"],.seg butto
   box-shadow:var(--neu-inset)!important; color:var(--accent); font-weight:650;
 }
 body[data-theme="neumorphism"] :is(input[type="checkbox"],input[type="range"]) { box-shadow:none;accent-color:var(--accent); }
-body[data-theme="neumorphism"] :is(.anki-mini,.place-choice,.stats-tab,.stat-tab) { background:var(--bg);color:var(--fg); }
+body[data-theme="neumorphism"] :is(.anki-mini,.place-choice,.statistics-nav,.stat-tabs) { background:var(--bg);color:var(--fg); }
 body[data-theme="neumorphism"] :is(button,.button,.field) { transition:transform .16s ease,background-color .16s ease,color .16s ease; }
 body[data-theme="neumorphism"] button:disabled { opacity:.5;cursor:not-allowed; }
 @media(hover:hover) {
@@ -47,4 +43,17 @@ body[data-theme="neumorphism"] button:disabled { opacity:.5;cursor:not-allowed; 
 }
 @media(prefers-reduced-motion:reduce) {
   body[data-theme="neumorphism"] :is(button,.button,.field) { transition:none; }
+}
+
+/* The same inset selection treatment across every tool. */
+body[data-theme="neumorphism"] :is(.statistics-nav button[aria-pressed="true"],.stat-tabs button.active,.place-choice[aria-pressed="true"],.dock .button[aria-expanded="true"]) {
+  background:var(--bg); color:var(--accent); box-shadow:var(--neu-inset);font-weight:650;
+}
+body[data-theme="neumorphism"] :is(.anki-mini,.statistics-nav,.setting-details) { border:1px solid var(--line);border-radius:16px; }
+body[data-theme="neumorphism"] :is(.notice-card,.number-wheel) { background:var(--bg);color:var(--fg); }
+body[data-theme="neumorphism"] .place-choice[aria-pressed="true"] { border-color:var(--accent); }
+body[data-theme="neumorphism"] .field:disabled { opacity:.6;cursor:not-allowed; }
+@media(max-width:600px) {
+  body[data-theme="neumorphism"] #modes { gap:2px; }
+  body[data-theme="neumorphism"] :is(.theme-choice,.dock .button) { min-height:40px; }
 }

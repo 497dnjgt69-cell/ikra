@@ -1,6 +1,5 @@
 import { t, bilingual, localizedText } from "../i18n/bindings.js";
 import { $ } from "../shared/dom.js";
-import { datekey } from "../shared/format.js";
 import { prayerNames as names } from "../domain/prayer-timer.js";
 export function createPrayerView({ store, times }) {
   function locationText() {
@@ -45,6 +44,7 @@ export function createPrayerView({ store, times }) {
   }
   function renderPrayer() {
     $("#cityfetch").disabled = times.loading;
+    $("#geofetch").disabled = times.loading;
     $("#city").value = store.state.prayerLocation;
     $("#method").value = store.state.method;
     localizedText($("#prayerplace"), locationText);
@@ -94,7 +94,7 @@ export function createPrayerView({ store, times }) {
     );
     window.animatePanel($("#prayer-peek"), !!store.state.prayerPeek);
     localizedText($("#peek-location"), () => locationText() +
-      (store.state.prayerDate && store.state.prayerDate !== datekey(Date.now())
+      (store.state.prayerDate && store.state.prayerDate !== times.wall().date
         ? bilingual(" · " + store.state.prayerDate + " kaydı (güncel değil)",
           " · saved times from " + store.state.prayerDate + " (out of date)") : ""));
     let grid = $("#peek-times");

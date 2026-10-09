@@ -35,11 +35,11 @@ export function bindSettings({ store, settings, focus, render, playSound }) {
   $("#soundvolume").oninput = handleAction((e) => {
     settings.setVolume(Number(e.target.value) / 100);
   });
-  $("#soundtest").onclick = handleAction(() => playSound("finish"));
-  document.addEventListener("click", (e) => {
+  $("#soundtest").onclick = handleAction(() => playSound(store.state.theme === "neumorphism" ? "tap" : "finish"));
+  const clickSound = (e) => {
     let b = e.target.closest("button");
-    if (!b || b.disabled || b.id === "soundtest") return;
-    if (b.id === "focus-toggle") playSound("wind");
+    if (!b || b.disabled || b.getAttribute("aria-disabled") === "true" || b.id === "soundtest" || b.closest("#manual-session-form")) return;
+    if (b.id === "focus-toggle") playSound(store.state.theme === "neumorphism" ? "tap" : "wind");
     else if (b.id === "start")
       playSound(
         (
@@ -52,10 +52,12 @@ export function bindSettings({ store, settings, focus, render, playSound }) {
       );
     else if (b.id === "prayerfinish") playSound("finish");
     else playSound("tap");
-  });
-  document.addEventListener("widget-position", (e) => {
+  };
+  document.addEventListener("click", clickSound);
+  const widgetPosition = (e) => {
     settings.setWidget(e.detail);
-  });
+  };
+  document.addEventListener("widget-position", widgetPosition);
   $("#theme").onchange = handleAction((e) => settings.setTheme(e.target.value));
-  return {};
+  return {dispose() { document.removeEventListener("click", clickSound); document.removeEventListener("widget-position", widgetPosition); }};
 }
