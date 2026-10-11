@@ -4,6 +4,7 @@ import { fmt } from "../shared/format.js";
 export function createClockView({ store }) {
   let clockPrev = "";
   function renderClock() {
+    if(store.state.prayerHub){document.title="IKRA · "+(window.ikraLanguage()==='en'?'Peaceful garden':'Huzur bahçesi');return;}
     if(store.state.prayerView){document.title='Namaz · IKRA';$('#prayerelapsed').textContent='';return;}
 
     let value = store.state.prayerView

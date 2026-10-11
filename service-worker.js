@@ -1,4 +1,4 @@
-const CACHE = "ikra-v1.15.0";
+const CACHE = "ikra-v1.16.0";
 
 const CORE = [
   "./",
@@ -18,6 +18,7 @@ const CORE = [
   "./css/neumorphism.css",
   "./css/notifications.css",
   "./css/prayer-focus.css",
+  "./css/prayer-hub.css",
   "./css/release-notes.css",
   "./css/workspace.css",
   "./js/app.js",
@@ -40,6 +41,7 @@ const CORE = [
   "./js/core/default-state.js",
   "./js/core/dock.js",
   "./js/core/focus-streak.js",
+  "./js/core/prayer-garden.js",
   "./js/core/statistics.js",
   "./js/domain/focus-timer.js",
   "./js/domain/prayer-timer.js",
@@ -87,6 +89,7 @@ const CORE = [
   "./js/ui/notifications.js",
   "./js/ui/planner.js",
   "./js/ui/prayer-controls.js",
+  "./js/ui/prayer-hub.js",
   "./js/ui/prayer-layout.js",
   "./js/ui/prayer-picker.js",
   "./js/ui/prayer.js",

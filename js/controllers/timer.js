@@ -2,7 +2,7 @@ import { handleAction } from "../shared/actions.js";
 import { $, $$ } from "../shared/dom.js";
 
 export function bindTimer({ store, focus }) {
-  $("#prayerstart").onclick = () => window.ikraNotify("Coming soon");
+  $("#prayerstart").onclick = handleAction(() => store.update(d => { d.prayerHub = true; }));
   $("#start").onclick = handleAction(() => {
     try {
       focus.start();
@@ -25,9 +25,9 @@ export function bindTimer({ store, focus }) {
     breaks.inert = !open;
     breaks.setAttribute("aria-hidden", String(!open));
   }
-  showBreaks(!store.state.clockView && !store.state.prayerView);
+  showBreaks(!store.state.clockView && !store.state.prayerView && !store.state.prayerHub);
   document.addEventListener("focus-render", () => {
-    showBreaks(!store.state.clockView && !store.state.prayerView);
+    showBreaks(!store.state.clockView && !store.state.prayerView && !store.state.prayerHub);
   });
   $$("[data-mode]").forEach(
     (b) =>

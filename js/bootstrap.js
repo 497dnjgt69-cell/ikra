@@ -1,3 +1,4 @@
+import {createPrayerHub} from "./ui/prayer-hub.js";
 import {createMiniPlayer} from "./ui/mini-player.js";
 import {createPushSettings} from "./ui/push-settings.js";
 import {createAnkiWidget} from "./ui/anki-widget.js";
@@ -29,11 +30,11 @@ export function bootstrap(options) {
   initAnimations(); // ui/animations
   const app = createApplication(options); // services and views
   const workspace = initWorkspace({store:app.store});
-  let dockCustomizer, miniPlayer, pushSettings;
+  let dockCustomizer, miniPlayer, pushSettings, prayerHub;
   const ankiWidget=createAnkiWidget({store:app.store}); // ui/workspace
   const ambient = initAmbientSounds();
   const dispose = app.dispose;
-  app.dispose = () => { miniPlayer?.dispose(); pushSettings?.dispose(); ankiWidget.dispose(); dockCustomizer?.dispose(); workspace.dispose(); ambient.dispose(); dispose(); };
+  app.dispose = () => { prayerHub?.dispose(); miniPlayer?.dispose(); pushSettings?.dispose(); ankiWidget.dispose(); dockCustomizer?.dispose(); workspace.dispose(); ambient.dispose(); dispose(); };
   initFocusRoom({ access: app.access }); // features/focus-room
   initTimePickers({
     getWidgetPositions: () => app.store.state.widgetPositions,
@@ -52,6 +53,7 @@ export function bootstrap(options) {
   const progressButton=document.querySelector('.dock [aria-controls="progress-card"]');
   if(progressButton)progressButton.dataset.dockId='progress';
   dockCustomizer=createDockCustomizer({store:app.store,dock:document.querySelector('.dock')});
+  prayerHub=createPrayerHub(app);
   miniPlayer=createMiniPlayer(app);
   pushSettings=createPushSettings(app);
   initReleaseNotes(); // features/release-notes

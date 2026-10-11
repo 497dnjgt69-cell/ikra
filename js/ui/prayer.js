@@ -76,10 +76,10 @@ export function createPrayerView({ store, times }) {
     });
     $("#prayerstart").classList.remove("hidden");
     $("#prayerstart").textContent = "Namaz";
-    $("#prayerstart").classList.toggle("active", !!store.state.prayerView);
+    $("#prayerstart").classList.toggle("active", !!(store.state.prayerView || store.state.prayerHub));
     $("#prayerstart").setAttribute(
       "aria-pressed",
-      String(!!store.state.prayerView),
+      String(!!(store.state.prayerView || store.state.prayerHub)),
     );
     $("#prayerfinish").classList.toggle("hidden", !store.state.prayerTimer);
     $("#prayerselect").disabled = !!store.state.prayerTimer;

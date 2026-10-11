@@ -274,7 +274,21 @@ for (const width of [1440, 390])
     assert.equal(app.store.state.prayerView,false);
     assert.equal(app.store.state.prayerTimer,null);
     assert.equal($('#prayer-presence'),null);
-    assert.ok($('#completion-notices').textContent.includes('Coming soon'));
+    assert.equal(app.store.state.prayerHub,true);
+    assert.equal($('#prayer-hub').hidden,false);
+    assert.equal($('#prayerstart').getAttribute('aria-pressed'),'true');
+    assert.equal($('#modes').classList.contains('breaks-open'),false);
+    const prayerButton=$('#ph-checks [data-prayer="Sabah"]');
+    const wasChecked=prayerButton.getAttribute('aria-pressed')==='true';
+    prayerButton.click();await flush();
+    assert.equal(prayerButton.getAttribute('aria-pressed'),String(!wasChecked));
+    prayerButton.click();await flush();
+    assert.equal(prayerButton.getAttribute('aria-pressed'),String(wasChecked));
+    $('#ph-prev').click();assert.equal($('#ph-next').disabled,false);
+    $('#ph-today').click();assert.equal($('#ph-next').disabled,true);
+    $('[data-mode="clock"]').click();await flush();
+    assert.equal($('#prayer-hub').hidden,true);
+    $('[data-mode="focus"]').click();await flush();
     assert.equal($('#prayerstart').previousElementSibling.dataset.mode,'clock');
     const historyCount =
       app.store.state.sessions.length + app.store.state.prayers.length;
@@ -354,6 +368,12 @@ for (const width of [1440, 390])
       assert.ok($("#prayer-settings").textContent.includes(lang === "en" ? "Automatic times require internet" : "Otomatik vakitler internet"));
       assert.equal($("#prayer-settings h2").textContent, lang === "en" ? "Location & calculation" : "Konum ve hesaplama");
       assert.equal($("#push-heading").textContent,lang === "en" ? "Notifications" : "Bildirimler");
+      $('#prayerstart').click();await flush();
+      assert.equal($('#prayer-hub').hidden,false);
+      assert.equal($('#prayerstart').getAttribute('aria-pressed'),'true');
+      assert.equal($('#ph-today').textContent,lang==='en'?'Today':'Bugün');
+      assert.equal($('#title').textContent,lang==='en'?'Make room for peace.':'Huzura yer aç.');
+      $('[data-mode="focus"]').click();await flush();
       assert.equal($("#push-enable").disabled,true,"push cannot activate before server configuration");
       assert.equal(document.querySelectorAll("#push-categories input").length,4);
       assert.ok($("#mini-player-open"));

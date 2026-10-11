@@ -40,6 +40,7 @@ export function migrateState(input, now = Date.now()) {
   state.prayerPeek = false;
   // Prayer entry is temporarily unavailable; retain completed records and settings.
   state.prayerView = false;
+  state.prayerHub = false;
   state.prayerTimer = null;
   if (!["light", "dark", "nature", "neumorphism"].includes(state.theme))
     state.theme = state.theme === "rose" ? "light" : "neumorphism";

@@ -44,7 +44,7 @@ export function createTimerView({ store }) {
     document.body.classList.toggle("prayer-active", !!store.state.prayerView);
     document.body.classList.toggle(
       "focus-running",
-      store.state.mode === "focus" &&
+      store.state.mode === "focus" && !store.state.prayerHub &&
         store.state.timer.running &&
         !store.state.prayerView,
     );
@@ -105,6 +105,11 @@ export function createTimerView({ store }) {
       $("#title").textContent = "Rabbine yönel.";
       $("#timerinfo").textContent = "";
       $$("[data-mode]").forEach((b) => b.classList.remove("active"));
+    }
+    if(store.state.prayerHub){
+      $("#overline").textContent="Kendine bir an ayır.";
+      $("#title").textContent="Huzura yer aç.";
+      $$("[data-mode]").forEach(b=>b.classList.remove("active"));
     }
     renderQuote();
   }

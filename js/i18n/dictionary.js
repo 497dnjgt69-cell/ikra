@@ -1,6 +1,13 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Namaz sekmesinde sana ait sakin bir alan.":"A peaceful space of your own in the Prayer tab.",
+      "Huzur bahçen":"Your peaceful garden",
+      "Kaydettiğin namazlarla büyüyen, ara verdiğinde seni bekleyen bir bahçe.":"A garden that grows with your prayer records and waits for you when you take a break.",
+      "Her şey bir arada":"Everything together",
+      "Beş vakit takibi, sıradaki vakit ve son 7 günün analitikleri. Paneller aşağıdan yumuşakça açılır.":"Five daily prayers, your next prayer time and a seven-day overview. Panels gently slide into view.",
+      "Kendine bir an ayır.":"A moment for yourself.",
+      "Huzura yer aç.":"Make room for peace.",
       "Odağın yanında.":"Focus by your side.",
       "Masaüstü için sade bir mini pencere.":"A minimal mini window for your desktop.",
       "Mini odak penceresi":"Mini focus window",
