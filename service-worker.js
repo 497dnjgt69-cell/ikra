@@ -1,4 +1,4 @@
-const CACHE = "ikra-v1.14.0";
+const CACHE = "ikra-v1.15.0";
 
 const CORE = [
   "./",
@@ -12,9 +12,11 @@ const CORE = [
   "./css/ambient.css",
   "./css/base.css",
   "./css/glass.css",
+  "./css/mini-player.css",
   "./css/mobile.css",
   "./css/nature.css",
   "./css/neumorphism.css",
+  "./css/notifications.css",
   "./css/prayer-focus.css",
   "./css/release-notes.css",
   "./css/workspace.css",
@@ -22,6 +24,7 @@ const CORE = [
   "./js/bootstrap.js",
   "./js/config/features.js",
   "./js/config/places.js",
+  "./js/config/push.js",
   "./js/controllers/backup.js",
   "./js/controllers/manual-session.js",
   "./js/controllers/planner.js",
@@ -58,6 +61,7 @@ const CORE = [
   "./js/platform/anki-connect.js",
   "./js/platform/commerce.js",
   "./js/platform/prayer-api.js",
+  "./js/platform/push-client.js",
   "./js/platform/register-service-worker.js",
   "./js/services/access.js",
   "./js/services/ambient-audio.js",
@@ -78,6 +82,7 @@ const CORE = [
   "./js/ui/anki.js",
   "./js/ui/clock.js",
   "./js/ui/dock-customizer.js",
+  "./js/ui/mini-player.js",
   "./js/ui/mobile-widgets.js",
   "./js/ui/notifications.js",
   "./js/ui/planner.js",
@@ -86,6 +91,7 @@ const CORE = [
   "./js/ui/prayer-picker.js",
   "./js/ui/prayer.js",
   "./js/ui/progress-widget.js",
+  "./js/ui/push-settings.js",
   "./js/ui/session-layout.js",
   "./js/ui/statistics.js",
   "./js/ui/time-pickers.js",
@@ -149,4 +155,26 @@ self.addEventListener("fetch", (event) => {
         return Response.error();
       }),
   );
+});
+
+self.addEventListener('push', event => {
+  let payload={};try{payload=event.data?.json()||{};}catch{}
+  const target=['focus','prayer','home'].includes(payload.target)?payload.target:'home';
+  event.waitUntil(self.registration.showNotification(String(payload.title||'IKRA').slice(0,100),{
+    body:String(payload.body||'IKRA’dan yeni bir bildirim.').slice(0,300),
+    icon:new URL('./ikra-icon-v2-192.png',self.registration.scope).href,
+    badge:new URL('./ikra-icon-v2-192.png',self.registration.scope).href,
+    tag:String(payload.tag||'ikra-message').slice(0,180),
+    data:{target},
+  }));
+});
+self.addEventListener('notificationclick',event=>{
+  event.notification.close();
+  const target=['focus','prayer','home'].includes(event.notification.data?.target)?event.notification.data.target:'home';
+  const url=new URL('./',self.registration.scope);url.searchParams.set('notification',target);
+  event.waitUntil(self.clients.matchAll({type:'window',includeUncontrolled:true}).then(async clients=>{
+    const existing=clients.find(client=>{const u=new URL(client.url);return u.origin===url.origin&&u.pathname.startsWith(new URL(self.registration.scope).pathname);});
+    if(existing){await existing.focus();existing.postMessage({type:'ikra-notification',target});}
+    else await self.clients.openWindow(url.href);
+  }));
 });

@@ -1,0 +1,18 @@
+import {createServer} from 'node:http';
+import {mkdirSync} from 'node:fs';
+import {dirname,resolve} from 'node:path';
+import webpush from 'web-push';
+import {createNotificationService} from './service.js';
+import {createHandler} from './http.js';
+const {VAPID_PUBLIC_KEY,VAPID_PRIVATE_KEY,VAPID_SUBJECT,ADMIN_TOKEN,APP_ORIGIN}=process.env;
+if(!VAPID_PUBLIC_KEY||!VAPID_PRIVATE_KEY||!VAPID_SUBJECT||!APP_ORIGIN||!ADMIN_TOKEN||ADMIN_TOKEN.length<32)throw Error('Set APP_ORIGIN, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT and ADMIN_TOKEN (32+ chars).');
+if(new URL(APP_ORIGIN).origin!==APP_ORIGIN)throw Error('APP_ORIGIN must contain only the origin, without a trailing slash or path.');
+webpush.setVapidDetails(VAPID_SUBJECT,VAPID_PUBLIC_KEY,VAPID_PRIVATE_KEY);
+const filename=resolve(process.env.DB_PATH||'data/notifications.sqlite');mkdirSync(dirname(filename),{recursive:true});
+const service=createNotificationService({filename,send:(subscription,payload,TTL)=>webpush.sendNotification(subscription,JSON.stringify(payload),{TTL,urgency:'normal',timeout:10000})});
+const server=createServer(createHandler({service,origin:APP_ORIGIN,publicKey:VAPID_PUBLIC_KEY,adminToken:ADMIN_TOKEN}));
+server.requestTimeout=15000;server.headersTimeout=10000;
+const run=()=>service.tick().catch(()=>console.error('Notification scheduler failed; retrying.'));
+const interval=setInterval(run,20000);run();
+server.listen(Number(process.env.PORT||8787),'0.0.0.0',()=>console.log('IKRA notification service ready.'));
+for(const signal of ['SIGTERM','SIGINT'])process.once(signal,()=>{clearInterval(interval);server.close();setTimeout(()=>process.exit(0),12000).unref();});

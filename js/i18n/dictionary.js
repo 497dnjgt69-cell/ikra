@@ -1,6 +1,12 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Odağın yanında.":"Focus by your side.",
+      "Masaüstü için sade bir mini pencere.":"A minimal mini window for your desktop.",
+      "Mini odak penceresi":"Mini focus window",
+      "Sayacını ayrı bir pencerede izle, başlat ve duraklat.":"View, start and pause your timer in a separate window.",
+      "Bildirim tercihleri":"Notification preferences",
+      "Namaz vakti, odak hatırlatması ve duyurular için tercihlerini seç. Gönderim, bildirim servisi etkinleştirildiğinde başlayacak.":"Choose your prayer, focus reminder and announcement preferences. Delivery will start when the notification service is activated.",
       "Daha akıcı, daha sessiz.":"Smoother and quieter.",
       "Gereksiz yeniden çizimler azaltıldı.":"Fewer unnecessary interface updates.",
       "Doğa artık sessiz":"Nature is now silent",

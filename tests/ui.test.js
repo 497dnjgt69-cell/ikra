@@ -353,6 +353,10 @@ for (const width of [1440, 390])
       assert.ok($("#panel-history").textContent.includes(lang === "en" ? "Prayer time is not included" : "Namaz süreleri"));
       assert.ok($("#prayer-settings").textContent.includes(lang === "en" ? "Automatic times require internet" : "Otomatik vakitler internet"));
       assert.equal($("#prayer-settings h2").textContent, lang === "en" ? "Location & calculation" : "Konum ve hesaplama");
+      assert.equal($("#push-heading").textContent,lang === "en" ? "Notifications" : "Bildirimler");
+      assert.equal($("#push-enable").disabled,true,"push cannot activate before server configuration");
+      assert.equal(document.querySelectorAll("#push-categories input").length,4);
+      assert.ok($("#mini-player-open"));
       assert.equal($(".number-wheel").getAttribute("aria-label"), lang === "en" ? "Focus duration in minutes" : "Odak dakika");
       assert.equal($("#plan-progress").getAttribute("aria-label"), lang === "en" ? "Task completion rate" : "Tamamlanan görev oranı");
       assert.equal($("#tasklist .task-name").textContent, "Light");

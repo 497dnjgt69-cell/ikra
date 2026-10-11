@@ -1,0 +1,25 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {JSDOM} from 'jsdom';
+import {createMiniPlayer} from '../js/ui/mini-player.js';
+import {createStore} from '../js/services/store.js';
+import {createFocusTimer} from '../js/services/focus-timer.js';
+for(const pip of [false,true])test(`mini window shares timer, preserves state on close and cleans up (${pip?'PiP':'popup'})`,async t=>{
+  const previous=[globalThis.window,globalThis.document];
+  const dom=new JSDOM('<div class="controls"></div>',{url:'https://ikra.test/ikra/'}),mini=new JSDOM('',{url:'https://ikra.test/ikra/'});
+  globalThis.window=dom.window;globalThis.document=dom.window.document;let view;
+  t.after(()=>{view?.dispose();dom.window.close();mini.window.close();[globalThis.window,globalThis.document]=previous;});
+  window.ikraLanguage=()=> 'tr';window.ikraNotify=message=>assert.fail(message);window.focus=()=>{};
+  let opens=0,closed=false;
+  Object.defineProperty(mini.window,'closed',{get:()=>closed});mini.window.focus=()=>{};
+  const miniClose=mini.window.close.bind(mini.window);mini.window.close=()=>{if(closed)return;closed=true;mini.window.dispatchEvent(new mini.window.Event('pagehide'));};
+  t.after(miniClose);
+  if(pip)window.documentPictureInPicture={requestWindow:async()=>{opens++;return mini.window;}};else window.open=()=>{opens++;return mini.window;};
+  const store=createStore({storage:{getItem:()=>null,setItem(){}}});store.update(d=>{d.subjects=['Matematik'];d.subject='Matematik';d.clockView=true;});
+  const focus=createFocusTimer({store,access:{require(){}}});view=createMiniPlayer({store,focus});
+  await document.querySelector('#mini-player-open').onclick();await document.querySelector('#mini-player-open').onclick();assert.equal(opens,1);
+  assert.equal(mini.window.document.querySelector('#mini-subject').textContent,'Matematik');
+  mini.window.document.querySelector('#mini-start').click();assert.equal(store.state.timer.running,true);assert.equal(store.state.clockView,false);
+  const endAt=store.state.timer.endAt;store.update(d=>d.theme='dark');assert.equal(mini.window.document.body.dataset.theme,'dark');
+  mini.window.close();assert.equal(store.state.timer.running,true);assert.equal(store.state.timer.endAt,endAt);assert.equal(document.querySelector('#mini-player-open').getAttribute('aria-pressed'),'false');
+});
