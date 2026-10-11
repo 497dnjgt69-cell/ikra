@@ -1,6 +1,13 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Daha akıcı, daha sessiz.":"Smoother and quieter.",
+      "Gereksiz yeniden çizimler azaltıldı.":"Fewer unnecessary interface updates.",
+      "Doğa artık sessiz":"Nature is now silent",
+      "Yeşil temada arayüz ses efektleri kapalı.":"Interface sound effects are disabled in the Nature theme.",
+      "Daha hafif geçişler":"Lighter transitions",
+      "Ses üretimi arka plana taşındı; panel kapanışları sadeleştirildi.":"Sound generation moves to the background; panel closing animations are simpler.",
+      "Doğa temasında arayüz sesleri kapalıdır.":"Interface sounds are disabled in the Nature theme.",
       "Her temanın kendi sesi.":"Every theme has its own sound.",
       "Tıklama, başlatma, duraklatma ve bitiş için ayrı sesler.":"Distinct sounds for clicks, start, pause and completion.",
       "Uzun ve yumuşak hışırtı":"A longer, softer rustle",

@@ -80,7 +80,12 @@ export function createAnkiView({store, api}) {
       localizedText(status,()=>bilingual(...copy));
     } finally {busy=false; sync.disabled=false; root.removeAttribute('aria-busy');}
   };
+  let lastRenderKey;
   function render() {
+    const d=store.state;
+    const key=JSON.stringify([d.anki,d.ankiGoal,d.statsAnchor,d.statsView,new Date().toDateString(),window.ikraLanguage()]);
+    if(key===lastRenderKey)return;
+    lastRenderKey=key;
     const snapshot=store.state.anki;
     goalSelect.value=String(store.state.ankiGoal||25);
     const game=ankiJourney(snapshot,store.state.ankiGoal);

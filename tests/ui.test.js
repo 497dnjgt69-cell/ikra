@@ -252,7 +252,11 @@ for (const width of [1440, 390])
     await flush();
     if (!app.store.state.sessions.some((s) => s.manual && s.seconds === 3600))
       throw Error("manual record");
+    assert.ok($("#sound-preview-kind"),"sound preview survives settings layout");
+    assert.ok($("#theme-sound-note"));
+    const statsNode=$('#focus-streak').firstChild;
     $('[data-mode="clock"]').click();await flush();
+    assert.equal($('#focus-streak').firstChild,statsNode,'mode switch must not rebuild unchanged statistics');
     assert.equal($('#modes').classList.contains('breaks-open'),false);
     $('[data-mode="focus"]').click();await flush();
     assert.equal($('#modes').classList.contains('breaks-open'),true);

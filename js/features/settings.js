@@ -73,7 +73,7 @@ export default function initialize() {
     value.setAttribute("for", "soundvolume");
     range.setAttribute("aria-label", "Ses seviyesi");
     volume.append(range, value, test);
-    soundSection.append(volume);
+    soundSection.append(volume, $("#sound-preview-kind").closest("label"), $("#theme-sound-note"));
     const advanced = document.createElement("details");
     advanced.className = "setting-details";
     let summary = document.createElement("summary");
@@ -123,7 +123,7 @@ export default function initialize() {
     function sync() {
       value.textContent = range.value + "%";
       range.disabled = !sound.checked;
-      test.disabled = !sound.checked;
+      test.disabled = !sound.checked || document.body.dataset.theme === "nature" || Number(range.value) === 0;
       volume.classList.toggle("disabled-volume", !sound.checked);
       let n = +$("#longevery").value;
       summaryValue.textContent = n ? "Her " + n + " turda" : "Elle";

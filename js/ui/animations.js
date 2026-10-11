@@ -21,7 +21,7 @@ export default function initialize() {
             { opacity: 0, transform: "translateY(6px)" },
           ];
       const animation = el.animate(frames, {
-          duration: reduced ? 0 : 190,
+          duration: reduced ? 0 : 130,
           easing: "cubic-bezier(.22,1,.36,1)",
         }),
         state = { show, animation };
@@ -37,9 +37,9 @@ export default function initialize() {
     window.closePanel = async (dialog) => {
       if (!dialog.open || dialog.dataset.closing) return;
       dialog.dataset.closing = "true";
-      dialog.classList.add("is-closing");
       const shell = dialog.querySelector(".dialog-shell");
       const opacity = getComputedStyle(shell).opacity;
+      dialog.classList.add("is-closing");
       shell.getAnimations().forEach((a) => a.cancel());
       await shell
         .animate(
@@ -50,7 +50,7 @@ export default function initialize() {
           {
             duration: matchMedia("(prefers-reduced-motion: reduce)").matches
               ? 0
-              : 190,
+              : 130,
             easing: "cubic-bezier(.4,0,.8,.4)",
             fill: "forwards",
           },

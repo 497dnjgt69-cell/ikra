@@ -998,13 +998,13 @@ button:active {
   animation: dialog-enter 0.22s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .glass-dialog.is-closing .dialog-shell {
-  animation: none;
+  animation:none;
 }
 .glass-dialog::backdrop {
   animation: backdrop-enter 0.22s ease;
 }
 .glass-dialog.is-closing::backdrop {
-  animation: backdrop-exit 0.19s ease forwards;
+  animation: backdrop-exit 0.13s ease forwards;
 }
 @keyframes dialog-enter {
   from {

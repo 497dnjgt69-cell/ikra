@@ -38,6 +38,13 @@ export function bindSettings({ store, settings, focus, render, playSound }) {
     playSound.syncSettings();
   });
   $("#soundtest").onclick = handleAction(() => playSound($("#sound-preview-kind").value));
+  const updateSoundPreview=()=>{
+    const silent=store.state.theme==='nature';
+    $("#theme-sound-note").hidden=!silent;
+    $("#soundtest").disabled=silent||!store.state.sound||store.state.soundVolume<=0;
+    $("#sound-preview-kind").disabled=silent;
+  };
+  document.addEventListener('focus-render',updateSoundPreview);updateSoundPreview();
   const clickSound = (e) => {
     let b = e.target.closest("button");
     if (!b || b.disabled || b.getAttribute("aria-disabled") === "true" || b.id === "soundtest" || b.closest("#manual-session-form")) return;
@@ -60,6 +67,6 @@ export function bindSettings({ store, settings, focus, render, playSound }) {
     settings.setWidget(e.detail);
   };
   document.addEventListener("widget-position", widgetPosition);
-  $("#theme").onchange = handleAction((e) => settings.setTheme(e.target.value));
-  return {dispose() { document.removeEventListener("click", clickSound); document.removeEventListener("widget-position", widgetPosition); }};
+  $("#theme").onchange = handleAction((e) => {settings.setTheme(e.target.value);playSound.syncSettings();});
+  return {dispose() { document.removeEventListener("focus-render",updateSoundPreview); document.removeEventListener("click", clickSound); document.removeEventListener("widget-position", widgetPosition); }};
 }

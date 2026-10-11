@@ -71,6 +71,7 @@ export default function initialize() {
         return;
       }
       if (root.nodeType !== 1) return;
+      if(root.matches("script,style,[data-user-text],.digit,.colon,.wheel-item"))return;
       element(root);
       const walker = document.createTreeWalker(
         root,

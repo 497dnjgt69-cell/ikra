@@ -59,7 +59,13 @@ export function createStatisticsView({ store, planner, records, access }) {
       : bilingual("Bugünün serisi için 15+ dakikalık bir Focus oturumu tamamla. Dünkü seri gün sonuna kadar korunur.", "Complete a 15+ minute Focus session to earn today. Yesterday’s streak stays active until the end of today."));
     root.append(heading, cards, status, rule);
   }
+  let lastRenderKey;
   function renderStats() {
+    const d=store.state;
+    const key=JSON.stringify([d.sessions,d.prayers,d.prayerChecks,d.subjectColors,d.subjects,d.archivedSubjects,
+      d.statsView,d.statsAnchor,d.view,historyLimit,datekey(Date.now()),window.ikraLanguage(),access.plan]);
+    if(key===lastRenderKey)return;
+    lastRenderKey=key;
     let sums = {},
       today = datekey(Date.now());
     for (let s of store.state.sessions) {
