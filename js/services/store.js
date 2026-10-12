@@ -1,3 +1,4 @@
+import { normalizeMemos } from "../core/memo.js";
 import { normalizeDock } from "../core/dock.js";
 import { normalizeAnki, normalizeAnkiGoal } from "../core/anki.js";
 import { fresh } from "../core/default-state.js";
@@ -41,6 +42,8 @@ export function migrateState(input, now = Date.now()) {
   // Prayer entry is temporarily unavailable; retain completed records and settings.
   state.prayerView = false;
   state.prayerHub = false;
+  state.memoView = false;
+  state.memos = normalizeMemos(state.memos);
   state.prayerTimer = null;
   if (!["light", "dark", "nature", "neumorphism"].includes(state.theme))
     state.theme = state.theme === "rose" ? "light" : "neumorphism";

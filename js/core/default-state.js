@@ -39,5 +39,7 @@ export const fresh = () => ({
   taskFilter: "active",
   prayerView: false,
   prayerHub: false,
+  memoView: false,
+  memos: [],
   prayerDuration: 10,
 });
