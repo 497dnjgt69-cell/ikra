@@ -2,7 +2,7 @@ import { handleAction } from "../shared/actions.js";
 import { $, $$ } from "../shared/dom.js";
 
 export function bindTimer({ store, focus }) {
-  $("#prayerstart").onclick = handleAction(() => store.update(d => { d.prayerHub = true; }));
+  $("#prayerstart").onclick = handleAction(() => store.update(d => { d.memoView = false; d.prayerHub = true; }));
   $("#start").onclick = handleAction(() => {
     try {
       focus.start();
@@ -25,9 +25,9 @@ export function bindTimer({ store, focus }) {
     breaks.inert = !open;
     breaks.setAttribute("aria-hidden", String(!open));
   }
-  showBreaks(!store.state.clockView && !store.state.prayerView && !store.state.prayerHub);
+  showBreaks(!store.state.clockView && !store.state.prayerView && !store.state.prayerHub && !store.state.memoView);
   document.addEventListener("focus-render", () => {
-    showBreaks(!store.state.clockView && !store.state.prayerView && !store.state.prayerHub);
+    showBreaks(!store.state.clockView && !store.state.prayerView && !store.state.prayerHub && !store.state.memoView);
   });
   $$("[data-mode]").forEach(
     (b) =>

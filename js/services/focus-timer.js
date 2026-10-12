@@ -74,11 +74,12 @@ export function createFocusTimer({
       settle();
       store.update((d) => {
         d.prayerHub = false;
+        d.memoView = false;
         if (mode === "clock") {
           d.clockView = true;
           return;
         }
-        const returning = (d.clockView || store.state.prayerHub) && d.mode === mode;
+        const returning = (d.clockView || store.state.prayerHub || store.state.memoView) && d.mode === mode;
         d.clockView = false;
         if (returning) return;
         creditFocus(d, now());
