@@ -46,9 +46,11 @@ export function createMemo({store}) {
   const toolbar=el('div',undefined,'memo-actions');
   for(const [i,tr,en] of [[0,'Oku','Read'],[1,'Az gizle','Hide some'],[2,'Çok gizle','Hide more'],[3,'Tam gizle','Hide all']]){const x=btn(b(tr,en),()=>{stage=i;revealed=false;render();});x.setAttribute('aria-pressed',String(stage===i));toolbar.append(x);}root.append(toolbar);
   const toggle=btn(b('Biriktirerek çalış','Cumulative practice'),()=>{cumulative=!cumulative;revealed=false;render();});toggle.setAttribute('aria-pressed',String(cumulative));root.append(toggle);
-  const paper=el('div',undefined,'memo-paper');paper.setAttribute('aria-label',b('Ezber metni','Practice text'));
+  const paper=el('div',undefined,'memo-paper');paper.setAttribute('aria-label',b('Ezber metni','Practice text'));paper.tabIndex=0;paper.setAttribute('role','region');
   const visible=cumulative?lines.slice(0,line+1):[lines[line]];
   for(const text of visible){const row=el('p');row.dir='auto';text.split(/(\s+)/).forEach((word,i)=>{if(!word.trim()){row.append(document.createTextNode(word));return;}if(stage&&!revealed&&hiddenWord(i/2,stage)){const chip=btn('•••',()=>{chip.textContent=word;chip.classList.add('memo-peek');},'memo-mask');chip.setAttribute('aria-label',b('Kelimeyi göster','Reveal word'));row.append(chip);}else row.append(document.createTextNode(word));});paper.append(row);}root.append(paper);
+  // Scroll only the text panel; never move the page or its Next button.
+  if(cumulative)paper.scrollTop=paper.scrollHeight;
   const actions=el('div',undefined,'memo-actions memo-navigation');const prev=btn(b('← Önceki','← Previous'),()=>{line--;revealed=false;render();});prev.disabled=line===0;actions.append(prev,el('span',`${line+1} / ${lines.length}`,'memo-muted'),btn(revealed?b('Yeniden gizle','Hide again'):b('Kontrol et','Check text'),()=>{revealed=!revealed;render();}),btn(line===lines.length-1?b('Turu tamamla ✓','Finish round ✓'):b('Sonraki →','Next →'),()=>{if(line===lines.length-1)screen='done';else line++;revealed=false;render();},'button primary'));root.append(actions,el('p',b('Önce ezberinden söyle. Takıldığında gizli kelimeye dokun.','Recall aloud first. Tap a hidden word when you need a hint.'),'memo-muted'));
  }
  function editor(){
