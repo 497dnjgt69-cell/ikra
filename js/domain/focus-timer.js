@@ -1,4 +1,12 @@
 import { newId } from "../shared/format.js";
+export const isStopwatch = (state) => state.mode === "focus" && state.focusStyle === "stopwatch";
+export function timerSeconds(state, now) {
+  const t = state.timer;
+  if (!t.running) return t.remaining;
+  return isStopwatch(state)
+    ? (t.elapsedBase || 0) + Math.max(0, (now - t.elapsedStartedAt) / 1000)
+    : Math.max(0, (t.endAt - now) / 1000);
+}
 // State transitions without DOM, storage or network: seconds are credited once, only up to the deadline.
 export function creditFocus(state, now, complete = false) {
   const t = state.timer;
@@ -24,7 +32,7 @@ export function resetFocus(state, now) {
   creditFocus(state, now);
   state.timer = {
     running: false,
-    remaining: state.mode === "clock" ? 0 : state.durations[state.mode] * 60,
+    remaining: state.mode === "clock" || isStopwatch(state) ? 0 : state.durations[state.mode] * 60,
     endAt: null,
     startedAt: null,
     credited: 0,
@@ -48,13 +56,15 @@ export function settleFocus(state, now) {
   } else state.mode = "focus";
   state.timer = {
     running: state.auto,
-    remaining: state.durations[state.mode] * 60,
+    remaining: isStopwatch(state) ? 0 : state.durations[state.mode] * 60,
     endAt: null,
     startedAt: null,
     credited: 0,
   };
   if (state.auto) {
-    state.timer.endAt = now + state.timer.remaining * 1000;
+    state.timer.endAt = isStopwatch(state) ? null : now + state.timer.remaining * 1000;
+    state.timer.elapsedBase = 0;
+    state.timer.elapsedStartedAt = now;
     state.timer.startedAt = now;
   }
   return {

@@ -1,4 +1,5 @@
 import { $, $$ } from "../shared/dom.js";
+import { isStopwatch } from "../domain/focus-timer.js";
 import { datekey } from "../shared/format.js";
 
 export function createTimerView({ store }) {
@@ -40,7 +41,7 @@ export function createTimerView({ store }) {
     const activeRunning = store.state.prayerView
       ? !!store.state.prayerTimer?.running
       : store.state.timer.running;
-    $("#prayermin").value = store.state.prayerDuration;
+    if (document.activeElement !== $("#prayermin")) $("#prayermin").value = store.state.prayerDuration;
     document.body.classList.toggle("prayer-active", !!store.state.prayerView);
     document.body.classList.toggle(
       "focus-running",
@@ -52,9 +53,9 @@ export function createTimerView({ store }) {
     $("#theme").value = store.state.theme;
 
     for (let k of ["focus", "break", "long"])
-      $("#" + k + "min").value = store.state.durations[k];
+      if (document.activeElement !== $("#" + k + "min")) $("#" + k + "min").value = store.state.durations[k];
     $("#autonext").checked = !!store.state.auto;
-    $("#longevery").value = store.state.longEvery;
+    if (document.activeElement !== $("#longevery")) $("#longevery").value = store.state.longEvery;
     $("#soundenabled").checked = !!store.state.sound;
     $("#soundvolume").value = Math.round(store.state.soundVolume * 100);
     if (!$("#manual-subject").value)
@@ -116,6 +117,13 @@ export function createTimerView({ store }) {
       $("#title").textContent="Huzura yer aç.";
       $$("[data-mode]").forEach(b=>b.classList.remove("active"));
     }
+    const showStyle = store.state.mode === "focus" && !store.state.clockView &&
+      !store.state.prayerView && !store.state.prayerHub && !store.state.memoView;
+    $("#focus-style").hidden = !showStyle;
+    $$("[data-focus-style]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.focusStyle === store.state.focusStyle)));
+    $("#finish-stopwatch")?.classList.toggle("hidden", !showStyle || !isStopwatch(store.state));
+    if (isStopwatch(store.state)) $("#skip").classList.add("hidden");
+    if (showStyle && isStopwatch(store.state)) $("#overline").textContent = "Kendi ritminde çalış";
     renderQuote();
   }
   return { render };

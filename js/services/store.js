@@ -24,6 +24,7 @@ export function migrateState(input, now = Date.now()) {
     state.clockView = true;
     state.timer = { ...fresh().timer, remaining: state.durations.focus * 60 };
   }
+  state.focusStyle = state.focusStyle === "stopwatch" ? "stopwatch" : "countdown";
   state.clockView = !!state.clockView;
   state.subjectColors ||= {};
   for (const key of ["tasks", "sessions", "prayers"]) {

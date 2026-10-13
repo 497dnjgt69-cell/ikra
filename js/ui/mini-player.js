@@ -1,4 +1,5 @@
 import {bilingual} from '../i18n/bindings.js';
+import {isStopwatch, timerSeconds} from '../domain/focus-timer.js';
 import {fmt} from '../shared/format.js';
 export function createMiniPlayer({store,focus}) {
   let popup=null,opening=false,tick=null;
@@ -10,15 +11,16 @@ export function createMiniPlayer({store,focus}) {
   function render(){
     labels();if(!popup||popup.closed)return;
     const doc=popup.document,d=store.state,t=d.timer;
-    const seconds=t.running&&Number.isFinite(t.endAt)?Math.max(0,(t.endAt-Date.now())/1000):t.remaining;
+    const seconds=timerSeconds(d, Date.now());
     doc.body.dataset.theme=d.theme;doc.documentElement.lang=window.ikraLanguage();
-    doc.getElementById('mini-mode').textContent=d.mode==='focus'?bilingual('ODAK','FOCUS'):bilingual('MOLA','BREAK');
+    doc.getElementById('mini-mode').textContent=isStopwatch(d)?bilingual('KRONOMETRE','STOPWATCH'):d.mode==='focus'?bilingual('ODAK','FOCUS'):bilingual('MOLA','BREAK');
     doc.getElementById('mini-subject').textContent=d.mode==='focus'?(d.subject||bilingual('Kendine bir an ayır.','A moment for yourself.')):bilingual('Biraz nefes al.','Take a breath.');
     doc.getElementById('mini-time').textContent=fmt(seconds);doc.title=fmt(seconds)+' · IKRA';
     const start=doc.getElementById('mini-start');start.textContent=t.running?bilingual('Duraklat','Pause'):bilingual('Başlat','Start');
     doc.getElementById('mini-reset').textContent=bilingual('Sıfırla','Reset');
     doc.getElementById('mini-back').textContent=bilingual('Uygulamaya dön ↗','Back to app ↗');
     doc.getElementById('mini-hint').textContent=window.documentPictureInPicture?'':bilingual('Bu tarayıcıda pencere hep üstte kalmayabilir.','This browser may not keep the window on top.');
+    doc.getElementById('mini-progress').hidden=isStopwatch(d);
     doc.getElementById('mini-progress').value=1-Math.min(1,seconds/(d.durations[d.mode]*60));
   }
   const act=fn=>()=>{try{fn();render();}catch(e){popup.document.getElementById('mini-status').textContent=e.message;}};

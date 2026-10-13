@@ -1,6 +1,23 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Çalışman, kendi ritminde.": "Study at your own pace.",
+      "Odak, Memo ve günlük kullanım için küçük kolaylıklar.": "Small improvements for Focus, Memo and everyday use.",
+      "Kronometre ile serbest odak": "Open-ended focus with Stopwatch",
+      "Geri sayım veya kronometre seç; süresiz çalış, bitirince kaydet.": "Choose Countdown or Stopwatch; study without a limit and save when finished.",
+      "Memo ile ezber ve tekrar": "Memorize and review with Memo",
+      "Metinlerini ezberle, kategorilere ayır ve tekrarlarını takip et.": "Memorize your texts, organize by category and keep track of reviews.",
+      "Kontroller elinin altında": "Controls within reach",
+      "Sabit alt menü, ortalanmış sayaç, elle süre girişi ve oklar. Kartları − ile küçült.": "A fixed dock, centered timer, typed durations and arrow controls. Minimize cards with −.",
+      "Odak modu": "Focus method",
+      "Geri sayım": "Countdown",
+      "Kronometre": "Stopwatch",
+      "Bitir ve kaydet": "Finish & save",
+      "Kendi ritminde çalış": "Study at your own pace",
+      "Artır": "Increase",
+      "Azalt": "Decrease",
+      "Küçült": "Minimize",
+
       "Namaz sekmesinde sana ait sakin bir alan.":"A peaceful space of your own in the Prayer tab.",
       "Huzur bahçen":"Your peaceful garden",
       "Kaydettiğin namazlarla büyüyen, ara verdiğinde seni bekleyen bir bahçe.":"A garden that grows with your prayer records and waits for you when you take a break.",

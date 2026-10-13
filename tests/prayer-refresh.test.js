@@ -31,7 +31,7 @@ test('midnight promotes prefetched times even offline and does not overwrite man
 });
 test('failed initial selection retries after backoff and deduplicates tomorrow requests',async()=>{
  let fail=true;
- const f=setup({},async()=>{if(fail)throw Error('offline');return {times:table,timezone:'America/Toronto'};});
+ const f=setup({prayerTimeZone:'America/Toronto'},async()=>{if(fail)throw Error('offline');return {times:table,timezone:'America/Toronto'};});
  await f.times.fetchForSource({type:'address',address:'Toronto'});
  await f.times.refresh();assert.equal(f.calls.length,1);
  fail=false;f.advance(300001);await f.times.refresh();assert.equal(f.store.state.prayerSource.address,'Toronto');

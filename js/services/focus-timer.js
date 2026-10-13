@@ -1,4 +1,4 @@
-import { creditFocus, resetFocus, settleFocus } from "../domain/focus-timer.js";
+import { creditFocus, resetFocus, settleFocus, isStopwatch, timerSeconds } from "../domain/focus-timer.js";
 import { FEATURES } from "../config/features.js";
 export function createFocusTimer({
   store,
@@ -9,10 +9,10 @@ export function createFocusTimer({
   function settle() {
     if (!store.state.timer.running) return;
     const time = now(),
-      finished = time >= store.state.timer.endAt;
+      finished = !isStopwatch(store.state) && time >= store.state.timer.endAt;
     if (!finished) {
       store.previewTimer("timer", (timer) => {
-        timer.remaining = Math.max(0, (timer.endAt - time) / 1000);
+        timer.remaining = timerSeconds(store.state, time);
       });
       return;
     }
@@ -27,7 +27,7 @@ export function createFocusTimer({
     if (!store.state.timer.running) return;
     store.update((d) => {
       creditFocus(d, now());
-      d.timer.remaining = Math.max(0, (d.timer.endAt - now()) / 1000);
+      d.timer.remaining = timerSeconds(d, now());
       Object.assign(d.timer, {
         running: false,
         endAt: null,
@@ -46,13 +46,15 @@ export function createFocusTimer({
     store.update((d) => {
       const time = now(),
         t = d.timer;
-      if (t.remaining <= 0) {
+      if (!isStopwatch(d) && t.remaining <= 0) {
         t.remaining = d.durations[d.mode] * 60;
         delete t.focusSessionId;
       }
       Object.assign(t, {
         running: true,
-        endAt: time + t.remaining * 1000,
+        endAt: isStopwatch(d) ? null : time + t.remaining * 1000,
+        elapsedBase: t.remaining,
+        elapsedStartedAt: time,
         startedAt: time,
         credited: 0,
       });
@@ -61,6 +63,26 @@ export function createFocusTimer({
   return Object.freeze({
     start,
     pause,
+    setStyle(style) {
+      access.require(FEATURES.TIMER);
+      if (!["countdown", "stopwatch"].includes(style) || style === store.state.focusStyle) return;
+      pause();
+      store.update(d => {
+        d.focusStyle = style;
+        if (d.mode === "focus") resetFocus(d, now());
+      });
+    },
+    finish() {
+      access.require(FEATURES.TIMER);
+      if (!isStopwatch(store.state)) return;
+      pause();
+      store.update(d => {
+        const id = d.timer.focusSessionId;
+        const last = id && d.sessions.findLast(s => s.focusSessionId === id);
+        if (last) { last.complete = true; d.round++; }
+        resetFocus(d, now());
+      });
+    },
     settle,
     reset() {
       store.update((d) => resetFocus(d, now()));
@@ -89,6 +111,7 @@ export function createFocusTimer({
       });
     },
     skip() {
+      if (isStopwatch(store.state)) return;
       access.require(FEATURES.TIMER);
       store.update((d) => {
         creditFocus(d, now());
@@ -116,7 +139,7 @@ export function createFocusTimer({
       pause();
       store.update((d) => {
         d.durations[mode] = minutes;
-        if (d.mode === mode) {
+        if (d.mode === mode && !isStopwatch(d)) {
           d.timer.remaining = minutes * 60;
           delete d.timer.focusSessionId;
         }

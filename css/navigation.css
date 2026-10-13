@@ -67,3 +67,29 @@ body.memo-active #prayerelapsed {
   .header::after { content: ""; flex-basis: 100%; order: 2; }
   .header { row-gap: 8px; }
 }
+
+/* Focus method and direct duration controls. */
+#focus-style { display:flex; justify-content:center; gap:4px; margin:12px auto 20px; padding:4px; border:1px solid var(--line); border-radius:16px; width:fit-content; background:var(--tint); }
+#focus-style[hidden] { display:none; }
+#focus-style button { border:0; background:transparent; color:var(--muted); padding:10px 16px; border-radius:12px; font:inherit; cursor:pointer; }
+#focus-style button[aria-pressed="true"] { background:var(--card); color:var(--fg); box-shadow:0 2px 8px #0001; }
+.duration-stepper { display:flex; flex-direction:column; align-items:center; width:90px; border:1px solid var(--line); border-radius:16px; background:var(--tint); overflow:hidden; }
+.duration-stepper button { width:100%; min-height:32px; border:0; background:transparent; color:var(--muted); font-size:22px; cursor:pointer; }
+.duration-stepper button:disabled { opacity:.3; cursor:default; }
+.settings .duration-stepper input { display:block; width:100%; min-width:0; height:42px; padding:4px; text-align:center; border:0; border-radius:8px; font-size:22px; font-weight:600; background:var(--card); color:var(--fg); appearance:textfield; -moz-appearance:textfield; }
+.duration-stepper input::-webkit-inner-spin-button, .duration-stepper input::-webkit-outer-spin-button { -webkit-appearance:none; margin:0; }
+.widget-heading { display:flex; align-items:center; gap:8px; padding-bottom:12px; }
+.widget-heading .widget-handle { flex:1; padding:0; min-width:0; }
+.widget-minimize { flex-shrink:0; width:32px; height:32px; border:1px solid var(--line); border-radius:10px; background:var(--tint); color:var(--fg); font:inherit; font-size:22px; cursor:pointer; }
+.activity-mini > .widget-heading + .row { display:none; }
+.widget-minimize:hover, .duration-stepper button:hover:not(:disabled) { background:var(--card); }
+#focus-style button:focus-visible, .widget-minimize:focus-visible, .duration-stepper :focus-visible { outline:2px solid var(--heat); outline-offset:2px; }
+@media (min-width:1101px) {
+  body:not(.memo-active):not(.prayer-hub-active):not(.prayer-active) .hero > #focus-style { grid-area:1 / 1; align-self:end; justify-self:center; margin:0 0 20px; }
+  body:not(.memo-active):not(.prayer-hub-active):not(.prayer-active) .hero:has(#focus-style:not([hidden])) > #title { margin-bottom:88px; }
+  body:not(.memo-active):not(.prayer-hub-active):not(.prayer-active) .hero:has(#focus-style:not([hidden])) > #overline { margin-bottom:130px; }
+}
+@media (max-width:690px) { .mobile-widget-dialog .widget-heading { display:none; } }
+
+.controls #finish-stopwatch { width:auto; white-space:nowrap; }
+@media (max-width:690px) { .hero .controls { flex-wrap:wrap; max-width:100%; } }

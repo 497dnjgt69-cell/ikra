@@ -1,9 +1,10 @@
+import { isStopwatch, timerSeconds } from "../domain/focus-timer.js";
 import { newId } from "../shared/format.js";
 export function backupSnapshot(source, now) {
   const copy = JSON.parse(JSON.stringify(source)),
     t = copy.timer;
-  if (t?.running && Number.isFinite(t.endAt) && Number.isFinite(t.startedAt)) {
-    const end = Math.min(now, t.endAt),
+  if (t?.running && (isStopwatch(copy) || Number.isFinite(t.endAt)) && Number.isFinite(t.startedAt)) {
+    const end = isStopwatch(copy) ? now : Math.min(now, t.endAt),
       seconds = Math.max(0, (end - t.startedAt) / 1000);
     if (copy.mode === "focus" && seconds > 0 && Array.isArray(copy.sessions)) {
       t.focusSessionId ||= newId();
@@ -13,10 +14,10 @@ export function backupSnapshot(source, now) {
         subject: copy.subject || "Derssiz",
         seconds,
         focusSessionId: t.focusSessionId,
-        complete: end >= t.endAt,
+        complete: !isStopwatch(copy) && end >= t.endAt,
       });
     }
-    t.remaining = Math.max(0, (t.endAt - now) / 1000);
+    t.remaining = timerSeconds(copy, now);
     t.running = false;
     t.endAt = null;
     t.startedAt = null;

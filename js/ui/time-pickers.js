@@ -13,110 +13,38 @@ export default function initialize({ getWidgetPositions }) {
         label = input.closest("label"),
         min = +input.min,
         max = +input.max;
-      input.style.display = "none";
-      input.setAttribute("aria-hidden", "true");
-      input.tabIndex = -1;
       label.classList.add("wheel-label");
       const wrap = document.createElement("span");
-      wrap.className = "wheel-wrap";
-      const wheel = document.createElement("span");
-      wheel.className = "number-wheel";
-      wheel.style.display = "block";
-      wheel.tabIndex = 0;
-      wheel.setAttribute("role", "spinbutton");
-      wheel.setAttribute("aria-label", {
+      wrap.className = "duration-stepper";
+      const up = document.createElement("button"), down = document.createElement("button");
+      up.type = down.type = "button";
+      up.textContent = "⌃"; down.textContent = "⌄";
+      up.setAttribute("aria-label", "Artır"); down.setAttribute("aria-label", "Azalt");
+      input.before(wrap);
+      wrap.append(up, input, down);
+      input.inputMode = "numeric";
+      input.setAttribute("aria-label", {
         focusmin: "Odak dakika", breakmin: "Kısa mola dakika", longmin: "Uzun mola dakika",
         prayermin: "Namaz dakika", longevery: "Uzun mola aralığı",
       }[id]);
-      wheel.setAttribute("aria-valuemin", min);
-      wheel.setAttribute("aria-valuemax", max);
-      wrap.append(wheel);
-      label.append(wrap);
-      let timer,
-        scrolling = false,
-        userScroll = false;
-      const nodes = [];
-      for (let n = min; n <= max; n++) {
-        const item = document.createElement("span");
-        item.style.display = "block";
-        item.className = "wheel-item";
-        item.textContent = n;
-        item.setAttribute("aria-hidden", "true");
-        item.onclick = () => {
-          userScroll = true;
-          wheel.scrollTo({ top: (n - min) * 36, behavior: "smooth" });
-        };
-        wheel.append(item);
-        nodes.push(item);
+      input.addEventListener("focus", () => input.select());
+      input.addEventListener("keydown", e => {
+        if (e.key === "Enter") { e.preventDefault(); input.blur(); }
+      });
+      function step(amount) {
+        const current = Number(input.value);
+        input.value = Math.max(min, Math.min(max, (Number.isFinite(current) ? current : min) + amount));
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+        sync();
       }
-      const mark = () => {
-        const value = Math.max(
-          min,
-          Math.min(max, min + Math.round(wheel.scrollTop / 36)),
-        );
-        nodes.forEach((n, i) =>
-          n.classList.toggle("selected", i === value - min),
-        );
-        wheel.setAttribute("aria-valuenow", value);
-        wheel.setAttribute(
-          "aria-valuetext",
-          id === "longevery" && value === 0 ? "Serbest" : String(value),
-        );
-        return value;
-      };
+      up.onclick = () => step(1);
+      down.onclick = () => step(-1);
       function sync() {
-        if (!wheel.getClientRects().length) {
-          clearTimeout(timer);
-          scrolling = false;
-          userScroll = false;
-          return;
-        }
-        if (userScroll && scrolling) return;
-        userScroll = false;
-        wheel.scrollTop =
-          (Math.max(min, Math.min(max, +input.value)) - min) * 36;
-        mark();
+        up.disabled = Number(input.value) >= max;
+        down.disabled = Number(input.value) <= min;
       }
-      wheel.addEventListener(
-        "wheel",
-        () => {
-          userScroll = true;
-        },
-        { passive: true },
-      );
-      wheel.addEventListener("pointerdown", () => {
-        userScroll = true;
-      });
-      wheel.addEventListener("scroll", () => {
-        mark();
-        if (!userScroll) return;
-        scrolling = true;
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-          const value = mark(),
-            commit = userScroll && wheel.getClientRects().length > 0;
-          scrolling = false;
-          userScroll = false;
-          if (commit && +input.value !== value) {
-            input.value = value;
-            input.dispatchEvent(new Event("change", { bubbles: true }));
-          }
-        }, 180);
-      });
-      wheel.addEventListener("keydown", (e) => {
-        const steps = { ArrowUp: -1, ArrowDown: 1, PageUp: -5, PageDown: 5 };
-        let value = mark();
-        if (e.key in steps) value += steps[e.key];
-        else if (e.key === "Home") value = min;
-        else if (e.key === "End") value = max;
-        else return;
-        e.preventDefault();
-        userScroll = true;
-        wheel.scrollTo({
-          top: (Math.max(min, Math.min(max, value)) - min) * 36,
-          behavior: "smooth",
-        });
-      });
+      input.addEventListener("change", sync);
+      sync();
       pickers.push(sync);
     }
     $("#panel-settings").addEventListener("toggle", () => {
@@ -150,7 +78,23 @@ export default function initialize({ getWidgetPositions }) {
         "aria-label",
         title + " kartını sürükle; ok tuşlarıyla taşı",
       );
-      card.prepend(handle);
+      const heading = document.createElement("div");
+      heading.className = "widget-heading";
+      const minimize = document.createElement("button");
+      minimize.type = "button";
+      minimize.className = "widget-minimize";
+      minimize.textContent = "−";
+      minimize.setAttribute("aria-label", "Küçült");
+      minimize.title = "Küçült";
+      minimize.onclick = () => {
+        const dialog = card.closest("dialog");
+        const toggle = id === "heatmap" ? $('.dock [aria-controls="progress-card"]') : $(id === "prayer" ? "#peek-toggle" : "#anki-toggle");
+        if (dialog?.open) window.closePanel(dialog);
+        else if (toggle?.getAttribute("aria-expanded") === "true") toggle.click();
+        toggle?.focus({preventScroll:true});
+      };
+      heading.append(handle, minimize);
+      card.prepend(heading);
       let drag = null,
         raf = null,
         last = null;

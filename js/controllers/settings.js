@@ -6,6 +6,7 @@ export function bindSettings({ store, settings, focus, render, playSound }) {
     $("#" + k + "min").onchange = handleAction((e) => {
       let n = +e.target.value;
       if (!Number.isInteger(n) || n < 1 || n > (k === "focus" ? 240 : 120)) {
+        e.target.value = store.state.durations[k];
         render();
         return;
       }
