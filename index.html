@@ -48,6 +48,7 @@
     <link rel="stylesheet" href="./css/notifications.css" />
     <link rel="stylesheet" href="./css/prayer-hub.css" />
     <link rel="stylesheet" href="./css/memo.css" />
+    <link rel="stylesheet" href="./css/navigation.css" />
     <link rel="manifest" href="./manifest.webmanifest?v=2" />
     <meta name="theme-color" content="#e9eef5" />
     <meta name="application-name" content="IKRA" />
@@ -75,6 +76,12 @@
           <img class="brand-logo" src="./ikra-icon-v2-192.png" alt="" width="38" height="38" />
           <span>IKRA</span>
         </button>
+          <div class="seg" id="modes">
+            <button data-mode="focus" class="active">Odak</button>
+            <button data-mode="break">Mola</button>
+            <button data-mode="long">Uzun mola</button>
+            <button data-mode="clock">Saat</button>
+          </div>
         <div class="row">
           <button id="fullscreen" class="button" aria-label="Tam ekran">
             ⛶
@@ -91,12 +98,6 @@
         <section class="hero">
           <div class="overline" id="overline">Çalışma zamanı</div>
           <h1 id="title">Odağını topla.</h1>
-          <div class="seg" id="modes">
-            <button data-mode="focus" class="active">Odak</button>
-            <button data-mode="break">Mola</button>
-            <button data-mode="long">Uzun mola</button>
-            <button data-mode="clock">Saat</button>
-          </div>
           <div class="bigclock" id="bigclock" aria-label="Sayaç">
             <span class="digit">5</span>
             <span class="digit">0</span>
