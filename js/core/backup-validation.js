@@ -115,6 +115,7 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
   clean.mode = ["focus", "break", "long", "clock"].includes(raw.mode)
     ? raw.mode
     : "focus";
+  clean.focusStyle = raw.focusStyle === "stopwatch" ? "stopwatch" : "countdown";
   clean.clockView = !!raw.clockView;
   clean.auto = !!raw.auto;
   clean.sound = raw.sound !== false;
@@ -126,12 +127,12 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
     : 10;
   clean.timer = {
     running: false,
-    remaining: clean.mode === "clock" ? 0 : clean.durations[clean.mode] * 60,
+    remaining: clean.mode === "clock" || (clean.mode === "focus" && clean.focusStyle === "stopwatch") ? 0 : clean.durations[clean.mode] * 60,
     endAt: null,
     startedAt: null,
     credited: 0,
   };
-  if (finite(raw.timer?.remaining, 0, 14400))
+  if (finite(raw.timer?.remaining, 0, clean.focusStyle === "stopwatch" ? 31536000 : 14400))
     clean.timer.remaining = raw.timer.remaining;
   if (validString(raw.timer?.focusSessionId) && raw.timer.focusSessionId)
     clean.timer.focusSessionId = raw.timer.focusSessionId;

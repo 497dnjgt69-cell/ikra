@@ -11,6 +11,7 @@ export const fresh = () => ({
   sessions: [],
   round: 0,
   mode: "focus",
+  focusStyle: "countdown",
   clockView: false,
   timer: {
     running: false,

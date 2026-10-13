@@ -140,6 +140,33 @@ for (const width of [1440, 390])
     const $ = (s) => w.document.querySelector(s);
     const flush = () => new Promise((r) => setTimeout(r, 20));
     await flush();
+    $('[data-focus-style="stopwatch"]').click(); await flush();
+    assert.equal(app.store.state.focusStyle, 'stopwatch');
+    assert.equal($('#bigclock').textContent.replace(/\s/g,''), '00:00');
+    assert.equal($('#finish-stopwatch').classList.contains('hidden'), false);
+    assert.equal($('#skip').classList.contains('hidden'), true);
+    $('[data-mode="clock"]').click(); await flush();
+    assert.equal($('#focus-style').hidden, true);
+    $('[data-mode="focus"]').click();
+    $('[data-focus-style="countdown"]').click(); await flush();
+    $('#focusmin').value='37'; $('#focusmin').dispatchEvent(new w.Event('change')); await flush();
+    assert.equal(app.store.state.durations.focus,37);
+    $('#focusmin').previousElementSibling.click(); await flush();
+    assert.equal(app.store.state.durations.focus,38);
+    $('#focusmin').nextElementSibling.click(); await flush();
+    assert.equal(app.store.state.durations.focus,37);
+    $('#focusmin').value='999'; $('#focusmin').dispatchEvent(new w.Event('change')); await flush();
+    assert.equal($('#focusmin').value,'37');
+    for (const [card, toggle] of [['progress-card', '.dock [aria-controls="progress-card"]'], ['prayer-peek', '#peek-toggle']]) {
+      $(toggle).click(); await flush();
+      assert.equal($(toggle).getAttribute('aria-expanded'),'true');
+      $('#'+card+' .widget-minimize').click(); await flush();
+      assert.equal($(toggle).getAttribute('aria-expanded'),'false');
+      assert.equal($('#'+card).classList.contains('hidden'),true);
+      $(toggle).click(); await flush();
+      assert.equal($(toggle).getAttribute('aria-expanded'),'true');
+      $('#'+card+' .widget-minimize').click(); await flush();
+    }
     assert.equal($('#statistics-general').hidden, false);
     for (const section of ['focus', 'anki', 'prayer', 'general']) {
       $(`[data-stat-section="${section}"]`).click();
@@ -377,7 +404,7 @@ for (const width of [1440, 390])
       assert.equal($("#push-enable").disabled,true,"push cannot activate before server configuration");
       assert.equal(document.querySelectorAll("#push-categories input").length,4);
       assert.ok($("#mini-player-open"));
-      assert.equal($(".number-wheel").getAttribute("aria-label"), lang === "en" ? "Focus duration in minutes" : "Odak dakika");
+      assert.equal($("#focusmin").getAttribute("aria-label"), lang === "en" ? "Focus duration in minutes" : "Odak dakika");
       assert.equal($("#plan-progress").getAttribute("aria-label"), lang === "en" ? "Task completion rate" : "Tamamlanan görev oranı");
       assert.equal($("#tasklist .task-name").textContent, "Light");
       assert.ok($("#history").textContent.includes("Focus ·"));

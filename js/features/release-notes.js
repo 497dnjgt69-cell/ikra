@@ -2,12 +2,14 @@ export default function initialize() {
   (() => {
     // Edit this release record and its dictionary entries for future announcements.
     const release = {
-  version:"1.16.0",title:"Huzura yer aç.",intro:"Namaz sekmesinde sana ait sakin bir alan.",
-  features:[
-    {icon:"leaf",title:"Huzur bahçen",text:"Kaydettiğin namazlarla büyüyen, ara verdiğinde seni bekleyen bir bahçe."},
-    {icon:"sparkle",title:"Her şey bir arada",text:"Beş vakit takibi, sıradaki vakit ve son 7 günün analitikleri. Paneller aşağıdan yumuşakça açılır."}
-  ]
-};
+      version: "1.18.0", title: "Çalışman, kendi ritminde.",
+      intro: "Odak, Memo ve günlük kullanım için küçük kolaylıklar.",
+      features: [
+        {icon:"sparkle",title:"Kronometre ile serbest odak",text:"Geri sayım veya kronometre seç; süresiz çalış, bitirince kaydet."},
+        {icon:"leaf",title:"Memo ile ezber ve tekrar",text:"Metinlerini ezberle, kategorilere ayır ve tekrarlarını takip et."},
+        {icon:"arrow",title:"Kontroller elinin altında",text:"Sabit alt menü, ortalanmış sayaç, elle süre girişi ve oklar. Kartları − ile küçült."}
+      ]
+    };
     const seenKey = "ikra-release-seen:" + release.version;
     const paths = {
       leaf: "M20 4C12 3 5 6 5 12a6 6 0 0 0 6 6c6 0 9-7 9-14ZM4 21l11-11m-7 7v-5m3 2h5",
@@ -62,7 +64,7 @@ export default function initialize() {
       close.setAttribute("aria-label", window.ikraT("Kapat"));
       const mark = element("div", "release-mark");
       const logo = document.createElement("img");
-      logo.src = "./icon-192.png";
+      logo.src = "./ikra-icon-v2-192.png";
       logo.alt = "";
       logo.width = logo.height = 56;
       mark.append(logo);

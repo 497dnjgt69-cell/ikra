@@ -362,3 +362,59 @@ test("prayer start notification fires once, honors location timezone, and skips 
   times.checkStarted();
   assert.equal(events.length, 1);
 });
+
+test("stopwatch pause, reload, view switches and finish preserve elapsed time without duplicates", () => {
+  const f = fixture();
+  f.planner.addSubject("ANAT");
+  f.focus.setStyle("stopwatch");
+  assert.equal(f.store.state.timer.remaining, 0);
+  f.focus.start();
+  f.advance(30000); f.focus.settle();
+  assert.equal(f.store.state.timer.remaining, 30);
+  f.focus.credit(); // lifecycle checkpoint must not reset the elapsed display anchor
+  f.advance(15000); f.focus.pause();
+  assert.equal(f.store.state.timer.remaining, 45);
+  f.advance(60000); f.focus.start();
+  f.focus.changeMode("clock"); f.advance(15000); f.focus.settle();
+  assert.equal(f.store.state.timer.remaining, 60);
+  f.focus.changeMode("focus");
+  assert.equal(f.store.state.timer.running, true);
+  const reloaded = createStore({storage:f.disk, now:f.now});
+  const timer = createFocusTimer({store:reloaded, access:f.access, now:f.now});
+  f.advance(900000); timer.settle(); timer.finish();
+  assert.equal(reloaded.state.sessions.reduce((n,s)=>n+s.seconds,0), 960);
+  assert.equal(reloaded.state.sessions.filter(s=>s.complete).length,1);
+  assert.equal(reloaded.state.timer.remaining,0);
+  assert.equal(reloaded.state.timer.running,false);
+  timer.finish();
+  assert.equal(reloaded.state.sessions.filter(s=>s.complete).length,1);
+  assert.equal(f.completions.length,0);
+});
+test("stopwatch backup exports a paused snapshot, restores and continues without double counting", () => {
+  const f = fixture(); f.planner.addSubject("ANAT"); f.focus.setStyle("stopwatch");
+  f.focus.start(); f.advance(15000000);
+  const payload = f.backup.export();
+  assert.equal(payload.data.timer.remaining,15000);
+  assert.equal(f.store.state.sessions.length,0);
+  f.backup.restore(payload);
+  assert.equal(f.store.state.focusStyle,"stopwatch");
+  assert.equal(f.store.state.timer.running,false);
+  assert.equal(f.store.state.timer.remaining,15000);
+  f.focus.start(); f.advance(20000); f.focus.finish();
+  assert.equal(f.store.state.sessions.reduce((n,s)=>n+s.seconds,0),15020);
+});
+test("switching timer style credits work and automatic breaks return to an unbounded stopwatch", () => {
+  const f = fixture(); f.planner.addSubject("ANAT"); f.focus.start(); f.advance(10000);
+  f.focus.setStyle("stopwatch");
+  assert.equal(f.store.state.sessions[0].seconds,10);
+  assert.equal(f.store.state.timer.remaining,0);
+  f.focus.start(); f.advance(20000); f.focus.setStyle("countdown");
+  assert.equal(f.store.state.sessions.reduce((n,s)=>n+s.seconds,0),30);
+  assert.equal(f.store.state.timer.remaining,3000);
+  f.focus.setStyle("stopwatch"); f.focus.changeMode("break"); f.focus.setDuration("break",1);
+  f.store.update(d=>{d.auto=true;}); f.focus.start(); f.advance(60000); f.focus.settle();
+  assert.equal(f.store.state.mode,"focus"); assert.equal(f.store.state.timer.endAt,null);
+  f.advance(90000); f.focus.settle();
+  assert.equal(f.store.state.timer.remaining,90);
+  f.focus.reset(); assert.equal(f.store.state.timer.remaining,0);
+});

@@ -11,6 +11,15 @@ export function bindTimer({ store, focus }) {
       if (!store.state.subject) $("#panel-tasks")?.showModal();
     }
   });
+  const finish = document.createElement("button");
+  finish.id = "finish-stopwatch";
+  finish.className = "button hidden";
+  finish.textContent = "Bitir ve kaydet";
+  $("#skip").after(finish);
+  finish.onclick = handleAction(() => focus.finish());
+  $$("[data-focus-style]").forEach(button => {
+    button.onclick = handleAction(() => focus.setStyle(button.dataset.focusStyle));
+  });
   $("#reset").onclick = handleAction(() => focus.reset());
   $("#skip").onclick = handleAction(() => focus.skip());
   const modes = $("#modes"), focusButton = $('[data-mode="focus"]');
