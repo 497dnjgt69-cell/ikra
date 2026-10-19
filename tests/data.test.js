@@ -10,11 +10,11 @@ test("backup credits only elapsed focus time without mutating live state", () =>
   state.timer = { running: true, startedAt: 1000, endAt: 61000, remaining: 60 };
   const original = structuredClone(state);
   const backup = backupSnapshot(state, 31000);
-  assert.equal(backup.sessions[0].seconds, 30);
+  assert.equal(backup.pendingFocus[0].seconds, 30);
   assert.equal(backup.timer.remaining, 30);
   assert.equal(backup.timer.running, false);
   assert.deepEqual(state, original);
-  assert.equal(backupSnapshot(state, 91000).sessions[0].seconds, 60);
+  assert.equal(backupSnapshot(state, 91000).pendingFocus[0].seconds, 60);
 });
 
 test("stats preserve seconds and exclude the next period boundary", () => {

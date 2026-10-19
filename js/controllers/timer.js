@@ -20,7 +20,11 @@ export function bindTimer({ store, focus }) {
   $$("[data-focus-style]").forEach(button => {
     button.onclick = handleAction(() => focus.setStyle(button.dataset.focusStyle));
   });
-  $("#reset").onclick = handleAction(() => focus.reset());
+  $("#reset").onclick = handleAction(() => {
+    focus.pause();
+    if (store.state.pendingFocus?.length && !confirm(window.ikraT("Bu oturumu kaydetmeden sıfırla?"))) return;
+    focus.reset();
+  });
   $("#skip").onclick = handleAction(() => focus.skip());
   const modes = $("#modes"), focusButton = $('[data-mode="focus"]');
   const breaks = document.createElement("div");

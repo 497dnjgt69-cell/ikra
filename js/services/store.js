@@ -25,6 +25,13 @@ export function migrateState(input, now = Date.now()) {
     state.timer = { ...fresh().timer, remaining: state.durations.focus * 60 };
   }
   state.focusStyle = state.focusStyle === "stopwatch" ? "stopwatch" : "countdown";
+  state.pendingFocus = Array.isArray(state.pendingFocus) ? state.pendingFocus : [];
+  const activeId = state.timer.focusSessionId;
+  if (activeId && !state.sessions.some(s => s.focusSessionId === activeId && s.complete)) {
+    const fragments = state.sessions.filter(s => s.focusSessionId === activeId);
+    state.pendingFocus.push(...fragments);
+    state.sessions = state.sessions.filter(s => s.focusSessionId !== activeId);
+  }
   state.clockView = !!state.clockView;
   state.subjectColors ||= {};
   for (const key of ["tasks", "sessions", "prayers"]) {

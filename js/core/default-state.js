@@ -9,6 +9,7 @@ export const fresh = () => ({
   archivedSubjects: [],
   tasks: [],
   sessions: [],
+  pendingFocus: [],
   round: 0,
   mode: "focus",
   focusStyle: "countdown",

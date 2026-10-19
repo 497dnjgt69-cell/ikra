@@ -40,3 +40,13 @@ test('prayer tracking deduplicates records, respects corrections and never count
   assert.deepEqual(restored.prayerChecks, state.prayerChecks);
   assert.throws(() => normalizeBackup({ ...state, prayerChecks: { 'bad-date': { Sabah: true } } }, { fresh, isDateKey, names }));
 });
+
+test('combined sessions keep the real study hours and exclude gaps between pauses', () => {
+  const start=new Date(2026,8,28), end=new Date(2026,8,29);
+  const result=focusDistribution([{seconds:1200,at:new Date(2026,8,28,15,10).toISOString(),segments:[
+    {seconds:600,at:new Date(2026,8,28,10,10).toISOString()},
+    {seconds:600,at:new Date(2026,8,28,15,10).toISOString()}
+  ]}],start,end);
+  assert.equal(result.hours[10],600);assert.equal(result.hours[15],600);
+  assert.equal(result.total,1200);
+});

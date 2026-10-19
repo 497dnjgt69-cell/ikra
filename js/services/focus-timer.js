@@ -1,4 +1,4 @@
-import { creditFocus, resetFocus, settleFocus, isStopwatch, timerSeconds } from "../domain/focus-timer.js";
+import { creditFocus, finishFocus, resetFocus, settleFocus, isStopwatch, timerSeconds } from "../domain/focus-timer.js";
 import { FEATURES } from "../config/features.js";
 export function createFocusTimer({
   store,
@@ -74,18 +74,16 @@ export function createFocusTimer({
     },
     finish() {
       access.require(FEATURES.TIMER);
-      if (!isStopwatch(store.state)) return;
+      if (store.state.mode !== "focus" && !store.state.pendingFocus?.length) return;
       pause();
       store.update(d => {
-        const id = d.timer.focusSessionId;
-        const last = id && d.sessions.findLast(s => s.focusSessionId === id);
-        if (last) { last.complete = true; d.round++; }
+        if (finishFocus(d, now())) d.round++;
         resetFocus(d, now());
       });
     },
     settle,
     reset() {
-      store.update((d) => resetFocus(d, now()));
+      store.update((d) => { resetFocus(d, now()); d.pendingFocus = []; });
     },
     credit(time = now()) {
       if (store.state.timer.running) store.update((d) => creditFocus(d, time));
