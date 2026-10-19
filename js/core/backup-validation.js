@@ -24,7 +24,7 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
   const finite = (n, min, max) => Number.isFinite(n) && n >= min && n <= max;
   const validString = (x) => typeof x === "string" && x.length <= 200;
   let derived = new Set();
-  clean.sessions = raw.sessions.map((item, index) => {
+  const normalizeSession = (item, index) => {
     if (
       !item ||
       !finite(item.seconds, 0, 31536000) ||
@@ -39,8 +39,15 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
       );
     const subject = item.subject.trim() || "Derssiz";
     derived.add(subject);
+    if (item.segments !== undefined && (!Array.isArray(item.segments) ||
+      item.segments.some(s => !s || !finite(s.seconds, 0, 31536000) || typeof s.at !== "string" || isNaN(Date.parse(s.at))) ||
+      Math.abs(item.segments.reduce((n,s) => n + s.seconds, 0) - item.seconds) > 0.01))
+      throw Error("Çalışma kaydı geçersiz.");
     return { ...item, subject, at: new Date(item.at).toISOString() };
-  });
+  };
+  clean.sessions = raw.sessions.map(normalizeSession);
+  if (raw.pendingFocus !== undefined && !Array.isArray(raw.pendingFocus)) throw Error("Çalışma kaydı geçersiz.");
+  clean.pendingFocus = (raw.pendingFocus || []).map(normalizeSession);
   clean.tasks = raw.tasks.map((t, index) => {
     if (
       !t ||

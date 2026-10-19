@@ -18,6 +18,8 @@ export function createMiniPlayer({store,focus}) {
     doc.getElementById('mini-time').textContent=fmt(seconds);doc.title=fmt(seconds)+' · IKRA';
     const start=doc.getElementById('mini-start');start.textContent=t.running?bilingual('Duraklat','Pause'):bilingual('Başlat','Start');
     doc.getElementById('mini-reset').textContent=bilingual('Sıfırla','Reset');
+    doc.getElementById('mini-finish').textContent=bilingual('Bitir ve kaydet','Finish & save');
+    doc.getElementById('mini-finish').hidden=d.mode!=='focus';
     doc.getElementById('mini-back').textContent=bilingual('Uygulamaya dön ↗','Back to app ↗');
     doc.getElementById('mini-hint').textContent=window.documentPictureInPicture?'':bilingual('Bu tarayıcıda pencere hep üstte kalmayabilir.','This browser may not keep the window on top.');
     doc.getElementById('mini-progress').hidden=isStopwatch(d);
@@ -34,8 +36,9 @@ export function createMiniPlayer({store,focus}) {
       const doc=popup.document;doc.head.replaceChildren();doc.body.replaceChildren();
       const meta=doc.createElement('meta');meta.name='viewport';meta.content='width=device-width,initial-scale=1';
       const style=doc.createElement('link');style.rel='stylesheet';style.href=new URL('../../css/mini-player.css',import.meta.url).href;doc.head.append(meta,style);
-      doc.body.innerHTML='<main class="mini"><header><span class="mark">IKRA</span><span id="mini-mode"></span></header><p id="mini-subject"></p><div id="mini-time" role="timer"></div><progress id="mini-progress" max="1" aria-label="Progress"></progress><div class="actions"><button id="mini-start" class="primary"></button><button id="mini-reset"></button></div><button id="mini-back" class="back"></button><p id="mini-status" role="status"></p><p id="mini-hint"></p></main>';
-      doc.getElementById('mini-start').onclick=act(()=>{if(store.state.clockView)focus.changeMode(store.state.mode);focus.start();});doc.getElementById('mini-reset').onclick=act(()=>focus.reset());
+      doc.body.innerHTML='<main class="mini"><header><span class="mark">IKRA</span><span id="mini-mode"></span></header><p id="mini-subject"></p><div id="mini-time" role="timer"></div><progress id="mini-progress" max="1" aria-label="Progress"></progress><div class="actions"><button id="mini-start" class="primary"></button><button id="mini-reset"></button></div><button id="mini-finish" class="mini-finish"></button><button id="mini-back" class="back"></button><p id="mini-status" role="status"></p><p id="mini-hint"></p></main>';
+      doc.getElementById('mini-start').onclick=act(()=>{if(store.state.clockView)focus.changeMode(store.state.mode);focus.start();});doc.getElementById('mini-reset').onclick=act(()=>{focus.pause();if(store.state.pendingFocus?.length&&!popup.confirm(bilingual('Bu oturumu kaydetmeden sıfırla?','Reset this session without saving?')))return;focus.reset();});
+      doc.getElementById('mini-finish').onclick=act(()=>focus.finish());
       doc.getElementById('mini-back').onclick=()=>{window.focus();popup?.close();};
       popup.addEventListener('pagehide',cleanup,{once:true});
       button.setAttribute('aria-pressed','true');render();tick=setInterval(()=>{if(popup?.closed)cleanup();else render();},1000);

@@ -65,7 +65,8 @@ test("focus pause/resume and reload credit each second once", () => {
   f.focus.start();
   f.advance(30000);
   f.focus.pause();
-  assert.equal(f.store.state.sessions[0].seconds, 30);
+  assert.equal(f.store.state.sessions.length, 0);
+  assert.equal(f.store.state.pendingFocus[0].seconds, 30);
   assert.equal(f.store.state.timer.remaining, 2970);
   f.advance(60000);
   f.focus.start();
@@ -77,6 +78,9 @@ test("focus pause/resume and reload credit each second once", () => {
     now: f.now,
   });
   timer.pause();
+  assert.equal(reloaded.state.sessions.length, 0);
+  timer.finish();
+  assert.equal(reloaded.state.sessions.length, 1);
   assert.equal(
     reloaded.state.sessions.reduce((sum, r) => sum + r.seconds, 0),
     45,
@@ -111,6 +115,8 @@ test("switching subjects attributes elapsed segments to the correct course", () 
   f.planner.select("GLPH");
   f.advance(5000);
   f.focus.pause();
+  assert.equal(f.store.state.sessions.length, 0);
+  f.focus.finish();
   assert.deepEqual(
     f.store.state.sessions.map((s) => [s.subject, s.seconds]),
     [
@@ -121,7 +127,7 @@ test("switching subjects attributes elapsed segments to the correct course", () 
 });
 test("legacy prayer service only marks explicit completion; reload clears retired active flow",()=>{
  const f=fixture();f.planner.addSubject('ANAT');f.focus.start();f.advance(10000);f.prayer.enter();
- assert.equal(f.store.state.timer.running,false);assert.equal(f.store.state.sessions[0].seconds,10);
+ assert.equal(f.store.state.timer.running,false);assert.equal(f.store.state.sessions.length,0);assert.equal(f.store.state.pendingFocus[0].seconds,10);
  f.prayer.begin('Sabah');assert.equal(f.store.state.prayerTimer.untimed,true);
  f.prayer.pause();assert.equal(f.store.state.prayerTimer.paused,true);
  f.prayer.resume();assert.equal(f.store.state.prayerTimer.paused,false);
@@ -177,7 +183,8 @@ test("legacy backup and running focus restore without granting imported Pro flag
   payload.data.plan = "pro";
   payload.data.entitlements = { plan: "pro" };
   f.backup.restore(payload);
-  assert.equal(f.store.state.sessions[0].seconds, 10);
+  assert.equal(f.store.state.sessions.length, 0);
+  assert.equal(f.store.state.pendingFocus[0].seconds, 10);
   assert.equal(f.store.state.timer.running, false);
   assert.equal(f.access.plan, "free");
   assert.equal(f.store.state.isPro, undefined);
@@ -330,7 +337,8 @@ test("clock view preserves paused timers and auto break completion", () => {
   assert.equal(f.store.state.mode, "focus");
   assert.equal(f.store.state.clockView, true);
   assert.equal(f.store.state.timer.running, true);
-  assert.equal(f.store.state.sessions.reduce((sum, s) => sum + s.seconds, 0), 10);
+  assert.equal(f.store.state.sessions.length, 0);
+  assert.equal(f.store.state.pendingFocus.reduce((sum, s) => sum + s.seconds, 0), 10);
 });
 
 test("prayer start notification fires once, honors location timezone, and skips stale catch-up", () => {
@@ -406,10 +414,11 @@ test("stopwatch backup exports a paused snapshot, restores and continues without
 test("switching timer style credits work and automatic breaks return to an unbounded stopwatch", () => {
   const f = fixture(); f.planner.addSubject("ANAT"); f.focus.start(); f.advance(10000);
   f.focus.setStyle("stopwatch");
-  assert.equal(f.store.state.sessions[0].seconds,10);
+  assert.equal(f.store.state.sessions.length,0);assert.equal(f.store.state.pendingFocus[0].seconds,10);
   assert.equal(f.store.state.timer.remaining,0);
   f.focus.start(); f.advance(20000); f.focus.setStyle("countdown");
-  assert.equal(f.store.state.sessions.reduce((n,s)=>n+s.seconds,0),30);
+  assert.equal(f.store.state.sessions.length,0);
+  assert.equal(f.store.state.pendingFocus.reduce((n,s)=>n+s.seconds,0),30);
   assert.equal(f.store.state.timer.remaining,3000);
   f.focus.setStyle("stopwatch"); f.focus.changeMode("break"); f.focus.setDuration("break",1);
   f.store.update(d=>{d.auto=true;}); f.focus.start(); f.advance(60000); f.focus.settle();
@@ -417,4 +426,40 @@ test("switching timer style credits work and automatic breaks return to an unbou
   f.advance(90000); f.focus.settle();
   assert.equal(f.store.state.timer.remaining,90);
   f.focus.reset(); assert.equal(f.store.state.timer.remaining,0);
+});
+
+test("many pauses stay out of history and finish saves one total, excluding paused time", () => {
+  const f=fixture(); f.planner.addSubject('ANAT'); f.focus.setStyle('stopwatch');
+  for(let i=0;i<10;i++){
+    f.focus.start(); f.advance(60000); f.focus.pause(); f.advance(30000);
+    assert.equal(f.store.state.sessions.length,0);
+  }
+  f.focus.finish();
+  assert.equal(f.store.state.sessions.length,1);
+  assert.equal(f.store.state.sessions[0].seconds,600);
+  assert.equal(f.store.state.sessions[0].complete,true);
+  assert.equal(f.store.state.pendingFocus.length,0);
+  f.focus.finish(); assert.equal(f.store.state.sessions.length,1);
+});
+test("legacy active fragments migrate into the draft without changing completed history", () => {
+  const seed=fresh(); seed.subjects=['ANAT']; seed.subject='ANAT'; seed.focusStyle='stopwatch';
+  seed.timer={...seed.timer,remaining:120,focusSessionId:'open'};
+  seed.sessions=[
+    {id:'old',focusSessionId:'closed',subject:'ANAT',seconds:500,complete:true,at:'2026-09-27T12:00:00Z'},
+    ...[1,2].map(i=>({id:String(i),focusSessionId:'open',subject:'ANAT',seconds:60,complete:false,at:'2026-09-28T11:00:00Z'}))
+  ];
+  const f=fixture(seed); assert.equal(f.store.state.sessions.length,1);
+  f.focus.start(); f.advance(60000); f.focus.finish();
+  assert.equal(f.store.state.sessions.length,2); assert.equal(f.store.state.sessions[1].seconds,180);
+  assert.deepEqual(f.store.state.sessions[0],seed.sessions[0]);
+});
+test("paused drafts survive backups, reset discards and a failed finish remains recoverable", () => {
+  const f=fixture();f.planner.addSubject('ANAT'); f.focus.start(); f.advance(60000); f.focus.pause();
+  f.backup.restore(f.backup.export()); assert.equal(f.store.state.sessions.length,0);
+  assert.equal(f.store.state.pendingFocus[0].seconds,60);
+  f.disk.fail=true; assert.throws(()=>f.focus.finish());
+  assert.equal(f.store.state.pendingFocus[0].seconds,60);
+  f.disk.fail=false; f.focus.finish(); assert.equal(f.store.state.sessions.length,1);
+  f.focus.start(); f.advance(10000); f.focus.reset();
+  assert.equal(f.store.state.pendingFocus.length,0); assert.equal(f.store.state.sessions.length,1);
 });

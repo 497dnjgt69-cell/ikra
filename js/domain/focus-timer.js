@@ -15,8 +15,9 @@ export function creditFocus(state, now, complete = false) {
   const end = Math.min(now, Number.isFinite(t.endAt) ? t.endAt : now);
   const seconds = Math.max(0, (end - t.startedAt) / 1000);
   if (seconds > 0) {
-    t.focusSessionId ||= newId();
-    state.sessions.push({
+    state.pendingFocus ||= [];
+    t.focusSessionId ||= state.pendingFocus[0]?.focusSessionId || newId();
+    state.pendingFocus.push({
       id: newId(),
       at: new Date(end).toISOString(),
       subject: state.subject,
@@ -27,6 +28,20 @@ export function creditFocus(state, now, complete = false) {
     t.startedAt = end;
     t.credited = 0;
   }
+  if (complete) finishFocus(state, end);
+}
+// Pauses/checkpoints stay private until the user finishes or the countdown ends.
+// A course switch retains accurate attribution; each course gets one total.
+export function finishFocus(state, now) {
+  const groups = new Map();
+  for (const part of state.pendingFocus || []) {
+    const row = groups.get(part.subject);
+    if (row) { row.seconds += part.seconds; row.segments.push({at: part.at, seconds: part.seconds}); }
+    else groups.set(part.subject, { ...part, at: new Date(now).toISOString(), complete: true, segments: [{at: part.at, seconds: part.seconds}] });
+  }
+  state.sessions.push(...groups.values());
+  state.pendingFocus = [];
+  return groups.size > 0;
 }
 export function resetFocus(state, now) {
   creditFocus(state, now);

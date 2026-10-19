@@ -6,7 +6,7 @@ import { prayerNames } from "../domain/prayer-timer.js";
 export function focusDistribution(records, start, end) {
   const cells = Array.from({ length: 7 }, () => Array(24).fill(0));
   let excluded = 0;
-  for (const record of records) {
+  for (const record of records.flatMap(r => Array.isArray(r.segments) && r.segments.length ? r.segments : [r])) {
     const finish = Date.parse(record.at), duration = Number(record.seconds) * 1000;
     if (!Number.isFinite(finish) || !Number.isFinite(duration) || duration <= 0) continue;
     if (record.manual && record.timeKnown !== true) {

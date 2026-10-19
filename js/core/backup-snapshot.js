@@ -1,22 +1,9 @@
-import { isStopwatch, timerSeconds } from "../domain/focus-timer.js";
-import { newId } from "../shared/format.js";
+import { isStopwatch, timerSeconds, creditFocus } from "../domain/focus-timer.js";
 export function backupSnapshot(source, now) {
   const copy = JSON.parse(JSON.stringify(source)),
     t = copy.timer;
   if (t?.running && (isStopwatch(copy) || Number.isFinite(t.endAt)) && Number.isFinite(t.startedAt)) {
-    const end = isStopwatch(copy) ? now : Math.min(now, t.endAt),
-      seconds = Math.max(0, (end - t.startedAt) / 1000);
-    if (copy.mode === "focus" && seconds > 0 && Array.isArray(copy.sessions)) {
-      t.focusSessionId ||= newId();
-      copy.sessions.push({
-        id: globalThis.crypto?.randomUUID?.() || String(now) + Math.random(),
-        at: new Date(end).toISOString(),
-        subject: copy.subject || "Derssiz",
-        seconds,
-        focusSessionId: t.focusSessionId,
-        complete: !isStopwatch(copy) && end >= t.endAt,
-      });
-    }
+    creditFocus(copy, now);
     t.remaining = timerSeconds(copy, now);
     t.running = false;
     t.endAt = null;

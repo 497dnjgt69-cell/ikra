@@ -1,6 +1,7 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Bu oturumu kaydetmeden sıfırla?": "Reset this session without saving?",
       "Çalışman, kendi ritminde.": "Study at your own pace.",
       "Odak, Memo ve günlük kullanım için küçük kolaylıklar.": "Small improvements for Focus, Memo and everyday use.",
       "Kronometre ile serbest odak": "Open-ended focus with Stopwatch",

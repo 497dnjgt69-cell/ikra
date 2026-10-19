@@ -33,8 +33,8 @@ test('paused timer segments count as one completed session; reset never combines
   s.timer.startedAt = start + 1200000;
   s.timer.endAt = start + 1500000;
   settleFocus(s, s.timer.endAt);
-  assert.equal(s.sessions[0].seconds, 600);
-  assert.equal(s.sessions[1].seconds, 300);
+  assert.equal(s.sessions.length, 1);
+  assert.equal(s.sessions[0].seconds, 900);
   assert.equal(focusStreak(s.sessions, at(30)).current, 1);
   assert.equal(focusStreak(s.sessions.slice(1), at(30)).current, 0);
   s.mode = 'focus';

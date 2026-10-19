@@ -121,7 +121,7 @@ export function createTimerView({ store }) {
       !store.state.prayerView && !store.state.prayerHub && !store.state.memoView;
     $("#focus-style").hidden = !showStyle;
     $$("[data-focus-style]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.focusStyle === store.state.focusStyle)));
-    $("#finish-stopwatch")?.classList.toggle("hidden", !showStyle || !isStopwatch(store.state));
+    $("#finish-stopwatch")?.classList.toggle("hidden", !showStyle);
     if (isStopwatch(store.state)) $("#skip").classList.add("hidden");
     if (showStyle && isStopwatch(store.state)) $("#overline").textContent = "Kendi ritminde çalış";
     renderQuote();
