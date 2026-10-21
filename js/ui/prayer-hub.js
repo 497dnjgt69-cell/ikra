@@ -12,7 +12,7 @@ export function gardenScene(total){
   }).join('');
   return `<svg viewBox="0 0 600 330" aria-hidden="true" focusable="false"><defs><linearGradient id="garden-soil" x2="0" y2="1"><stop stop-color="#acb99f"/><stop offset="1" stop-color="#6e866f"/></linearGradient><radialGradient id="garden-glow"><stop stop-color="#efdba3" stop-opacity=".35"/><stop offset="1" stop-color="#efdba3" stop-opacity="0"/></radialGradient></defs><circle cx="304" cy="124" r="122" fill="url(#garden-glow)"/><circle cx="450" cy="84" r="25" fill="#dfcd9e" opacity=".5"/><ellipse cx="300" cy="294" rx="202" ry="17" fill="#293e3920"/><path d="M88 247Q300 173 512 247L487 273Q300 338 113 273Z" fill="url(#garden-soil)"/><ellipse cx="300" cy="245" rx="212" ry="53" fill="#bdcaaa"/><path d="M315 293Q257 266 296 242Q322 225 303 214" fill="none" stroke="#e6dfc7" stroke-width="17" opacity=".8"/>${plants}<g transform="translate(300 236) scale(${scale})"><path d="M0 0Q-8-52 0-139M-3-65L-43-105M-1-82L42-117" fill="none" stroke="#797263" stroke-width="9" stroke-linecap="round"/><ellipse cx="-34" cy="-125" rx="53" ry="43" fill="#8da984"/><ellipse cx="37" cy="-135" rx="53" ry="44" fill="#a2bd92"/><ellipse cx="0" cy="-167" rx="52" ry="47" fill="#b8cba0"/><ellipse cx="-19" cy="-179" rx="27" ry="24" fill="#cedabb" opacity=".65"/></g><ellipse cx="198" cy="246" rx="17" ry="8" fill="#e0dfce"/><ellipse cx="418" cy="271" rx="12" ry="6" fill="#dddecb"/><path d="M171 108q7-7 14 0q7-7 14 0M389 65q5-5 10 0q5-5 10 0" fill="none" stroke="#8c9c92" stroke-width="2" stroke-linecap="round"/></svg>`;
 }
-export function createPrayerHub({store,records}){
+export function createGardenHub({store,records}){
   const hub=document.createElement('section');hub.id='prayer-hub';hub.hidden=true;hub.dataset.i18nManaged='';hub.setAttribute('aria-label',bilingual('Namaz merkezi','Prayer hub'));
   hub.innerHTML=`<div class="ph-grid">
     <section class="ph-card ph-times"><div class="ph-eyebrow" data-copy="times"></div><h2 id="ph-next-name"></h2><div id="ph-countdown"></div><p id="ph-place"></p><div id="ph-times-list"></div><button type="button" class="ph-link" id="ph-location" data-copy="location"></button></section>
@@ -76,4 +76,20 @@ export function createPrayerHub({store,records}){
   const visible=()=>{if(!document.hidden)render(true);};document.addEventListener('visibilitychange',visible);
   render();
   return {dispose(){unsubscribe();clearInterval(interval);document.removeEventListener('ikra-language',language);document.removeEventListener('visibilitychange',visible);document.body.classList.remove('prayer-hub-active');hub.remove();}};
+}
+
+// Keep the garden implementation and saved records while this tab is on hold.
+export function createPrayerHub({store}) {
+  const hub=document.createElement('section');hub.id='prayer-hub';hub.className='prayer-coming-soon';hub.dataset.i18nManaged='';
+  const title=document.createElement('h2'),copy=document.createElement('p');hub.append(title,copy);
+  document.querySelector('.hero').append(hub);
+  const tab=document.querySelector('#prayerstart');tab.setAttribute('aria-controls',hub.id);
+  function render(){
+    const open=!!store.state.prayerHub;hub.hidden=!open;
+    document.body.classList.toggle('prayer-hub-active',open);tab.classList.toggle('active',open);tab.setAttribute('aria-pressed',String(open));
+    title.textContent=bilingual('Çok yakında','Coming soon');
+    copy.textContent=bilingual('Namaz alanını senin için hazırlıyoruz.','We’re preparing your prayer space.');
+  }
+  const unsubscribe=store.subscribe(render);document.addEventListener('ikra-language',render);render();
+  return {dispose(){unsubscribe();document.removeEventListener('ikra-language',render);hub.remove();document.body.classList.remove('prayer-hub-active');}};
 }

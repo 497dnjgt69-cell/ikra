@@ -1,0 +1,55 @@
+/* Compact collection: consistent rows with a single clear practice action. */
+.memo-grid{grid-template-columns:1fr;gap:10px;margin-top:16px}
+.memo-grid>.memo-card:not(.memo-empty){display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:20px;align-items:center;padding:16px 20px;border-radius:16px}
+.memo-grid>.memo-card>small,.memo-grid>.memo-card>h3,.memo-grid>.memo-card>.memo-preview,.memo-grid>.memo-card>.memo-muted{grid-column:1;margin:3px 0}
+#memo-hub .memo-grid h3{font-size:16px;line-height:1.4;margin:4px 0}
+.memo-grid .memo-preview{font-size:13px;line-height:1.5}
+.memo-grid .memo-actions{grid-column:2;grid-row:1/5;gap:6px;margin:0;max-width:240px;justify-content:flex-end}
+.memo-grid .memo-actions .button{font-size:12px;padding:8px 12px;min-height:40px}
+.memo-grid .memo-badge{grid-column:1;justify-self:start;margin-top:5px;padding:3px 8px}
+.memo-top{margin-bottom:12px}.memo-filters{gap:8px;margin:14px 0}
+/* Inline disclosure expands towards the right, inside a reserved header slot. */
+.theme-picker{box-sizing:border-box;justify-self:start;justify-content:flex-start;width:46px;max-width:100%;overflow:hidden;transition:width .22s ease;flex-shrink:0}
+.header>.row{min-width:0}.theme-picker.is-open{width:178px}
+.theme-choice{flex:0 0 36px;cursor:pointer}
+.theme-options{display:flex;gap:2px;opacity:0;visibility:hidden;transform:translateX(-10px);transition:opacity .18s,transform .22s,visibility .22s}
+.theme-picker.is-open .theme-options{opacity:1;visibility:visible;transform:translateX(0)}
+.theme-choice:focus-visible{outline:2px solid var(--fg);outline-offset:-3px}
+.prayer-coming-soon{text-align:center;padding:70px 20px}.prayer-coming-soon p{color:var(--muted);font-size:15px}
+/* Keep today's progress and period totals visible; optional detail stays folded. */
+.anki-dashboard .anki-header{margin:8px 0 12px;gap:12px;flex-direction:row;align-items:center}
+.anki-dashboard .anki-header h3{font-size:20px}.anki-dashboard .anki-header .anki-eyebrow{display:none}
+.anki-dashboard .anki-header>button{width:auto}
+.anki-dashboard .anki-hero{padding:16px;gap:18px;border-radius:16px;flex-direction:row;text-align:left}
+.anki-dashboard .anki-ring{width:94px;height:94px;padding:6px}.anki-dashboard .anki-ring strong{font-size:26px}.anki-dashboard .anki-ring span{font-size:10px}
+.anki-dashboard .anki-hero-copy h4{font-size:17px;margin:4px 0}.anki-dashboard .anki-hero-copy p{font-size:12px;line-height:1.5}
+.anki-dashboard .anki-hero-copy .anki-eyebrow{display:none}
+.anki-dashboard .anki-rewards{gap:8px;margin-top:8px}.anki-dashboard .anki-reward{padding:12px;border-radius:12px;gap:3px}
+.anki-dashboard .anki-reward strong{font-size:22px}.anki-dashboard .anki-reward span{font-size:12px}.anki-dashboard .anki-reward small{font-size:11px}
+.anki-details,.anki-dashboard .anki-archive{border:1px solid var(--line);border-radius:12px;margin:12px 0;padding:12px;background:transparent}
+.anki-details>summary{cursor:pointer;font-size:13px;font-weight:600}
+.anki-dashboard .anki-connect-card{padding:12px 14px;border-radius:12px;margin:12px 0}
+.anki-dashboard .anki-connect-card>p{font-size:12px}.anki-dashboard #anki-status:empty{display:none}
+.anki-dashboard .anki-section-title{margin:16px 0 8px}.anki-dashboard #anki-summary{gap:8px;grid-template-columns:repeat(auto-fit,minmax(105px,1fr))}
+.anki-dashboard #anki-summary>div{padding:12px}.anki-dashboard #anki-summary strong{font-size:20px}
+/* Fixed hourly thresholds: colors never rescale when another day is added. */
+.heatcell[data-level="1"]{background:#dceee4;color:#173a2e}
+.heatcell[data-level="2"]{background:#b4dcc4;color:#173a2e}
+.heatcell[data-level="3"]{background:#83c49e;color:#173a2e}
+.heatcell[data-level="4"]{background:#50a878;color:#102e22}
+.heatcell[data-level="5"]{background:#328457;color:#fff}
+.heatcell[data-level="6"]{background:#236541;color:#fff}
+.heatcell[data-level="7"]{background:#174c33;color:#fff}
+.heatcell[data-level="8"]{background:#103724;color:#fff}
+.heatcell[data-level="9"]{background:#092519;color:#fff}
+#heatmap .heatcell{flex-direction:column;gap:3px;min-width:0}#heatmap .heatcell small{font-size:9px;font-variant-numeric:tabular-nums;font-weight:600}
+.heat-scale{display:inline-flex;align-items:center;gap:3px;font-size:10px;white-space:nowrap}.heat-scale .heatcell{width:11px;height:11px;aspect-ratio:1;border-radius:3px}
+@media(max-width:600px){
+ .memo-grid>.memo-card:not(.memo-empty){padding:14px;column-gap:10px}
+ .memo-grid .memo-actions{grid-column:1/-1;grid-row:auto;justify-content:flex-start;margin-top:10px;max-width:none}
+ .memo-grid .memo-badge{grid-row:auto}.memo-grid .memo-preview{max-width:100%}
+ .anki-dashboard .anki-header h3{font-size:18px}.anki-dashboard .anki-header>button{font-size:12px;padding:8px 10px}
+ .anki-dashboard .anki-hero{gap:12px;padding:12px}.anki-dashboard .anki-reward{padding:10px 8px}
+}
+@media(prefers-reduced-motion:reduce){.theme-picker,.theme-options{transition:none;transform:none}}
+.theme-slot{width:178px;flex:0 0 178px;display:flex;justify-content:flex-start}

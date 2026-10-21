@@ -288,6 +288,12 @@ for (const width of [1440, 390])
     $('[data-mode="focus"]').click();await flush();
     assert.equal($('#modes').classList.contains('breaks-open'),true);
     assert.equal($('#mode-breaks').children.length,2);
+    assert.equal($('[data-theme-choice="light"]'),null);
+    $('.theme-toggle').click();
+    assert.equal($('.theme-toggle').getAttribute('aria-expanded'),'true');
+    $('[data-theme-choice="dark"]').click();await flush();
+    assert.equal(app.store.state.theme,'dark');
+    assert.equal($('.theme-toggle').getAttribute('aria-expanded'),'false');
     $("#theme").value = "neumorphism";
     $("#theme").dispatchEvent(new w.Event("change"));
     await flush();
@@ -305,14 +311,8 @@ for (const width of [1440, 390])
     assert.equal($('#prayer-hub').hidden,false);
     assert.equal($('#prayerstart').getAttribute('aria-pressed'),'true');
     assert.equal($('#modes').classList.contains('breaks-open'),false);
-    const prayerButton=$('#ph-checks [data-prayer="Sabah"]');
-    const wasChecked=prayerButton.getAttribute('aria-pressed')==='true';
-    prayerButton.click();await flush();
-    assert.equal(prayerButton.getAttribute('aria-pressed'),String(!wasChecked));
-    prayerButton.click();await flush();
-    assert.equal(prayerButton.getAttribute('aria-pressed'),String(wasChecked));
-    $('#ph-prev').click();assert.equal($('#ph-next').disabled,false);
-    $('#ph-today').click();assert.equal($('#ph-next').disabled,true);
+    assert.match($('#prayer-hub').textContent,/Coming soon/);
+    assert.equal($('#ph-checks'),null);
     $('[data-mode="clock"]').click();await flush();
     assert.equal($('#prayer-hub').hidden,true);
     $('[data-mode="focus"]').click();await flush();
@@ -398,7 +398,7 @@ for (const width of [1440, 390])
       $('#prayerstart').click();await flush();
       assert.equal($('#prayer-hub').hidden,false);
       assert.equal($('#prayerstart').getAttribute('aria-pressed'),'true');
-      assert.equal($('#ph-today').textContent,lang==='en'?'Today':'Bugün');
+      assert.equal($('#prayer-hub h2').textContent,lang==='en'?'Coming soon':'Çok yakında');
       assert.equal($('#title').textContent,lang==='en'?'Make room for peace.':'Huzura yer aç.');
       $('[data-mode="focus"]').click();await flush();
       assert.equal($("#push-enable").disabled,true,"push cannot activate before server configuration");

@@ -11,6 +11,7 @@ export function migrateState(input, now = Date.now()) {
     input && input.timer && input.durations && Array.isArray(input.sessions);
   const state = { ...fresh(), ...(valid ? structuredClone(input) : {}) };
   state.schemaVersion = SCHEMA_VERSION;
+  if (!["dark", "nature", "neumorphism"].includes(state.theme)) state.theme = "neumorphism";
   state.dock = normalizeDock(state.dock);
   state.ankiGoal = normalizeAnkiGoal(state.ankiGoal);
   try { state.anki = normalizeAnki(state.anki); } catch { state.anki = null; }

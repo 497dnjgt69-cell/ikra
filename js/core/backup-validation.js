@@ -114,11 +114,8 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
       throw Error("Sayaç süresi geçersiz.");
     if (n !== undefined) clean.durations[mode] = n;
   }
-  clean.theme = ["light", "dark", "nature", "neumorphism"].includes(raw.theme)
-    ? raw.theme
-    : raw.theme === "cream" || raw.theme === "rose"
-      ? "light"
-      : "dark";
+  clean.theme = ["dark", "nature", "neumorphism"].includes(raw.theme)
+    ? raw.theme : "neumorphism";
   clean.mode = ["focus", "break", "long", "clock"].includes(raw.mode)
     ? raw.mode
     : "focus";

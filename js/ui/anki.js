@@ -24,7 +24,7 @@ export function createAnkiView({store, api}) {
   goalSelect.onchange=()=>{try{store.update(d=>{d.ankiGoal=Number(goalSelect.value);});}catch{goalSelect.value=store.state.ankiGoal;localizedText(status,()=>bilingual('Hedef kaydedilemedi. Tekrar dene.','Could not save your goal. Try again.'));}};
 
   const description=node('p','Masaüstü Anki’den tekrar sayını, çalıştığın kartları ve çalışma süreni getir.','Import review counts, studied cards and study time from desktop Anki.','quiet');
-  const setup=node('details'); setup.className='anki-setup'; setup.open=!store.state.anki;
+  const setup=node('details'); setup.className='anki-setup'; setup.open=false;
   setup.append(node('summary','Bağlantı nasıl kurulur?','How do I connect?'));
   const steps=node('ol');
   for (const [tr,en] of [
@@ -46,7 +46,8 @@ export function createAnkiView({store, api}) {
   const help=node('div',null,null,'anki-connect-card');help.append(description,setup,status,metadata);
   const periodTitle=node('h4','Seçili dönemin özeti','Selected period overview','anki-section-title');
   const archive=node('details',null,null,'anki-archive');archive.append(node('summary','Günlük geçmişi aç','View daily history'),history);
-  root.append(help,goalLabel,journey,periodTitle,summary,archive,note);
+  root.append(goalLabel,journey,periodTitle,summary,archive,help);
+  setup.append(note);
   let busy=false, disposed=false;
   sync.onclick=async()=>{
     if(busy) return;
@@ -111,10 +112,11 @@ export function createAnkiView({store, api}) {
       card.append(valueNode,node('span',tr,en),node('small',hintTR,hintEN));rewards.append(card);
     }
     journey.append(rewards);
+    const extra=node('details',null,null,'anki-details');extra.append(node('summary','Rozetler ve aktivite','Badges & activity'));journey.append(extra);
     const xp=node('div',null,null,'anki-xp');
     xp.append(node('span',`Sonraki seviyeye ${1000-game.levelXP} XP`,`Next level in ${1000-game.levelXP} XP`));
     const meter=node('progress');meter.max=1000;meter.value=game.levelXP;meter.setAttribute('aria-label',bilingual('Seviye ilerlemesi','Level progress'));xp.append(meter);
-    xp.append(node('small','Her tekrar 10 XP • Eşitlemek puanı çoğaltmaz.','Each review earns 10 XP • Syncing never duplicates points.'));journey.append(xp);
+    xp.append(node('small','Her tekrar 10 XP • Eşitlemek puanı çoğaltmaz.','Each review earns 10 XP • Syncing never duplicates points.'));extra.append(xp);
     const activity=node('section',null,null,'anki-activity');activity.append(node('h4','Son 28 günün ritmi','Your rhythm over 28 days'),node('p','Bugün ve bu alan seçili dönemden bağımsızdır. Seri için günde en az bir tekrar yeterli.','Today and this area are independent of the period filter. One review a day keeps your streak going.','quiet'));
     const calendar=node('div',null,null,'anki-calendar');
     for(const day of game.days){
@@ -123,14 +125,14 @@ export function createAnkiView({store, api}) {
       cell.title=title;cell.setAttribute('aria-label',title);cell.tabIndex=0;
       const number=node('span');number.textContent=String(date.getDate());const amount=node('strong');amount.textContent=String(day.count);cell.append(number,amount);calendar.append(cell);
     }
-    activity.append(calendar);journey.append(activity);
+    activity.append(calendar);extra.append(activity);
     const badges=node('section',null,null,'anki-badges');badges.append(node('h4','Başarı koleksiyonun','Your milestones'));
     const badgeGrid=node('div',null,null,'anki-badge-grid');
     const milestones=[['✦','İlk adım','First step','1 tekrar','1 review'],['◈','Yüzlük','Century','100 tekrar','100 reviews'],['★','Bilgi birikimi','Knowledge builder','500 tekrar','500 reviews'],['♧','Ritim','Finding rhythm','3 günlük seri','3-day streak'],['♜','Bir hafta','A full week','7 günlük seri','7-day streak'],['♛','İstikrar','Consistency','30 günlük seri','30-day streak']];
     milestones.forEach(([icon,tr,en,reqTR,reqEN],i)=>{const badge=node('div',null,null,'anki-badge');badge.dataset.earned=String(game.badges[i]);
       const symbol=node('span',null,null,'anki-badge-symbol');symbol.textContent=icon;symbol.setAttribute('aria-hidden','true');
       badge.append(symbol,node('strong',tr,en),node('small',reqTR,reqEN),node('span',game.badges[i]?'Kazanıldı':'Sıradaki hedef',game.badges[i]?'Unlocked':'To unlock','anki-badge-state'));badgeGrid.append(badge);});
-    badges.append(badgeGrid);journey.append(badges);
+    badges.append(badgeGrid);extra.append(badges);
 
     localizedText(metadata,()=>snapshot
       ? `${snapshot.profile} · ${bilingual('Son eşitleme: ','Last sync: ')}${new Date(snapshot.syncedAt).toLocaleString(window.ikraLocale(),{dateStyle:'medium',timeStyle:'short'})}`

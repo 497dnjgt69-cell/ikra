@@ -1,3 +1,4 @@
+import { bilingual, localizedAttribute } from '../i18n/bindings.js';
 export default function initialize() {
   (() => {
     const $ = (s) => document.querySelector(s),
@@ -25,27 +26,34 @@ export default function initialize() {
     themes.className = "theme-picker";
     themes.setAttribute("role", "group");
     themes.setAttribute("aria-label", "Tema");
-    select.after(themes);
+    const slot=document.createElement('div');slot.className='theme-slot';slot.append(themes);select.after(slot);
+    const toggle=document.createElement('button');toggle.type='button';toggle.className='theme-choice theme-toggle';
+    toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-controls','theme-options');
+    localizedAttribute(toggle,'aria-label',()=>bilingual('Tema seç','Choose theme'));
+    const options=document.createElement('div');options.id='theme-options';options.className='theme-options';options.inert=true;
+    themes.append(toggle,options);
+    function expand(open){themes.classList.toggle('is-open',open);toggle.setAttribute('aria-expanded',String(open));options.inert=!open;}
+    toggle.onclick=()=>expand(toggle.getAttribute('aria-expanded')!=='true');
+    themes.addEventListener('keydown',e=>{if(e.key==='Escape'){expand(false);toggle.focus();}});
+    document.addEventListener('click',e=>{if(!themes.contains(e.target))expand(false);});
+    themes.addEventListener('focusout',e=>{if(!themes.contains(e.relatedTarget))expand(false);});
     const icons = {
-      light:
-        '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/>',
       neumorphism: '<rect x="4" y="4" width="16" height="16" rx="6"/><circle cx="12" cy="12" r="3"/>',
       dark: '<path d="M18 3a9 9 0 1 0 3 12A8 8 0 0 1 18 3Z"/>',
       nature:
         '<path d="M20 4c-7-1-14 2-14 8a6 6 0 0 0 6 6c6 0 8-7 8-14Z M4 21l11-11 M8 17v-5 M11 14h5"/>',
     };
     for (const [value, label] of [
-      ["light", "Aydınlık"],
+      ["neumorphism", "Aydınlık"],
       ["dark", "Karanlık"],
       ["nature", "Doğa"],
-      ["neumorphism", "Neumorphism"],
     ]) {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "theme-choice";
       button.dataset.themeChoice = value;
-      button.setAttribute("aria-label", label);
-      button.title = label;
+      localizedAttribute(button,"aria-label",()=>bilingual(label,({neumorphism:"Light",dark:"Dark",nature:"Nature"})[value]));
+      localizedAttribute(button,"title",()=>bilingual(label,({neumorphism:"Light",dark:"Dark",nature:"Nature"})[value]));
       button.innerHTML =
         '<svg viewBox="0 0 24 24" aria-hidden="true">' +
         icons[value] +
@@ -53,18 +61,14 @@ export default function initialize() {
       button.onclick = () => {
         select.value = value;
         select.dispatchEvent(new Event("change", { bubbles: true }));
+        expand(false);toggle.focus();
       };
-      themes.append(button);
+      options.append(button);
     }
-    const draw = () =>
-      themes
-        .querySelectorAll("button")
-        .forEach((b) =>
-          b.setAttribute(
-            "aria-pressed",
-            String(b.dataset.themeChoice === select.value),
-          ),
-        );
+    const draw = () => {
+      toggle.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+icons[select.value]+'</svg>';
+      options.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.themeChoice===select.value)));
+    };
     document.addEventListener("focus-render", draw);
     draw();
   })();

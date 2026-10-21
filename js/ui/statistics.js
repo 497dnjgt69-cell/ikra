@@ -205,11 +205,14 @@ export function createStatisticsView({ store, planner, records, access }) {
       let c = document.createElement("div");
       c.className = "heatcell" + (k === datekey(now) ? " today" : "");
       c.dataset.level =
-        v === 0 ? 0 : v < 1800 ? 1 : v < 3600 ? 2 : v < 7200 ? 3 : 4;
+        v === 0 ? 0 : Math.min(9, Math.floor(v / 3600) + 1);
       c.textContent =
         store.state.view === "month"
           ? x.getDate()
           : x.toLocaleDateString(window.ikraLocale(), { weekday: "short" });
+      const amount=document.createElement('small');
+      amount.textContent=v ? `${Math.floor(v/3600)}:${String(Math.floor(v%3600/60)).padStart(2,'0')}` : '—';
+      c.append(amount);c.tabIndex=0;
       c.title = `${x.toLocaleDateString(window.ikraLocale())}: ${display(v)}`;
       c.setAttribute("aria-label", c.title);
       map.append(c);

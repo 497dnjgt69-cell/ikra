@@ -1,4 +1,4 @@
-const CACHE = "ikra-v1.18.1";
+const CACHE = "ikra-v1.19.0";
 
 const CORE = [
   "./",
@@ -21,6 +21,7 @@ const CORE = [
   "./css/notifications.css",
   "./css/prayer-focus.css",
   "./css/prayer-hub.css",
+  "./css/refinements.css",
   "./css/release-notes.css",
   "./css/workspace.css",
   "./js/app.js",

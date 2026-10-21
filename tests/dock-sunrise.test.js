@@ -41,6 +41,7 @@ import {migrateState} from '../js/services/store.js';
 import {fresh} from '../js/core/default-state.js';
 test('default theme and retired prayer flow preserve saved choices and history',()=>{
  assert.equal(migrateState(null).theme,'neumorphism');
+ assert.equal(migrateState({...fresh(),theme:'light'}).theme,'neumorphism');
  const saved={...fresh(),theme:'dark',prayerTimer:{untimed:true,name:'Sabah'},prayerView:true,prayerChecks:{'2026-10-09':{Sabah:true}}};
  const result=migrateState(saved);
  assert.equal(result.theme,'dark');assert.equal(result.prayerView,false);assert.equal(result.prayerTimer,null);
