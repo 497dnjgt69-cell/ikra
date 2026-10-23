@@ -1,6 +1,6 @@
 export default function initialize() {
   (() => {
-    const mobile = matchMedia("(max-width:690px)");
+    const mobile = matchMedia("(max-width:690px), (max-width:960px) and (pointer:coarse)");
     for (const [id, buttonId, title] of [
       ["progress-card", null, "İlerleme"],
       ["prayer-peek", "peek-toggle", "Namaz vakitleri"],

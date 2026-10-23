@@ -9,9 +9,11 @@
 .memo-grid .memo-badge{grid-column:1;justify-self:start;margin-top:5px;padding:3px 8px}
 .memo-top{margin-bottom:12px}.memo-filters{gap:8px;margin:14px 0}
 /* Inline disclosure expands towards the right, inside a reserved header slot. */
-.theme-picker{box-sizing:border-box;justify-self:start;justify-content:flex-start;width:46px;max-width:100%;overflow:hidden;transition:width .22s ease;flex-shrink:0}
-.header>.row{min-width:0}.theme-picker.is-open{width:178px}
-.theme-choice{flex:0 0 36px;cursor:pointer}
+.theme-picker{box-sizing:border-box;justify-self:start;justify-content:flex-start;width:52px;max-width:100%;overflow:hidden;transition:width .22s ease;flex-shrink:0}
+.header>.row{min-width:0}.theme-picker.is-open{width:190px}
+.theme-choice{flex:0 0 44px;width:44px;height:44px;cursor:pointer}
+body .theme-picker{gap:2px;align-items:center}
+.theme-choice svg{display:block;width:22px;height:22px;stroke-width:1.75;flex-shrink:0}
 .theme-options{display:flex;gap:2px;opacity:0;visibility:hidden;transform:translateX(-10px);transition:opacity .18s,transform .22s,visibility .22s}
 .theme-picker.is-open .theme-options{opacity:1;visibility:visible;transform:translateX(0)}
 .theme-choice:focus-visible{outline:2px solid var(--fg);outline-offset:-3px}
@@ -52,4 +54,4 @@
  .anki-dashboard .anki-hero{gap:12px;padding:12px}.anki-dashboard .anki-reward{padding:10px 8px}
 }
 @media(prefers-reduced-motion:reduce){.theme-picker,.theme-options{transition:none;transform:none}}
-.theme-slot{width:178px;flex:0 0 178px;display:flex;justify-content:flex-start}
+.theme-slot{width:190px;flex:0 0 190px;display:flex;justify-content:flex-start}

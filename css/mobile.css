@@ -1,5 +1,5 @@
 /* Touch layout shares the existing timers, records and backup format. */
-@media (max-width: 690px) {
+@media (max-width: 690px), (max-width: 960px) and (pointer: coarse) {
   body {
     min-height: 100svh;
     background-attachment: scroll;
@@ -20,15 +20,16 @@
     display: none;
   }
   .theme-choice {
-    width: 36px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
   }
   .header .language-toggle button {
-    min-height: 40px;
+    min-width: 40px;
+    min-height: 44px;
     padding: 6px 8px;
   }
   .focusstage {
-    min-height: calc(100svh - 175px);
+    min-height: calc(100svh - 250px);
     flex-direction: column;
   }
   .focusstage > .hero,
@@ -76,7 +77,7 @@
     height: 20vw;
     max-height: 110px;
   }
-  .controls .button,
+  .controls .button:not(#finish-stopwatch),
   .controls #focus-toggle {
     min-height: 48px !important;
     min-width: 48px !important;
@@ -140,7 +141,9 @@
   #panel-settings,
   #panel-history,
   #panel-tasks,
-  #about-ikra {
+  #about-ikra,
+  #panel-sounds,
+  #panel-anki {
     width: 100%;
     max-width: 560px;
     max-height: calc(100dvh - 12px);
@@ -235,7 +238,8 @@
     flex-shrink: 0;
   }
   .mobile-widget-dialog .activity-mini,
-  .mobile-widget-dialog .prayer-peek {
+  .mobile-widget-dialog .prayer-peek,
+  .mobile-widget-dialog .anki-mini {
     position: static !important;
     inset: auto !important;
     width: 100% !important;
@@ -268,4 +272,88 @@
   .dock .button:hover svg {
     transform: none;
   }
+}
+
+/* Last in the cascade: all three palettes share the same touch layout. */
+@media (max-width: 690px), (max-width: 960px) and (pointer: coarse) {
+  html:has(dialog[open]), body:has(dialog[open]) { overflow: hidden; }
+  .header { gap: 16px 8px; }
+  .header > .brand { min-height: 44px; font-size: 1rem; }
+  .header .brand-logo { width: 30px; height: 30px; }
+  .header > .row { gap: 8px; margin-left: auto; }
+  .header::after { display: none; }
+  .header #focus-toggle { width: 44px; height: 44px; min-width: 44px; padding: 10px; }
+  .header .language-toggle { gap: 0; padding: 2px; }
+  .header .language-toggle button { padding: 6px; }
+  .theme-slot { width: 52px; flex-basis: 52px; }
+  .header .theme-picker, .header .theme-picker.is-open {
+    position: relative; width: 52px; overflow: visible; z-index: 9;
+  }
+  .theme-options {
+    position: absolute; right: 0; top: calc(100% + 10px);
+    padding: 6px; gap: 4px; border: 1px solid var(--line);
+    border-radius: 16px; background: var(--bg); box-shadow: 0 12px 32px #0002;
+    transform: translateY(-6px);
+  }
+  .theme-picker.is-open .theme-options { transform: translateY(0); }
+  .header > #modes {
+    flex: 1 1 100%; width: 100%; gap: 3px; padding: 5px;
+    justify-content: space-between; border-radius: 18px;
+  }
+  #modes > button { flex: 1; }
+  #modes #mode-breaks { order: 2; }
+  #modes.breaks-open #mode-breaks {
+    flex-basis: 100%; max-width: 100%; justify-content: center;
+    border-top: 1px solid var(--line); margin-top: 3px; padding-top: 3px;
+  }
+  #mode-breaks button { flex: 1; }
+  .focusstage > .hero { padding: 28px 0 !important; }
+  .hero h1 { margin-bottom: 18px; font-size: 1.4rem; }
+  .hero > #overline { margin-bottom: 10px; font-size: .65rem; letter-spacing: .17em; }
+  #focus-style { margin: 16px auto 20px; max-width: 100%; }
+  #focus-style button { min-height: 44px; padding: 8px 14px; font-size: .86rem; }
+  .hero > .bigclock { margin: 24px auto 20px !important; }
+  .hero .controls { gap: 12px; margin-top: 18px; }
+  .controls #finish-stopwatch { flex: 0 0 auto; width: auto; min-height: 44px; padding: 10px 16px; font-size: .82rem; }
+  .controls #finish-stopwatch:not(.hidden) { flex-basis: 100%; max-width: 220px; margin: 4px auto 0; }
+  .app .dock { gap: 2px; padding: 6px; overflow-x: auto; justify-content: flex-start; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .dock .button { flex: 1 0 44px; min-width: 44px; }
+  .dock .button > span { font-size: .62rem; }
+  .glass-dialog .dialog-shell { background: var(--bg); background-image: none; }
+  .dialog-top { gap: 12px; margin-bottom: 14px; }
+  .dialog-top h2 { min-width: 0; overflow-wrap: anywhere; line-height: 1.4; }
+  .dialog-top .button { flex-shrink: 0; }
+  .glass-dialog :is(.row,.plan-options,.setting-copy) { min-width: 0; }
+  .glass-dialog :is(.plan-options,.stat-period,.volume-row) { flex-wrap: wrap; }
+  .glass-dialog :is(input,select,textarea), .memo-form :is(input,select,textarea), .memo-category select { font-size: 16px; max-width: 100%; }
+  .glass-dialog input[type="checkbox"] { min-height: 0; }
+  .places-layout { grid-template-columns: minmax(0,1fr); }
+  .place-preview { grid-row: 1; }
+  .place-audio { min-width: 0; max-width: 100%; }
+  .mobile-widget-dialog .widget-heading { display: none; }
+  .mobile-widget-dialog .anki-mini { box-shadow: none; }
+  .settings .setting-details > summary, .course-manager > summary { min-height: 44px; align-content: center; }
+  .task-filters { display: flex; }
+  .task-filters button { flex: 1; min-width: 0; padding: 8px 4px; min-height: 44px; }
+  .notification-region { max-height: 50dvh; overflow-y: auto; }
+  #history li { flex-wrap: wrap; }
+  body.memo-active .focusstage, body.prayer-hub-active .focusstage { min-height: 0; }
+  body.memo-active .hero { padding: 24px 0 12px !important; }
+  #memo-hub { margin-top: 24px; }
+  .memo-paper { padding: 20px 16px; border-radius: 20px; }
+  .memo-top .memo-actions { margin: 4px 0; }
+  .prayer-coming-soon { padding: 40px 16px; }
+}
+@media (max-width: 360px) {
+  .header { column-gap: 4px; }
+  .header > .row { gap: 5px; }
+  .header .brand { gap: 5px; }
+  .header .brand-logo { width: 26px; height: 26px; }
+  .header .language-toggle button { min-width: 34px; }
+}
+@media (max-width: 960px) and (max-height: 500px) and (pointer: coarse) {
+  .focusstage { min-height: 0; }
+  .focusstage > .hero { padding: 20px 0 !important; }
+  .hero > .bigclock { margin: 16px auto !important; }
+  .bigclock .digit { height: 80px; font-size: 3.7rem; }
 }

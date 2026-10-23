@@ -20,7 +20,7 @@ export default function initialize() {
     dock.insertBefore(progress, $("#peek-toggle"));
     const peek = $("#peek-toggle");
     peek.innerHTML =
-      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 3a9 9 0 1 0 3 12A8 8 0 0 1 18 3Z"/></svg><span>Namaz vakitleri</span>';
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg><span>Namaz vakitleri</span>';
     const select = $("#theme"),
       themes = document.createElement("div");
     themes.className = "theme-picker";
@@ -38,10 +38,10 @@ export default function initialize() {
     document.addEventListener('click',e=>{if(!themes.contains(e.target))expand(false);});
     themes.addEventListener('focusout',e=>{if(!themes.contains(e.relatedTarget))expand(false);});
     const icons = {
-      neumorphism: '<rect x="4" y="4" width="16" height="16" rx="6"/><circle cx="12" cy="12" r="3"/>',
-      dark: '<path d="M18 3a9 9 0 1 0 3 12A8 8 0 0 1 18 3Z"/>',
+      neumorphism: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>',
+      dark: '<path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/>',
       nature:
-        '<path d="M20 4c-7-1-14 2-14 8a6 6 0 0 0 6 6c6 0 8-7 8-14Z M4 21l11-11 M8 17v-5 M11 14h5"/>',
+        '<path d="M20 4c-8-1-14 2-14 8a6 6 0 0 0 6 6c6 0 9-7 8-14Z M4 20l10-10"/>',
     };
     for (const [value, label] of [
       ["neumorphism", "Aydınlık"],
