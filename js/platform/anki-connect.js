@@ -16,10 +16,12 @@ export function createAnkiConnect({ fetcher = globalThis.fetch } = {}) {
     } finally { clearTimeout(timeout); }
   }
   return {
-    async sync({key = '', onProgress = () => {}} = {}) {
-      const permission = await call('requestPermission');
-      if (permission?.permission !== 'granted') throw Error('permission');
-      if (permission.requireApiKey && !key) throw Error('key');
+    async sync({key = '', onProgress = () => {}, requestPermission = true} = {}) {
+      if (requestPermission) {
+        const permission = await call('requestPermission');
+        if (permission?.permission !== 'granted') throw Error('permission');
+        if (permission.requireApiKey && !key) throw Error('key');
+      }
       const profile = await call('getActiveProfile', {}, key);
       const cards = await call('findCards', {query:''}, key);
       if (!Array.isArray(cards)) throw Error('api');
