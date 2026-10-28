@@ -49,12 +49,19 @@ export function createAnkiView({store, api}) {
   root.append(goalLabel,journey,periodTitle,summary,archive,help);
   setup.append(note);
   let busy=false, disposed=false;
-  sync.onclick=async()=>{
+  let lastAutoAttempt=0;
+  const AUTO_INTERVAL=5*60*1000;
+  async function performSync({automatic=false}={}) {
+    if(automatic && (!store.state.anki || document.hidden || !navigator.onLine)) return;
+    if(automatic) {
+      if(Date.now()-lastAutoAttempt<AUTO_INTERVAL) return;
+      lastAutoAttempt=Date.now();
+    }
     if(busy) return;
     busy=true; sync.disabled=true; root.setAttribute('aria-busy','true');
     const previous=store.state.anki;
     const before=ankiJourney(previous,store.state.ankiGoal);
-    localizedText(status,()=>bilingual('Anki’ye bağlanılıyor… Anki’deki izin penceresini kontrol et.','Connecting… Check Anki for a permission request.'));
+    if(!automatic) localizedText(status,()=>bilingual('Anki’ye bağlanılıyor… Anki’deki izin penceresini kontrol et.','Connecting… Check Anki for a permission request.'));
     try {
       const snapshot=await api.sync({key:key.value.trim(),onProgress:(done,total)=>{
         if(!disposed) localizedText(status,()=>bilingual(`${done}/${total} kart okundu…`,`${done}/${total} cards read…`));
@@ -70,7 +77,7 @@ export function createAnkiView({store, api}) {
         journey.classList.remove('anki-celebrate');void journey.offsetWidth;journey.classList.add('anki-celebrate');
         return;
       }
-      localizedText(status,()=>bilingual('Anki verileri güncellendi.','Anki data updated.'));
+      localizedText(status,()=>bilingual(automatic?'Anki otomatik eşitlendi.':'Anki verileri güncellendi.',automatic?'Anki synced automatically.':'Anki data updated.'));
     } catch(error) {
       if(disposed) return;
       const copy=error.message==='key'
@@ -78,9 +85,17 @@ export function createAnkiView({store, api}) {
         : error.message==='permission'
         ? ['Anki’de IKRA bağlantısına izin ver.','Allow IKRA to connect in Anki.']
         : ['Eşitleme tamamlanamadı; önceki verilerin korundu. Anki’nin açık olduğunu, AnkiConnect kurulumunu ve bağlantı izinlerini kontrol edip tekrar dene.','Sync failed; your previous data was kept. Check that Anki is open, AnkiConnect is installed and connection permissions are enabled, then retry.'];
-      localizedText(status,()=>bilingual(...copy));
+      if(!automatic) localizedText(status,()=>bilingual(...copy));
     } finally {busy=false; sync.disabled=false; root.removeAttribute('aria-busy');}
-  };
+  }
+  sync.onclick=()=>{void performSync();};
+  const tryAutoSync=()=>{void performSync({automatic:true});};
+  const onVisible=()=>{if(!document.hidden)tryAutoSync();};
+  const autoTimer=setInterval(tryAutoSync,AUTO_INTERVAL);
+  window.addEventListener('focus',onVisible);
+  window.addEventListener('online',tryAutoSync);
+  document.addEventListener('visibilitychange',onVisible);
+  if(store.state.anki) queueMicrotask(tryAutoSync);
   let lastRenderKey;
   function render() {
     const d=store.state;
@@ -153,5 +168,5 @@ export function createAnkiView({store, api}) {
     }
     if(!result.count) history.append(node('p','Bu dönemde Anki tekrarı yok.','No Anki reviews in this period.','quiet'));
   }
-  return {render,dispose(){disposed=true;key.value='';}};
+  return {render,dispose(){disposed=true;clearInterval(autoTimer);window.removeEventListener('focus',onVisible);window.removeEventListener('online',tryAutoSync);document.removeEventListener('visibilitychange',onVisible);key.value='';}};
 }
