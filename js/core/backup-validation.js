@@ -1,3 +1,4 @@
+import { normalizeBooks } from "./books.js";
 import { normalizeMemos } from "./memo.js";
 import { normalizeDock } from "./dock.js";
 import { normalizeAnki, normalizeAnkiGoal } from "./anki.js";
@@ -18,6 +19,7 @@ export function normalizeBackup(payload, { fresh, isDateKey, names }) {
     throw Error("Yedekte çalışma, görev veya ders listesi eksik.");
   const clean = fresh();
   clean.memos = normalizeMemos(raw.memos);
+  clean.books = normalizeBooks(raw.books);
   clean.dock = normalizeDock(raw.dock);
   clean.anki = normalizeAnki(raw.anki);
   clean.ankiGoal = normalizeAnkiGoal(raw.ankiGoal);

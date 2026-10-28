@@ -308,13 +308,13 @@ for (const width of [1440, 390])
     assert.equal(app.store.state.prayerTimer,null);
     assert.equal($('#prayer-presence'),null);
     assert.equal(app.store.state.prayerHub,true);
-    assert.equal($('#prayer-hub').hidden,false);
+    assert.equal($('#library-hub').hidden,false);
     assert.equal($('#prayerstart').getAttribute('aria-pressed'),'true');
     assert.equal($('#modes').classList.contains('breaks-open'),false);
-    assert.match($('#prayer-hub').textContent,/Coming soon/);
+    assert.match($('#library-hub').textContent,/Make room for your first book/);
     assert.equal($('#ph-checks'),null);
     $('[data-mode="clock"]').click();await flush();
-    assert.equal($('#prayer-hub').hidden,true);
+    assert.equal($('#library-hub').hidden,true);
     $('[data-mode="focus"]').click();await flush();
     assert.equal($('#prayerstart').previousElementSibling.dataset.mode,'clock');
     const historyCount =
@@ -396,10 +396,10 @@ for (const width of [1440, 390])
       assert.equal($("#prayer-settings h2").textContent, lang === "en" ? "Location & calculation" : "Konum ve hesaplama");
       assert.equal($("#push-heading").textContent,lang === "en" ? "Notifications" : "Bildirimler");
       $('#prayerstart').click();await flush();
-      assert.equal($('#prayer-hub').hidden,false);
+      assert.equal($('#library-hub').hidden,false);
       assert.equal($('#prayerstart').getAttribute('aria-pressed'),'true');
-      assert.equal($('#prayer-hub h2').textContent,lang==='en'?'Coming soon':'Çok yakında');
-      assert.equal($('#title').textContent,lang==='en'?'Make room for peace.':'Huzura yer aç.');
+      assert.equal($('#library-hub h2').textContent,lang==='en'?'Make room for your first book.':'İlk kitabına yer aç.');
+      assert.equal($('#title').textContent,lang==='en'?'Make room for books.':'Kitaplarına yer aç.');
       $('[data-mode="focus"]').click();await flush();
       assert.equal($("#push-enable").disabled,true,"push cannot activate before server configuration");
       assert.equal(document.querySelectorAll("#push-categories input").length,4);

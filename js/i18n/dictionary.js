@@ -1,6 +1,9 @@
 export default function initialize() {
   (() => {
     const dictionary = {
+      "Kitaplık": "Library",
+      "Bir sayfa daha.": "One more page.",
+      "Kitaplarına yer aç.": "Make room for books.",
       "Bu oturumu kaydetmeden sıfırla?": "Reset this session without saving?",
       "Çalışman, kendi ritminde.": "Study at your own pace.",
       "Odak, Memo ve günlük kullanım için küçük kolaylıklar.": "Small improvements for Focus, Memo and everyday use.",

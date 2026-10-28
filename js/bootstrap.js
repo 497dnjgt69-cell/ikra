@@ -1,5 +1,5 @@
 import {createMemo} from "./ui/memo.js";
-import {createPrayerHub} from "./ui/prayer-hub.js";
+import {createLibrary} from "./ui/library.js";
 import {createMiniPlayer} from "./ui/mini-player.js";
 import {createPushSettings} from "./ui/push-settings.js";
 import {createAnkiWidget} from "./ui/anki-widget.js";
@@ -54,7 +54,7 @@ export function bootstrap(options) {
   const progressButton=document.querySelector('.dock [aria-controls="progress-card"]');
   if(progressButton)progressButton.dataset.dockId='progress';
   dockCustomizer=createDockCustomizer({store:app.store,dock:document.querySelector('.dock')});
-  prayerHub=createPrayerHub(app);
+  prayerHub=createLibrary(app);
   memo=createMemo(app);
   miniPlayer=createMiniPlayer(app);
   pushSettings=createPushSettings(app);
