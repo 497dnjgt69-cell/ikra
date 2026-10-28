@@ -37,6 +37,8 @@ export function bindManualSession({ store, records, render, playSound }) {
         minutes = Number($("#manual-minutes").value),
         date = $("#manual-date").value;
       const record = records.addManual({ subject, minutes, date, time: $("#manual-time").value });
+      // Show the newly persisted record in the unfiltered overview and history.
+      document.querySelector('[data-stat-section="general"]')?.click();
       render();
       $("#manual-minutes").value = "";
       localizedText($("#manual-preview"), () => "");
