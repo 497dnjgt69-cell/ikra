@@ -63,7 +63,7 @@ export function createAnkiView({store, api}) {
     const before=ankiJourney(previous,store.state.ankiGoal);
     if(!automatic) localizedText(status,()=>bilingual('Anki’ye bağlanılıyor… Anki’deki izin penceresini kontrol et.','Connecting… Check Anki for a permission request.'));
     try {
-      const snapshot=await api.sync({key:key.value.trim(),onProgress:(done,total)=>{
+      const snapshot=await api.sync({key:key.value.trim(),requestPermission:!automatic,onProgress:(done,total)=>{
         if(!disposed) localizedText(status,()=>bilingual(`${done}/${total} kart okundu…`,`${done}/${total} cards read…`));
       }});
       if(disposed) return;
