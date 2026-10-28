@@ -43,5 +43,6 @@ export const fresh = () => ({
   prayerHub: false,
   memoView: false,
   memos: [],
+  books: [],
   prayerDuration: 10,
 });

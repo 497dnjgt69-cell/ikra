@@ -1,4 +1,4 @@
-const CACHE = "ikra-v1.19.2";
+const CACHE = "ikra-v1.20.0";
 
 const CORE = [
   "./",
@@ -12,6 +12,7 @@ const CORE = [
   "./css/ambient.css",
   "./css/base.css",
   "./css/glass.css",
+  "./css/library.css",
   "./css/memo.css",
   "./css/mini-player.css",
   "./css/mobile.css",
@@ -41,6 +42,7 @@ const CORE = [
   "./js/core/application.js",
   "./js/core/backup-snapshot.js",
   "./js/core/backup-validation.js",
+  "./js/core/books.js",
   "./js/core/default-state.js",
   "./js/core/dock.js",
   "./js/core/focus-streak.js",
@@ -88,6 +90,7 @@ const CORE = [
   "./js/ui/anki.js",
   "./js/ui/clock.js",
   "./js/ui/dock-customizer.js",
+  "./js/ui/library.js",
   "./js/ui/memo.js",
   "./js/ui/mini-player.js",
   "./js/ui/mobile-widgets.js",

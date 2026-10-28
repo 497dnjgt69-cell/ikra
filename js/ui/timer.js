@@ -113,8 +113,8 @@ export function createTimerView({ store }) {
       $$("[data-mode]").forEach(b=>b.classList.remove("active"));
     }
     if(store.state.prayerHub){
-      $("#overline").textContent="Kendine bir an ayır.";
-      $("#title").textContent="Huzura yer aç.";
+      $("#overline").textContent="Bir sayfa daha.";
+      $("#title").textContent="Kitaplarına yer aç.";
       $$("[data-mode]").forEach(b=>b.classList.remove("active"));
     }
     const showStyle = store.state.mode === "focus" && !store.state.clockView &&

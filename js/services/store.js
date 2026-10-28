@@ -1,3 +1,4 @@
+import { normalizeBooks } from "../core/books.js";
 import { normalizeMemos } from "../core/memo.js";
 import { normalizeDock } from "../core/dock.js";
 import { normalizeAnki, normalizeAnkiGoal } from "../core/anki.js";
@@ -53,6 +54,7 @@ export function migrateState(input, now = Date.now()) {
   state.prayerHub = false;
   state.memoView = false;
   state.memos = normalizeMemos(state.memos);
+  state.books = normalizeBooks(state.books);
   state.prayerTimer = null;
   if (!["light", "dark", "nature", "neumorphism"].includes(state.theme))
     state.theme = state.theme === "rose" ? "light" : "neumorphism";

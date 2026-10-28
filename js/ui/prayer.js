@@ -75,7 +75,7 @@ export function createPrayerView({ store, times }) {
       fields.append(l);
     });
     $("#prayerstart").classList.remove("hidden");
-    $("#prayerstart").textContent = "Namaz";
+    $("#prayerstart").textContent = "Kitaplık";
     $("#prayerstart").classList.toggle("active", !!(store.state.prayerView || store.state.prayerHub));
     $("#prayerstart").setAttribute(
       "aria-pressed",
