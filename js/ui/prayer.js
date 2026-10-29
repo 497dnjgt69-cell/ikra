@@ -1,4 +1,5 @@
 import { t, bilingual, localizedText } from "../i18n/bindings.js";
+import { updateKerahat } from "./kerahat.js";
 import { $ } from "../shared/dom.js";
 import { prayerNames as names } from "../domain/prayer-timer.js";
 export function createPrayerView({ store, times }) {
@@ -18,6 +19,7 @@ export function createPrayerView({ store, times }) {
         : bilingual(`Sabah bitişi · Güneş ${fajr.time}${fajr.ended?' · Vakit sona erdi.':''}`,`Fajr ends · Sunrise ${fajr.time}${fajr.ended?' · Time has ended.':''}`));
       label.classList.toggle('fajr-active',!!fajr?.active);
     }
+    updateKerahat({store,times});
     const next = times.next();
     const wall = times.wall();
     localizedText(el, () => {
