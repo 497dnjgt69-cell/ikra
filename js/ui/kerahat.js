@@ -5,7 +5,7 @@ const intervals = [
   {tr:"Öğle öncesi",en:"Before Dhuhr",start:"Öğle",end:"Öğle",before:10,after:0},
   {tr:"Güneş batışı",en:"Before sunset",start:"Akşam",end:"Akşam",before:45,after:0},
 ];
-const valid = /^([01]\\d|2[0-3]):[0-5]\\d$/;
+const valid = /^([01]\d|2[0-3]):[0-5]\d$/;
 const parse = s => valid.test(s||"") ? +s.slice(0,2)*60 + +s.slice(3,5) : null;
 const fmt = n => String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0");
 const english = () => (document.documentElement.lang||"tr").toLowerCase().startsWith("en");
