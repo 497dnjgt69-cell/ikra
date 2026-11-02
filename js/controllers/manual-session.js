@@ -37,7 +37,11 @@ export function bindManualSession({ store, records, render, playSound }) {
         minutes = Number($("#manual-minutes").value),
         date = $("#manual-date").value;
       const record = records.addManual({ subject, minutes, date, time: $("#manual-time").value });
-      // Show the newly persisted record in the unfiltered overview and history.
+      // Verify persistence before displaying a successful save confirmation.
+      if (!store.state.sessions.some(session => session.id === record.id)) {
+        throw Error("Oturum kaydı doğrulanamadı.");
+      }
+      // Repaint with the saved session, including the matching date's statistics.
       document.querySelector('[data-stat-section="general"]')?.click();
       render();
       $("#manual-minutes").value = "";
@@ -52,6 +56,7 @@ export function bindManualSession({ store, records, render, playSound }) {
       playSound("finish");
     } catch (error) {
       localizedText(status, () => t(error.message || "Kayıt saklanamadı."));
+      window.ikraNotify(() => t(error.message || "Kayıt saklanamadı."));
     }
   }
   return {};
