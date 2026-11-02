@@ -11,20 +11,48 @@ function ensureStyle() {
   const style = document.createElement("style");
   style.id = "ikra-kerahat-style";
   style.textContent = `
-    #peek-times .prayer .kerahat-inline {
+    /* Preserve a dedicated right column for prayer times. Kerahat gets its
+       own full-width line beneath, never a third item in the time row. */
+    #peek-times .prayer {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      align-items:center;
+      column-gap:12px;
+      row-gap:0;
+      width:100%;
+    }
+    #peek-times .prayer > b {
+      grid-column:1;
+      grid-row:1;
+      min-width:0;
+      text-align:left;
+    }
+    #peek-times .prayer > span {
+      grid-column:2;
+      grid-row:1;
+      justify-self:end;
+      text-align:right;
+      white-space:nowrap;
+      font-variant-numeric:tabular-nums;
+    }
+    #peek-times .prayer > .kerahat-inline {
       display:block;
-      margin-top:4px;
+      grid-column:1 / -1;
+      grid-row:2;
+      margin:4px 0 0;
+      padding:0;
       font-size:10px;
       font-weight:500;
       line-height:1.35;
+      text-align:left;
       color:#d64b54;
       font-variant-numeric:tabular-nums;
       white-space:normal;
       overflow-wrap:anywhere;
     }
-    #peek-times .prayer .kerahat-inline.is-active {font-weight:700;color:#e13b45}
-    @media(max-width:540px) {
-      #peek-times .prayer .kerahat-inline {font-size:10px}
+    #peek-times .prayer > .kerahat-inline.is-active {
+      font-weight:700;
+      color:#e13b45;
     }
   `;
   document.head.append(style);
