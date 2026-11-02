@@ -59,13 +59,9 @@ export function createStatisticsView({ store, planner, records, access }) {
       : bilingual("Bugünün serisi için 15+ dakikalık bir Focus oturumu tamamla. Dünkü seri gün sonuna kadar korunur.", "Complete a 15+ minute Focus session to earn today. Yesterday’s streak stays active until the end of today."));
     root.append(heading, cards, status, rule);
   }
-  let lastRenderKey;
   function renderStats() {
-    const d=store.state;
-    const key=JSON.stringify([d.sessions,d.prayers,d.prayerChecks,d.subjectColors,d.subjects,d.archivedSubjects,
-      d.statsView,d.statsAnchor,d.view,historyLimit,datekey(Date.now()),window.ikraLanguage(),access.plan]);
-    if(key===lastRenderKey)return;
-    lastRenderKey=key;
+    // Always derive history and summaries from persisted sessions. Avoid retaining
+    // a stale render key if an interrupted repaint or view transition occurred.
     let sums = {},
       today = datekey(Date.now());
     for (let s of store.state.sessions) {
@@ -118,7 +114,7 @@ export function createStatisticsView({ store, planner, records, access }) {
         a = document.createElement("span"),
         b = document.createElement("strong");
       localizedText(a, () =>
-        (s.type === "prayer" ? t("Namaz") + " · " + t(s.name) : s.subject) +
+        (s.type === "prayer" ? t("Namaz") + " · " + t(s.name) : s.subject + (s.manual ? bilingual(" · Elle eklendi", " · Manually added") : "")) +
         (s.complete ? " · " + t("Tamamlandı").toLocaleLowerCase(window.ikraLocale()) : "") +
         " · " +
         new Date(s.at).toLocaleString(window.ikraLocale(), {
